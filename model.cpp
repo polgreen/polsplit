@@ -4,6 +4,8 @@
 #include <iostream>
 #include <cassert>
 
+
+
 unsigned weighting(transitiont t, std::vector<unsigned> params)
 {
 	unsigned sum=0;
@@ -13,7 +15,7 @@ unsigned weighting(transitiont t, std::vector<unsigned> params)
 		case CONST: return t.prob; break;
 		case FUNCTION:
 	    for(unsigned index=0; index<t.params.size(); index++)
-         	  {sum = sum + t.params.at(index) * params.at(index);}
+         	  {sum = sum + t.params[index].first * params[index];}
           return sum; break;
         default:;
     }
@@ -24,74 +26,11 @@ unsigned weighting(transitiont t, std::vector<unsigned> params)
 //instead of probabilities, we give weightings for loss and notloss, and use and not use. 
 //Probability of a loss = loss/(loss + notloss)
 
-MC get_ZeroConfMC(unsigned probes, unsigned lossWT, unsigned notlossWT, unsigned useWT, unsigned notuseWT)
+
+
+statet MC::get_init_state()
 {
-// from http://www.prismmodelchecker.org/papers/allerton10.pdf
- statet state;
- transitiont t1, t2;
- MC Model;
-
-//initial state
- state.ID=0;
- t1.type=CONST;
- t1.prob=useWT;
- t1.successor=1;
- state.transitions.push_back(t1);
- t2.type=CONST;
- t2.prob=notuseWT;
- t2.successor=probes+2;
- state.transitions.push_back(t2);
- state.init=true;
- Model.states.push_back(state);
-
-//probes are states s1,...,sN
- for(unsigned i=0; i<probes; i++)
- {
- 	state = {}; t1 = {}; t2 = {};
- 	state.ID = i+1;
- 	t1.type=CONST;
- 	t1.prob=lossWT;
- 	t1.successor=i+2;
- 	state.transitions.push_back(t1);
- 	t2.type=CONST;
- 	t2.prob=notlossWT;
- 	t2.successor=i;
- 	state.transitions.push_back(t2);
- 	state.init=false;
- 	Model.states.push_back(state);
-
-
- }
-
- state = {}; 
- t1 = {}; 
- t2 = {};
- state.ID = probes+1;
- t1.type=CONST;
- t1.prob=10;
- t1.successor=probes+1;
- state.transitions.push_back(t1);
- state.init=false;
- state.label=0;//fail
- Model.states.push_back(state);
-
-
- state = {}; t1 = {}; t2 = {};
- state.ID = probes+2;
- t1.type=CONST;
- t1.prob=10;
- t1.successor=probes+2;
- state.transitions.push_back(t1);
- state.init=false;
- state.label=1; //transmit message
- Model.states.push_back(state);
-
-return Model;
-}
-
-statet get_init_state(MC model)
-{
-	for (const auto& s: model.states)
+	for (const auto& s: states)
 	{
 		if(s.init==true)
 		{
@@ -99,17 +38,6 @@ statet get_init_state(MC model)
 		}
 	}//add error handling, what if we find the ID twice, and what if we don't find it at all
 }
-
-statet get_state_ID(unsigned ID, MC model)
-{
-	for(const auto& s: model.states)
-	{
-		if(s.ID ==ID)
-		{
-			return s;
-		}
-	}
-}//add error handling, what if we find the ID twice, and what if we don't find it at all
 
 
 void printstate(statet s)
@@ -121,7 +49,7 @@ void printstate(statet s)
 tracet gettrace(std::default_random_engine &generator, MC model, unsigned length)
 {	
 	tracet trace;
-	statet state = get_init_state(model);
+	statet state = model.get_init_state();
 	unsigned next, i, product;
 	//std::cout<<"initial state ID: "<<state.ID<<"\n";
 
@@ -146,7 +74,7 @@ tracet gettrace(std::default_random_engine &generator, MC model, unsigned length
             { next = t.successor; break;}   
          	}
 
-        state = get_state_ID(next, model);
+        state = model.states[next];
 		trace.push_back(state);
 		}
 	return trace;
@@ -163,21 +91,21 @@ void printtrace(tracet trace)
     std::cout<<"\n";
 }
 
-void outputMC (MC model)
+void MC::outputMC (std::ostream &out)
 {
-	std::cout<<"\nMARKOV CHAIN: \n";
-	std::cout<<"parameters: ";
-	for(const auto &p: model.params)
-		{std::cout<<p << " ";}
-	std::cout<"\nSTATES \n";
-	for (const auto &s : model.states)
+	out<<"\nMARKOV CHAIN: \n";
+	out<<"parameters: ";
+	for(const auto &p: params)
+		{out<<p << " ";}
+	out<<"\nSTATES \n";
+	for (const auto &s : states)
 	{
-		std::cout<<"S"<<s.ID <<" "<<s.label<<": \n";
+		out<<"S"<<s.ID <<": \n";
 		for(const auto & t: s.transitions)
 		{
-			std::cout<<"transition "<<t.type<<" to S";
-			std::cout<<t.successor<<" weighting";
-			std::cout<<weighting(t, model.params)<<"\n";
+			out<<"transition "<<t.type<<" to S";
+			out<<t.successor<<" weighting";
+			out<<weighting(t, params)<<"\n";
 		}
 	}			
 

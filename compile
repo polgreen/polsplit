@@ -1,1 +1,1 @@
-g++ main.cpp model.cpp -std=c++11
+g++ main.cpp model.cpp models.cpp statesplit.cpp -std=c++11

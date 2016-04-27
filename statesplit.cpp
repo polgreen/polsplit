@@ -14,41 +14,44 @@ is in the form c1 X1 + c2 X2 + ... cn Xn?
 MC state_split(MC model)
 {
 
- statet new_state;
- transitiont t1, t2;
+ statet current_state, new_state;
+ transitiont t0, t1, t2;
+  std::pair<unsigned,unsigned> p1;
  std::vector<transitiont> temp;
-
- for(const auto & s: model.states)
+//replace with indexes
+ for(unsigned s_index=0; s_index<model.states.size(); s_index++)
 	{
-	 for(const auto & t: s.transitions)
+	current_state = model.states[s_index];		
+	 for(unsigned t_index=0; t_index<current_state.transitions.size(); t_index++)		
 	 {
+		t0 = current_state.transitions[t_index];
 			//case 1 split
-		 if(t.type==FUNCTION &&)
+		 if(t0.type==FUNCTION && t0.params.size()>1)
 		 	{
-		 		if(t.params.size()>1)
-		 		{//add new state
-		 		  for(unsigned i=0; i<t.params.size(); i++)
+		 		temp = {};
+		 		//add new state
+		 		 for(unsigned i=0; i<t0.params.size(); i++)
 		 		   {	
-		 			new_state.ID = model.states.size();
 			   		t1.type = CONST;
-			   		t1.successor = t.successor;
+			   		t1.successor = t0.successor;
 			   		t1.prob = 1;
 			   		new_state.transitions.push_back(t1);
+			   		model.states.push_back(new_state);
+			   		new_state.ID = model.states.size();
 			   	 //add transitions from state to new state
 			   	 	t2.type = FUNCTION;
 					t2.successor = new_state.ID;
-					t2.params.push_back(t.params.at(i));
-					t2.paramindex.push_back(t.paramindex.at(i));
+					p1=t0.params[i];
+					t2.params.push_back(p1);
 					temp.push_back(t2);
-				  }				  
-		 		}
-
-		 		s.transition.erase(t);
-		 		s.transitions.push_back(temp);
+				  }	
+				model.states[s_index].transitions = temp;
 		 	}	
 			//case 2 split
 
 		}
+
 	}
+	//git model.add_IDs();
 	return model;
 }
