@@ -4,6 +4,22 @@
 #include <iostream>
 #include <cassert>
 
+unsigned weighting(transitiont t, std::vector<unsigned> params)
+{
+	unsigned sum=0;
+
+	switch(t.type)
+	{
+		case CONST: return t.prob; break;
+		case FUNCTION:
+	    for(unsigned index=0; index<t.params.size(); index++)
+         	  {sum = sum + t.params.at(index) * params.at(index);}
+          return sum; break;
+        default:;
+    }
+       
+}
+
 
 //instead of probabilities, we give weightings for loss and notloss, and use and not use. 
 //Probability of a loss = loss/(loss + notloss)
@@ -12,47 +28,63 @@ MC get_ZeroConfMC(unsigned probes, unsigned lossWT, unsigned notlossWT, unsigned
 {
 // from http://www.prismmodelchecker.org/papers/allerton10.pdf
  statet state;
+ transitiont t1, t2;
  MC Model;
 
 //initial state
  state.ID=0;
- state.successors.push_back(1);
- state.prob.push_back(useWT);
- state.successors.push_back(probes+2);
- state.prob.push_back(notuseWT);
+ t1.type=CONST;
+ t1.prob=useWT;
+ t1.successor=1;
+ state.transitions.push_back(t1);
+ t2.type=CONST;
+ t2.prob=notuseWT;
+ t2.successor=probes+2;
+ state.transitions.push_back(t2);
  state.init=true;
  Model.states.push_back(state);
- Model.num=Model.num+1;
 
 //probes are states s1,...,sN
  for(unsigned i=0; i<probes; i++)
  {
- 	state = {};
+ 	state = {}; t1 = {}; t2 = {};
  	state.ID = i+1;
- 	state.successors.push_back(i+2);
- 	state.prob.push_back(lossWT);
- 	state.successors.push_back(i);
- 	state.prob.push_back(notlossWT);
+ 	t1.type=CONST;
+ 	t1.prob=lossWT;
+ 	t1.successor=i+2;
+ 	state.transitions.push_back(t1);
+ 	t2.type=CONST;
+ 	t2.prob=notlossWT;
+ 	t2.successor=i;
+ 	state.transitions.push_back(t2);
  	state.init=false;
  	Model.states.push_back(state);
- 	Model.num=Model.num+1;
+
+
  }
 
-//final state
-state = {};
-state.ID=probes+1;
-state.successors.push_back(probes+1);
-state.prob.push_back(10);
-state.label=0; //FAIL
-Model.states.push_back(state);
-Model.num=Model.num+1;
-state={};
-state.ID=probes+2;
-state.successors.push_back(probes+2);
-state.prob.push_back(10);
-state.label=1; //SUCCEED
-Model.states.push_back(state);
-Model.num=Model.num+1;
+ state = {}; 
+ t1 = {}; 
+ t2 = {};
+ state.ID = probes+1;
+ t1.type=CONST;
+ t1.prob=10;
+ t1.successor=probes+1;
+ state.transitions.push_back(t1);
+ state.init=false;
+ state.label=0;//fail
+ Model.states.push_back(state);
+
+
+ state = {}; t1 = {}; t2 = {};
+ state.ID = probes+2;
+ t1.type=CONST;
+ t1.prob=10;
+ t1.successor=probes+2;
+ state.transitions.push_back(t1);
+ state.init=false;
+ state.label=1; //transmit message
+ Model.states.push_back(state);
 
 return Model;
 }
@@ -90,49 +122,64 @@ tracet gettrace(std::default_random_engine &generator, MC model, unsigned length
 {	
 	tracet trace;
 	statet state = get_init_state(model);
-	unsigned next;
-	unsigned i;
-	std::cout<<"initial state ID: "<<state.ID<<"\n";
+	unsigned next, i, product;
+	//std::cout<<"initial state ID: "<<state.ID<<"\n";
 
 	trace.push_back(state);
 	while (trace.size() < length)
 	{
-     	i=0;
         unsigned sum = 0;
-       
-        for (const auto& p :state.prob)
+       //get total weighting of outgoing transitions
+        for (const auto& t :state.transitions)
         {   
-            sum = sum + p;
+         sum = sum + weighting(t, model.params);
         }  
-       std::cout<<"sum "<<sum << "\n";
+
 		std::uniform_int_distribution<unsigned> distribution(0,sum-1);
         unsigned random = distribution(generator);
         unsigned mass =0;
         std::cout<<random<<" ";
-        for(const auto& p : state.prob)
+        for(const auto& t : state.transitions)
          {
-          mass = mass + p;
-          std::cout<<"mass: "<<mass<<"\n";
-          if(mass > random)
-           { 
-          	next = state.successors.at(i); 
-          	std::cout<<"state ID: "<<next<<"\n";break;
-           }   
-         i = i+1;
-         }
-        
+         	mass = mass + weighting(t, model.params);
+           if(mass > random)
+            { next = t.successor; break;}   
+         	}
+
         state = get_state_ID(next, model);
 		trace.push_back(state);
-	}
+		}
 	return trace;
 }
 
 
 void printtrace(tracet trace)
 {
+	std::cout<<"\n";
     for(const auto &s: trace) 
     {
         printstate(s);
     }
     std::cout<<"\n";
 }
+
+void outputMC (MC model)
+{
+	std::cout<<"\nMARKOV CHAIN: \n";
+	std::cout<<"parameters: ";
+	for(const auto &p: model.params)
+		{std::cout<<p << " ";}
+	std::cout<"\nSTATES \n";
+	for (const auto &s : model.states)
+	{
+		std::cout<<"S"<<s.ID <<" "<<s.label<<": \n";
+		for(const auto & t: s.transitions)
+		{
+			std::cout<<"transition "<<t.type<<" to S";
+			std::cout<<t.successor<<" weighting";
+			std::cout<<weighting(t, model.params)<<"\n";
+		}
+	}			
+
+}
+
