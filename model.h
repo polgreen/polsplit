@@ -3,13 +3,17 @@
 
 #include <random>
 #include <vector>
+#include "fraction.h"
 enum transitiontype {CONST, FUNCTION};
+
 
 struct transitiont {
 	transitiontype type; 
 	unsigned successor; 
-	unsigned prob; 
-	std::vector <std::pair < unsigned, unsigned> > params;
+	fractiont prob; 
+	std::vector <std::pair < fractiont, unsigned> > params;
+	//first = parameter multiplier
+	//second = parameter index
 //	std::vector<unsigned> params; 
 //	std::vector<unsigned> paramindex;
 	};
@@ -21,10 +25,12 @@ struct statet {
 	};
 struct MC {
 	std::vector<statet> states; 
-	std::vector<unsigned> params; 
+	std::vector<fractiont> params; 
 	void outputMC(std::ostream &out);
 	statet get_init_state();
 	void add_IDs();
+	void outputPRISM(std::ostream &out);
+	bool checkProbabilities();
 	};
 typedef std::vector<statet> tracet; 
 

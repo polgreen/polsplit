@@ -3,19 +3,45 @@
 #include <random>
 #include <iostream>
 #include <cassert>
+#include "fraction.h"
 
-
-
-unsigned weighting(transitiont t, std::vector<unsigned> params)
+bool MC::checkProbabilities()
 {
-	unsigned sum=0;
+	fraction1 sum_state;
+
+	summ_state.zero();
+	for(const auto& s: states)
+	{
+		for(const auto & t: s.transitions)
+		{
+			sum_state = sum_state.add(weighting(t,params))
+		}
+		if(sum_state.nom == sum_state.denom)
+		{
+			std::cout<<"Error, probabilities of S"<<s.ID<<"sum to "
+			<<sum_state.nom<<"/"<<sum_state.denom<<"\n";
+			return false;
+		}
+	}
+	return true;
+}
+
+
+
+fractiont weighting(transitiont t, std::vector<unsigned> params)
+{
+	fraction1 sum, prod;
+	sum.nom = 0; sum.demon = 0;
 
 	switch(t.type)
 	{
 		case CONST: return t.prob; break;
 		case FUNCTION:
 	    for(unsigned index=0; index<t.params.size(); index++)
-         	  {sum = sum + t.params[index].first * params[index];}
+         	  {
+         	  	prod = t.params[index].first.multiply(params[t.params[index].second]);
+         	  	sum = sum.add(prod);
+         	  }
           return sum; break;
         default:;
     }
@@ -56,21 +82,23 @@ tracet gettrace(std::default_random_engine &generator, MC model, unsigned length
 	trace.push_back(state);
 	while (trace.size() < length)
 	{
-        unsigned sum = 0;
+        fractiont sum = 0;
        //get total weighting of outgoing transitions
         for (const auto& t :state.transitions)
         {   
-         sum = sum + weighting(t, model.params);
+         sum = sum.add(weighting(t, model.params));
         }  
 
-		std::uniform_int_distribution<unsigned> distribution(0,sum-1);
-        unsigned random = distribution(generator);
-        unsigned mass =0;
-        std::cout<<random<<" ";
+		std::uniform_int_distribution<unsigned> distribution(0,sum.nom-1);
+        fractiont random;
+        random.nom = distribution(generator);
+        random.denom = sum.nom;
+        fractiont mass =0;
+        
         for(const auto& t : state.transitions)
          {
-         	mass = mass + weighting(t, model.params);
-           if(mass > random)
+         	mass = mass.add(weighting(t, model.params));
+           if(mass.subtract(random)>0)
             { next = t.successor; break;}   
          	}
 
