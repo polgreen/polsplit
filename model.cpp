@@ -5,33 +5,32 @@
 #include <cassert>
 #include "fraction.h"
 
-bool MC::checkProbabilities()
-{
-	fraction1 sum_state;
 
-	summ_state.zero();
-	for(const auto& s: states)
+
+void MC::check()
+{
+	fractiont weight;
+	fractiont state_sum;
+	for(const auto s: states)
 	{
-		for(const auto & t: s.transitions)
+		state_sum.zero();
+		for(const auto t: s.transitions)
 		{
-			sum_state = sum_state.add(weighting(t,params))
-		}
-		if(sum_state.nom == sum_state.denom)
-		{
-			std::cout<<"Error, probabilities of S"<<s.ID<<"sum to "
-			<<sum_state.nom<<"/"<<sum_state.denom<<"\n";
-			return false;
+			weight = weighting(t,s);
+			if(weight.nom<0 || weight.denom<0)
+				{std::cout<<"ERROR: transition S"<<s.ID<<"->S"<<t.successor<<" probability less than 0 \n";}
+			state_sum = state_sum.add(weight);
+			if(state_sum.nom > state_sum.denom)
+				{std::cout<<"ERROR: transitions from S"<<s.ID<<" sum to more than 1 \n";}
 		}
 	}
-	return true;
 }
 
 
-
-fractiont weighting(transitiont t, std::vector<unsigned> params)
+fractiont MC::weighting(transitiont t, statet s)
 {
-	fraction1 sum, prod;
-	sum.nom = 0; sum.demon = 0;
+	fractiont sum, prod;
+	sum.zero();
 
 	switch(t.type)
 	{
@@ -39,18 +38,36 @@ fractiont weighting(transitiont t, std::vector<unsigned> params)
 		case FUNCTION:
 	    for(unsigned index=0; index<t.params.size(); index++)
          	  {
-         	  	prod = t.params[index].first.multiply(params[t.params[index].second]);
+         	  	prod = t.params[index].first.multiply(modelparams[t.params[index].second]);
          	  	sum = sum.add(prod);
          	  }
           return sum; break;
+         case REMAINDER: return remainderWeight(s) ;break; 
         default:;
     }
        
 }
 
 
-//instead of probabilities, we give weightings for loss and notloss, and use and not use. 
-//Probability of a loss = loss/(loss + notloss)
+
+fractiont MC::remainderWeight(statet s)
+{
+	fractiont sum_state;
+	fractiont result;
+	bool remainderfound =false;
+	sum_state.zero();
+	for(const auto & t: s.transitions)
+	 {
+	 	if(t.type==REMAINDER && remainderfound==false)
+	 	{remainderfound=true;}
+	 	else if(t.type==REMAINDER && remainderfound==true)
+	 	{std::cout<<"error, 2 transitions of type REMAINDER found on S"<<s.ID<<"\n";}
+	 	else{sum_state = sum_state.add(weighting(t, s));}
+	 }
+	result.one();
+	result = result.subtract(sum_state);
+	return result;
+}
 
 
 
@@ -82,23 +99,25 @@ tracet gettrace(std::default_random_engine &generator, MC model, unsigned length
 	trace.push_back(state);
 	while (trace.size() < length)
 	{
-        fractiont sum = 0;
+        fractiont sum;
+        sum.zero();
        //get total weighting of outgoing transitions
         for (const auto& t :state.transitions)
         {   
-         sum = sum.add(weighting(t, model.params));
+         sum = sum.add(model.weighting(t,state));
         }  
 
 		std::uniform_int_distribution<unsigned> distribution(0,sum.nom-1);
         fractiont random;
         random.nom = distribution(generator);
         random.denom = sum.nom;
-        fractiont mass =0;
+        fractiont mass;
+        mass.zero();
         
         for(const auto& t : state.transitions)
          {
-         	mass = mass.add(weighting(t, model.params));
-           if(mass.subtract(random)>0)
+         	mass = mass.add(model.weighting(t,state));
+           if(mass.subtract(random).nom>0)
             { next = t.successor; break;}   
          	}
 
@@ -121,10 +140,12 @@ void printtrace(tracet trace)
 
 void MC::outputMC (std::ostream &out)
 {
+	fractiont result;
 	out<<"\nMARKOV CHAIN: \n";
 	out<<"parameters: ";
-	for(const auto &p: params)
-		{out<<p << " ";}
+	for(auto &p: modelparams)
+		{p.output(out);
+			out<<" ";}
 	out<<"\nSTATES \n";
 	for (const auto &s : states)
 	{
@@ -132,8 +153,11 @@ void MC::outputMC (std::ostream &out)
 		for(const auto & t: s.transitions)
 		{
 			out<<"transition "<<t.type<<" to S";
-			out<<t.successor<<" weighting";
-			out<<weighting(t, params)<<"\n";
+			out<<t.successor<<" weighting: ";
+			result = weighting(t, s);
+			if(result.nom==0){std::cout<<"ERROR ZERO VALUE RETURNED";}
+			result.output(out);
+			out<<"\n";
 		}
 	}			
 

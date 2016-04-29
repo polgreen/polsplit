@@ -4,7 +4,7 @@
 #include <random>
 #include <vector>
 #include "fraction.h"
-enum transitiontype {CONST, FUNCTION};
+enum transitiontype {CONST, FUNCTION, REMAINDER};
 
 
 struct transitiont {
@@ -25,12 +25,14 @@ struct statet {
 	};
 struct MC {
 	std::vector<statet> states; 
-	std::vector<fractiont> params; 
+	std::vector<fractiont> modelparams; 
 	void outputMC(std::ostream &out);
 	statet get_init_state();
 	void add_IDs();
 	void outputPRISM(std::ostream &out);
-	bool checkProbabilities();
+	fractiont weighting(transitiont t, statet s);
+	fractiont remainderWeight(statet s);
+	void check();
 	};
 typedef std::vector<statet> tracet; 
 
@@ -43,4 +45,5 @@ void printtrace(tracet trace);
 MC get_parameterisedMC (unsigned probes, unsigned lossWT, 
 	unsigned notlossWT, unsigned useWT, unsigned notuseWT);
 MC state_split(MC model);
+fractiont remainderWeight(statet s);
 #endif

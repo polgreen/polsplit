@@ -17,7 +17,7 @@ MC state_split(MC model)
 	bool case1 =false;	
  statet current_state, new_state;
  transitiont t0, t1, t2;
- std::pair<unsigned,unsigned> p1;
+ std::pair<fractiont,unsigned> p1;
  std::vector<transitiont> temp;
 //replace with indexes
  for(unsigned s_index=0; s_index<model.states.size(); s_index++)
@@ -42,7 +42,7 @@ MC state_split(MC model)
 		 		   new_state = {};
 			   		t1.type = CONST;
 			   		t1.successor = t0.successor;
-			   		t1.prob = 1;
+			   		t1.prob.one();
 			   		new_state.transitions.push_back(t1);
 			   		new_state.ID = model.states.size();
 			   		model.states.push_back(new_state);
