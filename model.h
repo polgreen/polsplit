@@ -44,6 +44,7 @@ void printtrace(tracet trace);
 
 MC get_parameterisedMC (unsigned probes, unsigned lossWT, 
 	unsigned notlossWT, unsigned useWT, unsigned notuseWT);
-MC state_split(MC model);
+MC state_split1(MC model);
+MC state_split2(MC model);
 fractiont remainderWeight(statet s);
 #endif
