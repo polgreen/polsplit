@@ -1,1 +1,1 @@
-g++ main.cpp model.cpp models.cpp statesplit.cpp prism_comms.cpp fraction.cpp -std=c++11
+g++ main.cpp model.cpp models.cpp statesplit.cpp prism_comms.cpp fraction.cpp trace.cpp -std=c++11

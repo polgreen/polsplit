@@ -12,10 +12,10 @@ void MC::check()
 	fractiont weight;
 	fractiont state_sum;
 	fractiont param_sum;
-	for(const auto s: states)
+	for(const auto &s: states)
 	{
 		state_sum.zero();
-		for(const auto t: s.transitions)
+		for(const auto &t: s.transitions)
 		{
 			weight = weighting(t,s);
 			if(weight.nom<0 || weight.denom<0)
@@ -32,6 +32,24 @@ void MC::check()
 				}	
 		}
 	}
+}
+
+
+std::vector<std::vector<statet>> MC::get_parameterised_states()
+{
+	std::vector<std::vector<statet>> result;
+	for(const auto &s:states)
+	{
+		for(const auto &t: s.transitions)
+		{
+			if(t.type==FUNCTION && t.params.size()==1)
+				{	
+					result[t.params[0].second].push_back(s);
+				}
+		}
+	}
+return result;
+
 }
 
 
@@ -97,54 +115,7 @@ void printstate(statet s)
 }
 
 
-tracet gettrace(std::default_random_engine &generator, MC model, unsigned length)
-{	
-	tracet trace;
-	statet state = model.get_init_state();
-	unsigned next, i, product;
-	//std::cout<<"initial state ID: "<<state.ID<<"\n";
 
-	trace.push_back(state);
-	while (trace.size() < length)
-	{
-        fractiont sum;
-        sum.zero();
-       //get total weighting of outgoing transitions
-        for (const auto& t :state.transitions)
-        {   
-         sum = sum.add(model.weighting(t,state));
-        }  
-
-		std::uniform_int_distribution<unsigned> distribution(0,sum.nom-1);
-        fractiont random;
-        random.nom = distribution(generator);
-        random.denom = sum.nom;
-        fractiont mass;
-        mass.zero();
-        
-        for(const auto& t : state.transitions)
-         {
-         	mass = mass.add(model.weighting(t,state));
-           if(mass.subtract(random).nom>0)
-            { next = t.successor; break;}   
-         	}
-
-        state = model.states[next];
-		trace.push_back(state);
-		}
-	return trace;
-}
-
-
-void printtrace(tracet trace)
-{
-	std::cout<<"\n";
-    for(const auto &s: trace) 
-    {
-        printstate(s);
-    }
-    std::cout<<"\n";
-}
 
 void MC::outputMC (std::ostream &out)
 {

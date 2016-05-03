@@ -32,15 +32,17 @@ struct MC {
 	void outputPRISM(std::ostream &out);
 	fractiont weighting(transitiont t, statet s);
 	fractiont remainderWeight(statet s);
+	std::vector<std::vector<statet>> get_parameterised_states();
 	void check();
 	};
 typedef std::vector<statet> tracet; 
+typedef std::pair<tracet, std::vector<std::vector<unsigned> > > trace_pair;
 
 MC get_ZeroConfMC(unsigned probes, unsigned lossWT, unsigned notlossWT, 
 	unsigned useWT, unsigned notuseWT);
 void printstate(statet s);
-tracet gettrace(std::default_random_engine &generator, MC model, unsigned length);
-void printtrace(tracet trace);
+trace_pair gettrace(std::default_random_engine &generator, MC model, unsigned length);
+void printtrace(trace_pair trace);
 
 MC get_parameterisedMC (unsigned probes, unsigned lossWT, 
 	unsigned notlossWT, unsigned useWT, unsigned notuseWT);
