@@ -97,31 +97,32 @@ MC state_split2(MC model)
 	transitiont t0, t1, t2, t3, t_remainder;
 	std::pair<fractiont,unsigned> p1;
  	std::vector<transitiont> temp;
+ 	std::vector<statet> temp_states;
 
  	std::cout<<"MODEL SIZE:  ";
  	std::cout<<model.states.size();
  	std::cout<<"\n";
- 	
+ 	temp_states = {};
  	for(unsigned s_index=0; s_index<model.states.size(); s_index++)
 	 {
 	 	current_state = model.states[s_index];
 	 	temp = {};
 	 	case2=false;
 	 	t_remainder = find_remainder(current_state);
-	 	std::cout<<"number of transitions: "<<current_state.transitions.size();
+	 //	std::cout<<"number of transitions: "<<current_state.transitions.size()<<"\n";
 
-	  for(unsigned t_index=0; t_index<model.states[s_index].transitions.size(); t_index++)
-	  {
-	 	t0 = current_state.transitions[t_index];
-
+	 	for(unsigned t_index=0; t_index<current_state.transitions.size(); t_index++)
+	 	{
+	 		t0=current_state.transitions[t_index];
 	 		if(t0.type==FUNCTION)
-	 		 {			 		
+	 		{
 	 			if(t0.params.size()==1)
 	 			{
-	 				t1 = {};
-	 				t2 = {};
-	 				new_state = {};
-	 				new_state.ID = model.states.size();
+	 		//		std::cout<<"FUNCTION: params: "<<t0.params.size()<<"\n";
+	 				t1={};
+	 				t2={};
+	 				new_state={};
+	 				new_state.ID = model.states.size() + temp_states.size();
 	 				t1.type = FUNCTION;
 	 				t1.successor = t0.successor;
 	 				t1.params.push_back(t0.params[0]);
@@ -130,48 +131,29 @@ MC state_split2(MC model)
 	 				t2.successor = t_remainder.successor;
 	 				new_state.transitions.push_back(t1);
 	 				new_state.transitions.push_back(t2);
-	 				model.states.push_back(new_state);
-	 				//
+	 				temp_states.push_back(new_state);
+
 	 				t3.successor = new_state.ID;
 	 				t3.type = CONST;
 	 				t3.prob = t0.params[0].first;
 	 				model.states[s_index].transitions[t_index] = t3;
-
 	 			}
 	 			else{std::cout<<"ERROR: please apply state split 1 first \n";}
-
-	 			/*
-	 			for(unsigned i=0; i<t0.params.size(); i++)
-	 			{
-	 				std::cout<<"ADD STATE \n";
-	 				//add state
-	 				t1 = {};
-	 				t2 = {};
-	 				new_state = {};
-	 				new_state.ID = model.states.size();
-	 				t1.type = FUNCTION;
-	 				t1.successor = t0.successor;
-	 				t1.params.push_back(t0.params[i]);
-	 				t1.params[0].first.one(); //transition probability = parameter multiplied by 1
-	 				t2.type = REMAINDER;
-	 				t2.successor = t_remainder.successor;
-	 				new_state.transitions.push_back(t1);
-	 				new_state.transitions.push_back(t2);
-	 				model.states.push_back(new_state);
-	 				//
-	 				t0.successor = new_state.ID;
-	 				t0.type = CONST;
-	 				t0.prob = t0.params[0].first;
-	 				t0.params = {};
-
-	 			}*/
 	 		}
-	 	 }
-	}
+	 	}
+	 }
+	 for(const auto & s: temp_states)
+	 {
+	 	model.states.push_back(s);
+	 }
+
 
 
 return model;
 }
+
+
+
 
 
 

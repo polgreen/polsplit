@@ -11,6 +11,7 @@ void MC::check()
 {
 	fractiont weight;
 	fractiont state_sum;
+	fractiont param_sum;
 	for(const auto s: states)
 	{
 		state_sum.zero();
@@ -22,6 +23,13 @@ void MC::check()
 			state_sum = state_sum.add(weight);
 			if(state_sum.nom > state_sum.denom)
 				{std::cout<<"ERROR: transitions from S"<<s.ID<<" sum to more than 1 \n";}
+			if(t.type==FUNCTION)
+				{ for(const auto &p: t.params)
+					{
+						param_sum = param_sum.add(p.first);
+						if(param_sum.nom>param_sum.denom){std::cout<<"ERROR: parameter multipliers >1";}
+					}
+				}	
 		}
 	}
 }
