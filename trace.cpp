@@ -6,36 +6,26 @@
 #include "fraction.h"
 
 
-trace_pair gettrace(std::default_random_engine &generator, MC model, unsigned length)
+
+tracet gettrace(std::default_random_engine &generator, MC model, unsigned length)
 {	
 
-	trace_pair result;
 	tracet trace;
 	std::vector<std::vector<unsigned> > count;
 	statet state = model.get_init_state();
+	bool gotnext;
 	unsigned next, i, product;
 	
-
-	std::cout<<"debug 1 \n";
-	result.second.resize(model.states.size());
-
-	for(auto & c: result.second)
-	{
-	 	c.resize(model.states.size());
-		//std::fill(c.begin(),c.end(),0);
-	}
-	std::cout<<"debug 2 \n";
-	//trace.push_back(state);
+	trace.push_back(state);
 	
-
 	while (trace.size() < length)
 	{
         fractiont sum;
         sum.zero();
        //get total weighting of outgoing transitions
         for (const auto& t :state.transitions)
-        { std::cout<<"debug 3 \n"; 
-         sum = sum.add(model.weighting(t,state));}  
+        { //std::cout<<"debug 3 \n"; 
+         sum = sum + model.weighting(t,state);}  
 
 		std::uniform_int_distribution<unsigned> distribution(0,sum.nom-1);
         fractiont random;
@@ -46,28 +36,77 @@ trace_pair gettrace(std::default_random_engine &generator, MC model, unsigned le
         
         for(const auto& t : state.transitions)
          {
-         	mass = mass.add(model.weighting(t,state));
-           if(mass.subtract(random).nom>0)
-            { next = t.successor; break;}   
+         	mass = mass + model.weighting(t,state);
+           if((mass - random)>0)
+            { next = t.successor; gotnext=true;break;}   
          }
 
-        result.second[state.ID][next]++;	 
+         if(gotnext==false){std::cout<<"ERROR NOT FOUND";}
+         if(state.ID>=model.states.size()|| next>=model.states.size())
+         	{throw std::exception();}
+        	 
         state = model.states[next];
 		trace.push_back(state);
 
 	}
-	result.first = trace;
-	return result;
+
+	return trace;
+}
+
+//make this pass by reference
+unsigned trace_count(unsigned s1, unsigned s2, tracet t)
+{
+	unsigned count;
+	for(unsigned i=0; i<t.size(); i++)
+	{
+		if(t[i].ID==s1 && t[i+1].ID==s2)
+			{count++;}
+		i++;
+	}
+	return count;
+}
+
+countt MC::get_trace_counts(tracet trace)
+{
+	countt result;
+	std::pair<unsigned, unsigned> p1;
+
+	for(const auto & s: states)
+	{
+		for(const auto & trans: s.transitions)
+		{
+		  if(trans.params.size()>1)
+		  {
+			std::cout<<"ERROR in get_trace_counts: perform state splitting first \n";
+			throw std::exception();
+		  }
+		  if(trans.type==FUNCTION)
+			{
+			for(unsigned p_index=0; p_index<modelparams.size(); p_index++)
+			 {
+				if(trans.params[0].second==modelparams[p_index])
+				{
+				 result[p_index].first += trace_count(s.ID, trans.successor, trace);
+				 for(const auto & t2: s.transitions)
+				 {
+				   if(trans.successor!=t2.successor)
+			       {result[p_index].second+=trace_count(s.ID, t2.successor, trace);}
+				 }
+				}
+			}
+          }
+		}
+	}
+return result;
 }
 
 
 
 
-
-void printtrace(trace_pair trace)
+void printtrace(tracet trace)
 {
 	std::cout<<"\n";
-    for(const auto &s: trace.first) 
+    for(const auto &s: trace) 
     {
         printstate(s);
     }

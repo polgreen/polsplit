@@ -7,6 +7,8 @@
 enum transitiontype {CONST, FUNCTION, REMAINDER};
 
 
+
+
 struct transitiont {
 	transitiontype type; 
 	unsigned successor; 
@@ -23,6 +25,10 @@ struct statet {
 	bool init; 
 	unsigned label;
 	};
+
+	typedef std::vector<statet> tracet; 
+	typedef std::vector < std::pair <unsigned,unsigned> > countt;
+	
 struct MC {
 	std::vector<statet> states; 
 	std::vector<fractiont> modelparams; 
@@ -33,16 +39,18 @@ struct MC {
 	fractiont weighting(transitiont t, statet s);
 	fractiont remainderWeight(statet s);
 	std::vector<std::vector<statet>> get_parameterised_states();
+	countt get_trace_counts(tracet trace);
 	void check();
 	};
-typedef std::vector<statet> tracet; 
-typedef std::pair<tracet, std::vector<std::vector<unsigned> > > trace_pair;
+
+
+
 
 MC get_ZeroConfMC(unsigned probes, unsigned lossWT, unsigned notlossWT, 
 	unsigned useWT, unsigned notuseWT);
 void printstate(statet s);
-trace_pair gettrace(std::default_random_engine &generator, MC model, unsigned length);
-void printtrace(trace_pair trace);
+tracet gettrace(std::default_random_engine &generator, MC model, unsigned length);
+void printtrace(tracet trace);
 
 MC get_parameterisedMC (unsigned probes, unsigned lossWT, 
 	unsigned notlossWT, unsigned useWT, unsigned notuseWT);

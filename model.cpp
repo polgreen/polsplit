@@ -19,15 +19,18 @@ void MC::check()
 		{
 			weight = weighting(t,s);
 			if(weight.nom<0 || weight.denom<0)
-				{std::cout<<"ERROR: transition S"<<s.ID<<"->S"<<t.successor<<" probability less than 0 \n";}
-			state_sum = state_sum.add(weight);
+				{std::cout<<"ERROR: transition S"<<s.ID<<"->S"<<t.successor<<" probability less than 0 \n";
+				throw std::exception();}
+			state_sum = weight + state_sum;
 			if(state_sum.nom > state_sum.denom)
-				{std::cout<<"ERROR: transitions from S"<<s.ID<<" sum to more than 1 \n";}
+				{std::cout<<"ERROR: transitions from S"<<s.ID<<" sum to more than 1 \n";
+				throw std::exception();}
 			if(t.type==FUNCTION)
 				{ for(const auto &p: t.params)
 					{
-						param_sum = param_sum.add(p.first);
-						if(param_sum.nom>param_sum.denom){std::cout<<"ERROR: parameter multipliers >1";}
+						param_sum = p.first + param_sum;
+						if(param_sum.nom>param_sum.denom){std::cout<<"ERROR: parameter multipliers >1";
+							throw std::exception();}
 					}
 				}	
 		}
@@ -64,8 +67,8 @@ fractiont MC::weighting(transitiont t, statet s)
 		case FUNCTION:
 	    for(unsigned index=0; index<t.params.size(); index++)
          	  {
-         	  	prod = t.params[index].first.multiply(modelparams[t.params[index].second]);
-         	  	sum = sum.add(prod);
+         	  	prod = t.params[index].first*modelparams[t.params[index].second];
+         	  	sum = prod + sum;
          	  }
           return sum; break;
          case REMAINDER: return remainderWeight(s) ;break; 
@@ -87,11 +90,15 @@ fractiont MC::remainderWeight(statet s)
 	 	if(t.type==REMAINDER && remainderfound==false)
 	 	{remainderfound=true;}
 	 	else if(t.type==REMAINDER && remainderfound==true)
-	 	{std::cout<<"error, 2 transitions of type REMAINDER found on S"<<s.ID<<"\n";}
-	 	else{sum_state = sum_state.add(weighting(t, s));}
+	 	{std::cout<<"error, 2 transitions of type REMAINDER found on S"<<s.ID<<"\n";
+		 throw std::exception();}
+	 	else{sum_state = sum_state + weighting(t, s);}
 	 }
 	result.one();
-	result = result.subtract(sum_state);
+	if(sum_state.nom>sum_state.denom || sum_state.nom<=0)
+		{std::cout<<"error, invalid state. \n";
+		throw std::exception();}
+	result = result-sum_state;
 	return result;
 }
 

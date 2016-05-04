@@ -12,8 +12,12 @@
 
 int main(int argc, const char *argv[])
 {
- 
-  trace_pair trace;
+
+
+
+  
+ try{
+  tracet trace;
   std::random_device rd;
   std::default_random_engine generator(rd());
   MC model, model2, model3, model4;
@@ -27,7 +31,7 @@ int main(int argc, const char *argv[])
 //  model2.outputMC(std::cout);
   model2.outputPRISM(std::cout);
   std::cout<<"Trace from model 2 \n";
-  trace = gettrace(generator,model,10);
+  trace = gettrace(generator,model2,10);
   
   printtrace(trace);
 
@@ -42,7 +46,9 @@ int main(int argc, const char *argv[])
  std::cout<<"state split 2 \n";
  model4 = state_split2(model3);
  model4.outputPRISM(std::cout);
-
+}
+catch(...)
+{std::cout<<"exception caught at end of main \n";}
 
 }
 
