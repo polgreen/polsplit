@@ -38,15 +38,13 @@ int main(int argc, const char *argv[])
   tracet trace;
   std::random_device rd;
   std::default_random_engine generator(rd());
-   MC model, model2, model3, model4;
+  MC model2, model3, model4;
 
   std::cout<<"Model 2 \n";
   model2 = get_parameterisedMC(4,10,10,10,10);
-
   model2.outputPRISM(std::cout);
-  
- 
- model2.PRISMsynthesis(f);
+
+  model2.PRISMsynthesis(f);
 /*
   std::cout<<"Trace from model 2 \n";
   trace = gettrace(generator,model2,10);

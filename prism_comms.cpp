@@ -31,6 +31,8 @@ std::string ssystem (const char *command)
 
 void MC::PRISMsynthesis(pctlformula property)
 {
+	if(property.t.kind==INIT)
+		{std::cout<<"Property is undefined \n"; throw std::exception();}
 	std::ofstream prismfile ("prismfile.pm");
 	std::ofstream propertyfile ("propertyfile.props");
 	if(!prismfile || !propertyfile){throw std::exception();}
@@ -52,10 +54,11 @@ void MC::outputPRISM(std::ostream &out)
 {
 	char letter = 'a';
 	out <<"dtmc \n\n";
-	out << "const double ";
+
 	for(unsigned p_index = 1; p_index<modelparams.size(); p_index++)
-		{out<<static_cast<char>(letter + p_index -1)<<" ";}
-	out<<";\n\nmodule test \n";
+		{out<<"const double ";
+			out<<static_cast<char>(letter + p_index -1)<<";\n";}
+	out<<"\n\nmodule test \n";
 	out<<"\n // local state \n s: [0..."
 		<<states.size()-1<<"] init "<<get_init_state().ID;
 	out<<";\n \n";
@@ -104,7 +107,9 @@ void MC::outputPRISM(std::ostream &out)
 
 		}out<<";\n";
 	}
-		out<<"\nendmodule \n";
+		out<<"\nendmodule \n \n";
+		out<< "label \"complete\"=(s=5\n)";
+
 }
 
 
