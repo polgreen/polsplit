@@ -4,6 +4,7 @@
 #include <random>
 #include <vector>
 #include "fraction.h"
+#include "pctl_parser.h"
 enum transitiontype {CONST, FUNCTION, REMAINDER};
 
 
@@ -28,7 +29,7 @@ struct statet {
 
 	typedef std::vector<statet> tracet; 
 	typedef std::vector < std::pair <unsigned,unsigned> > countt;
-	
+
 struct MC {
 	std::vector<statet> states; 
 	std::vector<fractiont> modelparams; 
@@ -40,6 +41,7 @@ struct MC {
 	fractiont remainderWeight(statet s);
 	std::vector<std::vector<statet>> get_parameterised_states();
 	countt get_trace_counts(tracet trace);
+	void PRISMsynthesis(pctlformula property);
 	void check();
 	};
 

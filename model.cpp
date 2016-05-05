@@ -14,6 +14,8 @@ void MC::check()
 	fractiont param_sum;
 	for(const auto &s: states)
 	{
+		if(s.ID>=states.size()){std::cout<<"StateIDs not properly assigned";
+		throw std::exception();}
 		state_sum.zero();
 		for(const auto &t: s.transitions)
 		{
