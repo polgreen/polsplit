@@ -1,6 +1,7 @@
 #include "pctl_parser.h"
 #include <vector>
 #include <iostream>
+#include <exception>
 pctlformula parse (std::vector<tokent> &tokenseq);
 pctlformula parseprimary(std::vector<tokent> &tokenseq);
 
@@ -89,6 +90,7 @@ pctlformula parseprob(std::vector<tokent> &tokenseq)
 	if (tokenseq.empty())
 	{
 		std::cout<<"expected bounds after P \n";
+		throw std::exception();
 	}
 		else if (tokenseq.front().kind==GE || tokenseq.front().kind==LE ||
 		tokenseq.front().kind==GT || tokenseq.front().kind==LT)
@@ -96,7 +98,8 @@ pctlformula parseprob(std::vector<tokent> &tokenseq)
 		f0.t.kind=tokenseq.front().kind;
 		tokenseq.erase(tokenseq.begin());
 		if(tokenseq.empty())
-			{std::cout<<"expected identifier after P>=, P>, P< or P<=";}
+			{std::cout<<"expected identifier after P>=, P>, P< or P<=\n";
+			throw std::exception();}
 		else{
 			f1 = parseprimary(tokenseq);
 			f.children.resize(4);
@@ -114,9 +117,11 @@ pctlformula parseprob(std::vector<tokent> &tokenseq)
 					tokenseq.erase(tokenseq.begin());
 					return f;
 				}
-				else{std::cout<<"missing SRP";}
+				else{std::cout<<"missing SRP\n";
+					throw std::exception();}
 			}
-			else{std::cout<<"missing SLP";}
+			else{std::cout<<"missing SLP\n";
+				throw std::exception();}
 
 		}
 	}
@@ -125,12 +130,14 @@ pctlformula parseprob(std::vector<tokent> &tokenseq)
 		f0.t.kind=tokenseq.front().kind;
 		tokenseq.erase(tokenseq.begin());
 		if(tokenseq.empty() || tokenseq.front().kind!=EQ)
-			{std::cout<<"expected = after P min or P max";}
+			{std::cout<<"expected = after P min or P max\n";
+			throw std::exception();}
 		else{
 			f1.t.kind=EQ;
 			tokenseq.erase(tokenseq.begin());
 			if(tokenseq.empty() || (tokenseq.front().kind!=QUE && tokenseq.front().kind!=IDENTIFIER))
-			{std::cout<<"expected ? or identifier after P min or P max";}
+			{std::cout<<"expected ? or identifier after P min or P max\n";
+			throw std::exception();}
 			else{
 			 f2.t=tokenseq.front();	
 			 tokenseq.erase(tokenseq.begin());
@@ -150,15 +157,18 @@ pctlformula parseprob(std::vector<tokent> &tokenseq)
 					tokenseq.erase(tokenseq.begin());
 					return f;
 				 }
-				 else{std::cout<<"missing SRP";}
+				 else{std::cout<<"missing SRP\n";
+					throw std::exception();}
 			   }
-			  else{std::cout<<"missing SLP";}
+			  else{std::cout<<"missing SLP\n";
+				throw std::exception();}
 
 		     } 
 
 	       }
 	 } 
-	 else{std::cout<<"expecting MIN or MAX or > or < after PROB";}     
+	 else{std::cout<<"expecting MIN or MAX or > or < after PROB\n";
+		throw std::exception();}     
 
 }
 
@@ -192,7 +202,8 @@ pctlformula parseprimary(std::vector<tokent> &tokenseq)
 			return f;
 		}
 		else{
-			std::cout<< "missing right parenthesis";
+			std::cout<< "missing right parenthesis\n";
+			throw std::exception();
 		}
 	}
 
@@ -203,15 +214,17 @@ pctlformula parseprimary(std::vector<tokent> &tokenseq)
 
 	else if (!tokenseq.empty()){
 		switch(tokenseq.front().kind){
-				case UNTIL: std::cout<<"UNTIL must be preceeded by an identifier"; break;
-				case AND: std::cout<<"AND must be preceeded by an identifier"; break;
-				case OR: std::cout<<"OR must be preceeded by an identifier"; break;
+				case UNTIL: std::cout<<"UNTIL must be preceeded by an identifier\n"; break;
+				case AND: std::cout<<"AND must be preceeded by an identifier\n"; break;
+				case OR: std::cout<<"OR must be preceeded by an identifier\n"; break;
 				default: ;
 			}
+			throw std::exception();
 			
 	}	
 	else
-		{std::cout<<"empty tokenseq";}
+		{std::cout<<"empty tokenseq\n";
+		throw std::exception();}
 
 }
 
@@ -225,7 +238,8 @@ pctlformula parseconjunction(std::vector<tokent> &tokenseq)
 	 tokenseq.erase(tokenseq.begin());
 	 if(tokenseq.empty())
 	 {
-		std::cout<<"error. Expected identifier after AND";
+		std::cout<<"error. Expected identifier after AND\n";
+		throw std::exception();
 		return f0;
 	 }
 	 else{
@@ -257,7 +271,8 @@ pctlformula parsedisjunction(std::vector<tokent> &tokenseq)
 	tokenseq.erase(tokenseq.begin());
 	if(tokenseq.empty())
 	{
-		std::cout<<"error. Expected identifier after OR";
+		std::cout<<"error. Expected identifier after OR\n";
+		throw std::exception();
 	}
 	else{
 	 f1 = parsedisjunction(tokenseq);
@@ -292,6 +307,7 @@ pctlformula parseFG(std::vector<tokent> &tokenseq)
 	  if(tokenseq.empty())
 	   {
 		std::cout<<"error. Expected identifier after FINALLY \n";
+		throw std::exception();
 	   }
 	  else{
 
@@ -310,6 +326,7 @@ pctlformula parseFG(std::vector<tokent> &tokenseq)
 	  if(tokenseq.empty())
 	   {
 		std::cout<<"error. Expected identifier after GLOBALLY \n";
+		throw std::exception();
 	   }
 	  else
 	  {
@@ -326,6 +343,7 @@ pctlformula parseFG(std::vector<tokent> &tokenseq)
 	  if(tokenseq.empty())
 	   {
 		std::cout<<"error. Expected identifier after X \n";
+		throw std::exception();
 	   }
 	  else
 	  {
@@ -381,10 +399,12 @@ pctlformula parseuntil(std::vector<tokent> &tokenseq)
 	 if(tokenseq.empty())
 	  {
 		std::cout<<"error. Expected identifier after UNTIL \n";
+		throw std::exception();
 	  }
 	 else if(tokenseq.front().kind==GT || tokenseq.front().kind==GE)
 	 {
 	 	std::cout<<"error: GT and GE not allowed after UNTIL \n";
+	 	throw std::exception();
 	 }
 	 else if (tokenseq.front().kind==LT || tokenseq.front().kind==LE)
 	 {
@@ -397,7 +417,8 @@ pctlformula parseuntil(std::vector<tokent> &tokenseq)
 			//outputtoken(tokenseq);
 
 			if(tokenseq.empty())
-			{std::cout<<"Error: expected something after UNTIL \n";}
+			{std::cout<<"Error: expected something after UNTIL \n";
+			throw std::exception();}
 			else
 			{
 		//	outputtoken(tokenseq);
@@ -411,7 +432,8 @@ pctlformula parseuntil(std::vector<tokent> &tokenseq)
 			return f;
 			}
 		}
-		else{std::cout<<"expected identifier after U>=, U>, U<, or U<= \n";}
+		else{std::cout<<"expected identifier after U>=, U>, U<, or U<= \n";
+			throw std::exception();}
 	 }
 	 else
 	  {
@@ -429,8 +451,6 @@ pctlformula parseuntil(std::vector<tokent> &tokenseq)
 	 	return f0;
 	 }
 	
-
-
 }
 
 
@@ -440,7 +460,8 @@ pctlformula parse (std::vector<tokent> &tokenseq)
 pctlformula f;
 if(tokenseq.empty())
 {
-	std::cout<<"parse error: empty tokenseq";
+	std::cout<<"parse error: empty tokenseq\n";
+	throw std::exception();
 }
 else{
  f =  parseuntil(tokenseq);
@@ -457,6 +478,7 @@ pctlformula f;
   if(!tokenseq.empty())
   {
 	std::cout<<"parse error: tokens after end of expression \n";
+	throw std::exception();
 	outputtoken(tokenseq);
 	  }
  return f;

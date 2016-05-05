@@ -12,6 +12,10 @@ void MC::check()
 	fractiont weight;
 	fractiont state_sum;
 	fractiont param_sum;
+	if(states.size()==0)
+		{std::cout<<"error in MC::check(), no states found \n";
+		throw std::exception();}
+
 	for(const auto &s: states)
 	{
 		if(s.ID>=states.size()){std::cout<<"StateIDs not properly assigned";
@@ -42,7 +46,11 @@ void MC::check()
 
 std::vector<std::vector<statet>> MC::get_parameterised_states()
 {
+	if(states.size()==0){
+		std::cout<<"no model states found\n";
+		throw std::exception();}
 	std::vector<std::vector<statet>> result;
+	bool found=false;
 	for(const auto &s:states)
 	{
 		for(const auto &t: s.transitions)
@@ -50,8 +58,11 @@ std::vector<std::vector<statet>> MC::get_parameterised_states()
 			if(t.type==FUNCTION && t.params.size()==1)
 				{	
 					result[t.params[0].second].push_back(s);
+					found=true;
 				}
 		}
+		if(found==false){std::cout<<"error in get_parameterised_states: no parameterised states found \n";
+		throw std::exception();}
 	}
 return result;
 
@@ -62,6 +73,7 @@ fractiont MC::weighting(transitiont t, statet s)
 {
 	fractiont sum, prod;
 	sum.zero();
+
 
 	switch(t.type)
 	{
@@ -74,7 +86,8 @@ fractiont MC::weighting(transitiont t, statet s)
          	  }
           return sum; break;
          case REMAINDER: return remainderWeight(s) ;break; 
-        default:;
+        default: std::cout<<"error, state"<<s.ID<<"type unknown \n";
+        		throw std::exception(); 
     }
        
 }
@@ -108,13 +121,19 @@ fractiont MC::remainderWeight(statet s)
 
 statet MC::get_init_state()
 {
+	bool found;
 	for (const auto& s: states)
 	{
-		if(s.init==true)
-		{
-			return s;
-		}
-	}//add error handling, what if we find the ID twice, and what if we don't find it at all
+		if(s.init==true && found==false)
+		{return s;}
+		else if(s.init==true && found==true)
+			{std::cout<<"error in get_init_state: found 2 initial states \n";
+			throw std::exception();}
+	}
+ //if we get here throw exception
+	std::cout<<"error in get_init_state: no initial state found \n";
+		 throw std::exception();
+
 }
 
 

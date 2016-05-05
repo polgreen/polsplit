@@ -22,18 +22,15 @@ int main(int argc, const char *argv[])
   if(argc==2)
   {
     tokenseq = pctl_tokenizer(argv[1]);
-   outputtoken(tokenseq);
-   fflush(stdout);
    try{
       f = parse_top(tokenseq);
       std::cout<<"\n";
       output(f);
       std::cout<<"\n";
         }
-   catch(std::exception)
-        {
-        std::cout << "parsing failed\n";
-        }
+   catch(std::exception& ex)
+        {std::cout << "parsing failed\n";}
+
   }
 
      

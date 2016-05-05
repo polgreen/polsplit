@@ -76,6 +76,9 @@ std::vector<tokent>  pctl_tokenizer(std::string input)
   std::vector<tokent> tokenseq;
   std::string buffer;
   tokent t;
+  if(input.size()==0)
+    {std::cout<<"Empty string \n";
+    throw std::exception();}
   std::string::iterator pos =input.begin();
   while(pos!=input.end())
   {
@@ -100,7 +103,6 @@ std::vector<tokent>  pctl_tokenizer(std::string input)
           if(pos!= input.end() && *pos=='>')
           {t.kind=IMPLIES; tokenseq.push_back(t); break;}
           else {t.kind = EQ; tokenseq.push_back(t); pos--;break;}
-
           case '(': t.kind = LP; tokenseq.push_back(t); break;
           case ')': t.kind = RP; tokenseq.push_back(t); break;
           case '[': t.kind = SLP; tokenseq.push_back(t); break;

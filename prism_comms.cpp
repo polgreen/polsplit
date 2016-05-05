@@ -10,7 +10,9 @@
 #include "pctl_parser.h"
 
 
-std::string ssystem (const char *command) {
+
+std::string ssystem (const char *command) 
+{
     char tmpname [L_tmpnam];
     std::tmpnam ( tmpname );
     std::string scommand = command;
@@ -27,7 +29,6 @@ std::string ssystem (const char *command) {
 }
 
 
-
 void MC::PRISMsynthesis(pctlformula property)
 {
 	std::ofstream prismfile ("prismfile.pm");
@@ -35,8 +36,7 @@ void MC::PRISMsynthesis(pctlformula property)
 	if(!prismfile || !propertyfile){throw std::exception();}
 	outputPRISM(prismfile);
 	outputproperty(property, propertyfile);
-
-/*	std::string result;
+	std::string result;
 	char letter='a';
 	std::string command ("prism prismfile.pm propertyfile.props -param ");
 	for(unsigned p_index=1; p_index<modelparams.size(); p_index++)
@@ -44,21 +44,17 @@ void MC::PRISMsynthesis(pctlformula property)
 		command+=static_cast<char>(letter+p_index -1);
 		command+="=0:1,";
 	}
-
-	system(command.c_str());*/
-	
+	system(command.c_str());	
 }
 
 
 void MC::outputPRISM(std::ostream &out)
 {
-	
-	
 	char letter = 'a';
 	out <<"dtmc \n\n";
 	out << "const double ";
 	for(unsigned p_index = 1; p_index<modelparams.size(); p_index++)
-	{out<<static_cast<char>(letter + p_index -1)<<" ";}
+		{out<<static_cast<char>(letter + p_index -1)<<" ";}
 	out<<";\n\nmodule test \n";
 	out<<"\n // local state \n s: [0..."
 		<<states.size()-1<<"] init "<<get_init_state().ID;

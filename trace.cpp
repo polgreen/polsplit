@@ -9,13 +9,11 @@
 
 tracet gettrace(std::default_random_engine &generator, MC model, unsigned length)
 {	
-
 	tracet trace;
 	std::vector<std::vector<unsigned> > count;
 	statet state = model.get_init_state();
 	bool gotnext;
 	unsigned next, i, product;
-	
 	trace.push_back(state);
 	
 	while (trace.size() < length)
@@ -41,9 +39,10 @@ tracet gettrace(std::default_random_engine &generator, MC model, unsigned length
             { next = t.successor; gotnext=true;break;}   
          }
 
-         if(gotnext==false){std::cout<<"ERROR NOT FOUND";}
+         if(gotnext==false){std::cout<<"ERROR NOT FOUND";
+     		throw std::exception();}
          if(state.ID>=model.states.size()|| next>=model.states.size())
-         	{throw std::exception();}
+         	{std::cout<<"error in get trace"; throw std::exception();}
         	 
         state = model.states[next];
 		trace.push_back(state);

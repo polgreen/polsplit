@@ -16,10 +16,12 @@ transitiont find_remainder(statet current_state)
 	bool rem_found;
 	transitiont t_remainder, t0;
 	rem_found=false;
-	  for(unsigned t1_index=0; t1_index<current_state.transitions.size(); t1_index++)
-	  {
+	if(current_state.transitions.size()==0)
+		{std::cout<<"error in find_remainder, no transitions to state "<<current_state.ID<<"\n";
+		throw std::exception();}
 
-	  	
+	for(unsigned t1_index=0; t1_index<current_state.transitions.size(); t1_index++)
+	  {	  	
 	 	t0 = current_state.transitions[t1_index];
 	 	if(t0.type==REMAINDER && rem_found==false)
 	 	{t_remainder = t0; rem_found=true;}
@@ -28,7 +30,8 @@ transitiont find_remainder(statet current_state)
 	  }
 
 	  if(rem_found==false && current_state.transitions.size()>1)
-	  	{std::cout<<"ERROR: found no remainder transition from state s"<<current_state.ID<<"\n";}
+	  	{std::cout<<"error in find_remainder, no REMAINDER transition from state s"<<current_state.ID<<"\n";
+		throw std::exception();	}
 
 	return t_remainder;
 }
@@ -42,6 +45,10 @@ MC state_split1(MC model)
  transitiont t0, t1, t2, t3, t_remainder;
  std::pair<fractiont,unsigned> p1;
  std::vector<transitiont> temp;
+ if(model.states.size()==0)
+ {	std::cout<<"error in state_split, no states found \n";
+	throw std::exception();
+ }
 
  for(unsigned s_index=0; s_index<model.states.size(); s_index++)
 	{
@@ -81,7 +88,9 @@ MC state_split1(MC model)
 				model.states[s_index].transitions.erase(model.states[s_index].transitions.begin()+t_index);
 
 		 	}
-
+		 	if(t0.type==FUNCTION && t0.params.size())
+		 		{std::cout<<"Error in state_split1, state "<<current_state.ID<<" has FUNCTION transition with no parameters\n";
+		 		throw std::exception();}
 	}
 
 	}
@@ -91,6 +100,10 @@ MC state_split1(MC model)
 
 MC state_split2(MC model)
 {
+	if(model.states.size()==0)
+ 	{std::cout<<"error in state_split2, no states found \n";
+	throw std::exception();}
+
 	bool case2=false;
 	bool rem_found=false;
 	statet current_state, new_state;
@@ -103,6 +116,7 @@ MC state_split2(MC model)
  	std::cout<<model.states.size();
  	std::cout<<"\n";
  	temp_states = {};
+
  	for(unsigned s_index=0; s_index<model.states.size(); s_index++)
 	 {
 	 	current_state = model.states[s_index];
@@ -138,7 +152,8 @@ MC state_split2(MC model)
 	 				t3.prob = t0.params[0].first;
 	 				model.states[s_index].transitions[t_index] = t3;
 	 			}
-	 			else{std::cout<<"ERROR: please apply state split 1 first \n";}
+	 			else{std::cout<<"error in state_split2: please apply state split 1 first \n";
+	 				throw std::exception();}
 	 		}
 	 	}
 	 }
@@ -146,8 +161,6 @@ MC state_split2(MC model)
 	 {
 	 	model.states.push_back(s);
 	 }
-
-
 
 return model;
 }

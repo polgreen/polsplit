@@ -2,12 +2,12 @@
 #include "fraction.h"
 #include <iostream>
 
-
 unsigned gcdr (unsigned a, unsigned b)
 {
 	if(a==0) return b;
 	return gcdr(b%a, a);
 }
+
 void fractiont::simplify()
 {
 	unsigned GCD;
@@ -16,8 +16,6 @@ void fractiont::simplify()
 	denom = denom/GCD;
 }
 
-
-
 void fractiont::output(std::ostream &out)
 {
 	simplify();
@@ -25,7 +23,6 @@ void fractiont::output(std::ostream &out)
 	else if(nom==denom){out<<1;}
 	else{out<<nom<<"/"<<denom;}
 }
-
 
 fractiont operator+(fractiont f1, fractiont f2)
 {
@@ -41,7 +38,6 @@ fractiont operator+(fractiont f1, fractiont f2)
 	return result;
 }
 
-
 fractiont operator*(fractiont f1, fractiont f2)
 {
 	fractiont result;
@@ -51,8 +47,6 @@ fractiont operator*(fractiont f1, fractiont f2)
 	return result;
 }
 
-
-
 fractiont operator/(fractiont f1, fractiont f2)
 {
 	fractiont result;
@@ -61,7 +55,6 @@ fractiont operator/(fractiont f1, fractiont f2)
 	result.simplify();
 	return result;
 }
-
 
 fractiont operator-(fractiont f1, fractiont f2)
 {
@@ -78,42 +71,22 @@ fractiont operator-(fractiont f1, fractiont f2)
 }
 
 bool operator==(fractiont f1, fractiont f2)
-{
-	return(f1.nom==f2.nom && f1.denom==f1.denom);
-}
+{return(f1.nom==f2.nom && f1.denom==f1.denom);}
 
 bool operator>(fractiont f1, fractiont f2)
-{
-	return((f1.nom*f2.denom) > (f1.denom*f2.nom));
-}
+{return((f1.nom*f2.denom) > (f1.denom*f2.nom));}
 
 bool operator<(fractiont f1, fractiont f2)
-{
-	return((f1.nom*f2.denom) < (f1.denom*f2.nom));
-}
+{return((f1.nom*f2.denom) < (f1.denom*f2.nom));}
 
 bool operator<=(fractiont f1, fractiont f2)
-{
-	return((f1.nom*f2.denom) <= (f1.denom*f2.nom));
-}
+{return((f1.nom*f2.denom) <= (f1.denom*f2.nom));}
 
 bool operator>=(fractiont f1, fractiont f2)
-{
-	return((f1.nom*f2.denom) >= (f1.denom*f2.nom));
-}
-
-
-
-
-
+{return((f1.nom*f2.denom) >= (f1.denom*f2.nom));}
 
 void fractiont::zero()
-{
-	nom = 0;
-	denom = 0;
-}
+{nom = 0;denom = 0;}
+
 void fractiont::one()
-{
-	nom = 1;
-	denom = 1;
-}
+{nom = 1;denom = 1;}
