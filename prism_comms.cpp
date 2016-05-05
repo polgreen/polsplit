@@ -38,6 +38,8 @@ void MC::PRISMsynthesis(pctlformula property)
 	if(!prismfile || !propertyfile){throw std::exception();}
 	outputPRISM(prismfile);
 	outputproperty(property, propertyfile);
+	prismfile.close();
+	propertyfile.close();
 	std::string result;
 	char letter='a';
 	std::string command ("prism prismfile.pm propertyfile.props -param ");
@@ -57,9 +59,9 @@ void MC::outputPRISM(std::ostream &out)
 
 	for(unsigned p_index = 1; p_index<modelparams.size(); p_index++)
 		{out<<"const double ";
-			out<<static_cast<char>(letter + p_index -1)<<";\n";}
+			out<<static_cast<char>(letter + p_index-1)<<";\n";}
 	out<<"\n\nmodule test \n";
-	out<<"\n // local state \n s: [0..."
+	out<<"\n // local state \n s: [0.."
 		<<states.size()-1<<"] init "<<get_init_state().ID;
 	out<<";\n \n";
 
@@ -82,7 +84,7 @@ void MC::outputPRISM(std::ostream &out)
 						else{out<< " + ";}
 							p.first.output(out);
 							out<<"*";
-						if(p.second>0){out<<static_cast<char>(letter + p.second);}
+						if(p.second>0){out<<static_cast<char>(letter + p.second -1);}
 					} out<<" : (s'="<<t.successor<<")"; break;
 				case REMAINDER: out<<"(1";
 						for(auto & t2: s.transitions)
@@ -95,7 +97,7 @@ void MC::outputPRISM(std::ostream &out)
 											out<<"-";
 										  p2.first.output(out);
 										  out<<"*";
-			                              if(p2.second>0){out<<static_cast<char>(letter + p2.second);}
+			                              if(p2.second>0){out<<static_cast<char>(letter + p2.second -1);}
 						    			 }
 									break;	
 							  case REMAINDER: break;	
@@ -108,7 +110,7 @@ void MC::outputPRISM(std::ostream &out)
 		}out<<";\n";
 	}
 		out<<"\nendmodule \n \n";
-		out<< "label \"complete\"=(s=5\n)";
+		out<< "label \"complete\"=(s=5);\n";
 
 }
 
