@@ -22,6 +22,8 @@ int main(int argc, const char *argv[])
   if(argc==2)
   {
     tokenseq = pctl_tokenizer(argv[1]);
+    outputtoken(tokenseq);
+
    try{
       f = parse_top(tokenseq);
       std::cout<<"\n";
@@ -33,7 +35,7 @@ int main(int argc, const char *argv[])
 
   }
 
-     
+ /*    
   try{
   tracet trace;
   std::random_device rd;
@@ -62,11 +64,11 @@ int main(int argc, const char *argv[])
   std::ofstream prismfile;
   prismfile.open("prismfile.pm");
   model4.outputPRISM(prismfile);
-  */
+  
 
 }
 catch(...)
 {std::cout<<"exception caught at end of main \n";}
-
+*/
 }
 
