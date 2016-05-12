@@ -11,10 +11,12 @@ enum transitiontype {CONST, FUNCTION, REMAINDER};
 
 
 struct transitiont {
+	transitiont(){count=0;}
 	transitiontype type; 
 	unsigned successor; 
 	fractiont prob; 
 	std::vector <std::pair < fractiont, unsigned> > params;
+	unsigned count;
 	//first = parameter multiplier
 	//second = parameter index
 //	std::vector<unsigned> params; 
@@ -28,7 +30,7 @@ struct statet {
 	};
 
 	typedef std::vector<statet> tracet; 
-	typedef std::vector < std::pair <unsigned,unsigned> > countt;
+	typedef std::vector<fractiont> countt;
 
 struct MC {
 	std::vector<statet> states; 
@@ -39,15 +41,17 @@ struct MC {
 	void outputPRISM(std::ostream &out);
 	fractiont weighting(transitiont t, statet s);
 	fractiont remainderWeight(statet s);
-	std::vector<std::vector<statet>> get_parameterised_states();
-	countt get_trace_counts(tracet trace);
+	std::vector< std::vector< std::pair < statet, unsigned> > >  get_parameterised_states();
+	void get_trace_counts(tracet trace);
 	void PRISMsynthesis(pctlformula property);
 	void check();
 	};
 
+	
+std::vector<fractiont> parameter_distributions(MC model);
 
 
-
+MC get_simpleMC();
 MC get_ZeroConfMC(unsigned probes, unsigned lossWT, unsigned notlossWT, 
 	unsigned useWT, unsigned notuseWT);
 void printstate(statet s);

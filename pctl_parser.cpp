@@ -6,11 +6,20 @@ pctlformula parse (std::vector<tokent> &tokenseq);
 pctlformula parseprimary(std::vector<tokent> &tokenseq);
 
 
+bool is_number(const std::string& s)
+{
+    return !s.empty() && std::find_if(s.begin(), 
+        s.end(), [](char c) { return !(std::isdigit(c)||c=='.'); }) == s.end();
+}
+
+
 void outputproperty(pctlformula f, std::ostream &out)
 {
 	switch(f.t.kind)
  	{
- 	case IDENTIFIER: out<< '\"'<<f.t.label<<'\"'; break;
+ 	case IDENTIFIER: 
+ 		if(is_number(f.t.label)){out<<f.t.label; break;}
+ 		else{ 	out<< '\"'<<f.t.label<<'\"'; break;}
  	case UNTIL:out<<"("; outputproperty(f.children[0], out); out<< " U "; outputproperty(f.children[1], out);out<<")"; break;
  	case BUNTIL:out<<"("; outputproperty(f.children[0], out); out<< " U"; outputproperty(f.children[2], out);
  	outputproperty(f.children[3], out);
@@ -20,8 +29,8 @@ void outputproperty(pctlformula f, std::ostream &out)
  	case PROB: out<<"P"; outputproperty(f.children[0],out); outputproperty(f.children[1], out); 
  	outputproperty(f.children[2], out); out<<"[";outputproperty(f.children[3], out); out<<"]";break;
 	case NOT: out<<"!"; outputproperty(f.children[0], out); break;
-	case GT: out<<">"; outputproperty(f.children[0], out);break;
- 	case LT: out<<"<";outputproperty(f.children[0], out);break;
+	case GT: out<<">"; break;//outputproperty(f.children[0], out);break;
+ 	case LT: out<<"<";break;//outputproperty(f.children[0], out);break;
  	case EQ:out<<"=";outputproperty(f.children[0], out);break;
  	case LP: out<<"("; break;
  	case RP: out<<")"; break;
@@ -53,8 +62,8 @@ case AND:  std::cout<<"("; output(f.children[0]); std::cout<< " & "; output(f.ch
  case PROB: std::cout<<"P"; output(f.children[0]); output(f.children[1]); 
  	output(f.children[2]); std::cout<<"[";output(f.children[3]); std::cout<<"]";break;
  case NOT: std::cout<<"!"; output(f.children[0]); break;
- case GT: std::cout<<">"; output(f.children[0]);break;
- case LT: std::cout<<"<";output(f.children[0]);break;
+ case GT: std::cout<<">"; break;//output(f.children[0]);break;
+ case LT: std::cout<<"<";break;//output(f.children[0]);break;
  case EQ:std::cout<<"=";output(f.children[0]);break;
  case LP: std::cout<<"("; break;
  case RP: std::cout<<")"; break;
@@ -66,8 +75,8 @@ case AND:  std::cout<<"("; output(f.children[0]); std::cout<< " & "; output(f.ch
  case MAX: std::cout<<"max"; break;
  case QUE: std::cout<<"?"; break;
  case IMPLIES: std::cout<<"implies"; break;
- case GE: std::cout<<">="; break;
- case LE: std::cout<<"<="; break;
+ case GE: std::cout<<">=";break;//output(f.children[0]); break;
+ case LE: std::cout<<"<=";break;//output(f.children[0]); break;
 
  default:;
  }
@@ -97,11 +106,11 @@ pctlformula parseprob(std::vector<tokent> &tokenseq)
 		else if (tokenseq.front().kind==GE || tokenseq.front().kind==LE ||
 		tokenseq.front().kind==GT || tokenseq.front().kind==LT)
 	{
-		std::cout<<"Got to line 98 \n";
+
 		f0.t.kind=tokenseq.front().kind;
-		std::cout<<"Got to line 100 \n";
+
 		tokenseq.erase(tokenseq.begin());
-		std::cout<<"Got to line 102 \n";
+
 		if(tokenseq.empty())
 			{std::cout<<"expected identifier after P>=, P>, P< or P<=\n";
 			throw std::exception();}

@@ -44,26 +44,49 @@ void MC::check()
 }
 
 
-std::vector<std::vector<statet>> MC::get_parameterised_states()
+std::vector< std::vector< std::pair < statet, unsigned> > > MC::get_parameterised_states()
 {
+
 	if(states.size()==0){
 		std::cout<<"no model states found\n";
 		throw std::exception();}
-	std::vector<std::vector<statet>> result;
+	std::vector< std::vector< std::pair < statet, unsigned> > > result;
+	result.resize(modelparams.size());
+	//for(const auto & v: result) //initialise result vector of vectors to empty for each parameter
+	//{v = {};}
+	std::pair<statet, unsigned> pair;
 	bool found=false;
+
 	for(const auto &s:states)
 	{
-		for(const auto &t: s.transitions)
+		for (unsigned t=0; t<s.transitions.size(); t++)
 		{
-			if(t.type==FUNCTION && t.params.size()==1)
+
+			if(s.transitions[t].type==FUNCTION && s.transitions[t].params.size()==1)
 				{	
-					result[t.params[0].second].push_back(s);
+					std::cout<<"S"<<s.ID<<" transition to S"<<s.transitions[t].successor<<"\n";
+					pair.first = s;
+					pair.second = t;
+					result[s.transitions[t].params[0].second].push_back(pair);
 					found=true;
-				}
+				}			
 		}
-		if(found==false){std::cout<<"error in get_parameterised_states: no parameterised states found \n";
-		throw std::exception();}
+		
 	}
+
+	if(found==false){std::cout<<"error in get_parameterised_states: no parameterised states found \n";
+		throw std::exception();}
+	std::cout<<"size of result: "<<result.size()<<"\n";
+	for (const auto & vector: result)
+	{
+		for(const auto & v: vector)
+		{
+
+			std::cout<<"result: "<<v.first.ID<<" ";
+			std::cout<<v.second<<"\n";
+		}
+	}
+
 return result;
 
 }
@@ -111,7 +134,7 @@ fractiont MC::remainderWeight(statet s)
 	 }
 	result.one();
 	if(sum_state.nom>sum_state.denom || sum_state.nom<=0)
-		{std::cout<<"error, invalid state. \n";
+		{std::cout<<"error, invalid state found calculating remainder weight S"<<s.ID<<" \n";
 		throw std::exception();}
 	result = result-sum_state;
 	return result;
@@ -159,11 +182,13 @@ void MC::outputMC (std::ostream &out)
 		out<<"S"<<s.ID <<": \n";
 		for(const auto & t: s.transitions)
 		{
-			out<<"transition "<<t.type<<" to S";
+			if(t.type==FUNCTION){out<<"FUNCTION ";}
+			out<<"transition to S";
 			out<<t.successor<<" weighting: ";
 			result = weighting(t, s);
 			if(result.nom==0){std::cout<<"ERROR ZERO VALUE RETURNED";}
 			result.output(out);
+			out<<", count: "<<t.count;
 			out<<"\n";
 		}
 	}			

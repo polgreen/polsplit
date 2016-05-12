@@ -35,40 +35,47 @@ int main(int argc, const char *argv[])
 
   }
 
- /*    
+  
   try{
   tracet trace;
+
+  MC model, model2, model3, model4;
+
+  model = get_simpleMC();
+  model.outputPRISM(std::cout);
+  model.PRISMsynthesis(f);
+ for(unsigned n=0; n<10; n++)
+ {
   std::random_device rd;
   std::default_random_engine generator(rd());
-  MC model2, model3, model4;
-
+  trace = gettrace(generator, model, 100);
+  printtrace(trace);
+  model.get_trace_counts(trace);
+ }
+ parameter_distributions(model);
+ model.outputMC(std::cout);
+/*
   std::cout<<"Model 2 \n";
   model2 = get_parameterisedMC(4,10,10,10,10);
-  model2.outputPRISM(std::cout);
 
-  model2.PRISMsynthesis(f);
-/*
+  model3 = state_split1(model2);
+  model4 = state_split2(model3);
+  //model2.PRISMsynthesis(f);
+
   std::cout<<"Trace from model 2 \n";
-  trace = gettrace(generator,model2,10);
-  
+  trace = gettrace(generator,model4,100);
   printtrace(trace);
+  model4.get_trace_counts(trace);
+   model4.outputMC(std::cout); 
+  parameter_distributions(model4);
+*/
 
- model2.check();
- std::cout<<"state split 1 \n";
- model3 = state_split1(model2);
-// model3.outputMC(std::cout);
- model3.outputPRISM(std::cout);
- std::cout<<"state split 2 \n";
- model4 = state_split2(model3);
- model4.outputPRISM(std::cout);
-  std::ofstream prismfile;
-  prismfile.open("prismfile.pm");
-  model4.outputPRISM(prismfile);
+
   
 
 }
 catch(...)
 {std::cout<<"exception caught at end of main \n";}
-*/
+
 }
 

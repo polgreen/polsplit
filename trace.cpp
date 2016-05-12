@@ -65,41 +65,50 @@ unsigned trace_count(unsigned s1, unsigned s2, tracet t)
 	return count;
 }
 
-countt MC::get_trace_counts(tracet trace)
+void MC::get_trace_counts(tracet trace)
 {
-	countt result;
-	std::pair<unsigned, unsigned> p1;
-
-	for(const auto & s: states)
+	for(unsigned i=0; i<trace.size(); i++)
 	{
-		for(const auto & trans: s.transitions)
+		if(states[trace[i].ID].transitions.size()==0){std::cout<<"Error no transitions on state"<<trace[i].ID<<"\n";
+		throw std::exception();}
+		for(unsigned t=0; t<states[trace[i].ID].transitions.size(); t++)
 		{
-		  if(trans.params.size()>1)
-		  {
-			std::cout<<"ERROR in get_trace_counts: perform state splitting first \n";
-			throw std::exception();
-		  }
-		  if(trans.type==FUNCTION)
-			{
-			for(unsigned p_index=0; p_index<modelparams.size(); p_index++)
-			 {
-				if(trans.params[0].second==modelparams[p_index])
-				{
-				 result[p_index].first += trace_count(s.ID, trans.successor, trace);
-				 for(const auto & t2: s.transitions)
-				 {
-				   if(trans.successor!=t2.successor)
-			       {result[p_index].second+=trace_count(s.ID, t2.successor, trace);}
-				 }
-				}
-			}
-          }
+		
+			if(states[trace[i].ID].transitions[t].successor==trace[i+1].ID)
+			{states[trace[i].ID].transitions[t].count++;}
 		}
 	}
-return result;
 }
 
+std::vector<fractiont> parameter_distributions(MC model)
+{
+	std::cout<<"parameter distributions \n";
+	std::vector< std::vector< std::pair < statet, unsigned> > > param_states;
+	param_states = model.get_parameterised_states();
+	std::vector<fractiont> result;
 
+	result.resize(param_states.size());
+	for(auto r: result) //initialise vector
+		{r.zero();}
+
+	for(unsigned p_index; p_index<param_states.size(); p_index++)
+	{
+		for(const auto s: param_states[p_index])
+		{
+			result[p_index]=result[p_index] + s.first.transitions[s.second].count;
+			std::cout<<"count is: "<<s.first.transitions[s.second].count;
+		}
+	}
+
+	for(auto f: result)
+	{
+		std::cout<<"dist: "<<f.nom<<" "<<f.denom;
+		std::cout<<"\n";
+	}
+
+
+return result;
+}
 
 
 void printtrace(tracet trace)

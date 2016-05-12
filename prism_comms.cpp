@@ -110,7 +110,7 @@ void MC::outputPRISM(std::ostream &out)
 		}out<<";\n";
 	}
 		out<<"\nendmodule \n \n";
-		out<< "label \"complete\"=(s=5);\n";
+		out<< "label \"complete\"=(s=2);\n";
 
 }
 

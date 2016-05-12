@@ -88,8 +88,9 @@ MC state_split1(MC model)
 				model.states[s_index].transitions.erase(model.states[s_index].transitions.begin()+t_index);
 
 		 	}
-		 	if(t0.type==FUNCTION && t0.params.size())
+		 	if(t0.type==FUNCTION && t0.params.size()==1)
 		 		{std::cout<<"Error in state_split1, state "<<current_state.ID<<" has FUNCTION transition with no parameters\n";
+
 		 		throw std::exception();}
 	}
 

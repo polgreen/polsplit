@@ -10,10 +10,13 @@ unsigned gcdr (unsigned a, unsigned b)
 
 void fractiont::simplify()
 {
+	if(nom==0 || denom==0){//do nothing
+	}
+	else{
 	unsigned GCD;
 	GCD = gcdr(nom, denom);
 	nom = nom/GCD;
-	denom = denom/GCD;
+	denom = denom/GCD;}
 }
 
 void fractiont::output(std::ostream &out)
