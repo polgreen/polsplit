@@ -91,13 +91,10 @@ std::vector<fractiont> parameter_distributions(MC model)
 	for(auto r: result) //initialise vector
 		{r.zero();}
 
-	for(unsigned p_index; p_index<param_states.size(); p_index++)
+	for(unsigned p_index=0; p_index<param_states.size(); p_index++)
 	{
 		for(const auto s: param_states[p_index])
-		{
-			result[p_index]=result[p_index] + s.first.transitions[s.second].count;
-			std::cout<<"count is: "<<s.first.transitions[s.second].count;
-		}
+		{result[p_index] = result[p_index] + s.first.transitions[s.second].count;}
 	}
 
 	for(auto f: result)

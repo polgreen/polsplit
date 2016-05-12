@@ -38,16 +38,15 @@ int main(int argc, const char *argv[])
   
   try{
   tracet trace;
-
+  std::random_device rd;
+  std::default_random_engine generator(rd());
   MC model, model2, model3, model4;
 
   model = get_simpleMC();
   model.outputPRISM(std::cout);
   model.PRISMsynthesis(f);
- for(unsigned n=0; n<10; n++)
+ for(unsigned n=0; n<1; n++)
  {
-  std::random_device rd;
-  std::default_random_engine generator(rd());
   trace = gettrace(generator, model, 100);
   printtrace(trace);
   model.get_trace_counts(trace);

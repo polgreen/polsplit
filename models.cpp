@@ -24,6 +24,7 @@ MC get_simpleMC()
  	model.modelparams[0].one();
  	model.modelparams[1].nom = 5;
  	model.modelparams[1].denom = 10;
+
  	//s0
  	s0 = {};
  	s0.init = true;
@@ -39,7 +40,6 @@ MC get_simpleMC()
  	model.states.push_back(s0);
 
  	//s1
- 
  	s1.init = false;
  	t1.successor = 2;
  	t2.successor = 3;
@@ -51,7 +51,7 @@ MC get_simpleMC()
  	s2.init=false;
  	t1.type = CONST;
  	t1.prob.one();
- 	t1.successor = 2;
+ 	t1.successor = 0;
  	s2.transitions.push_back(t1);
  	model.states.push_back(s2);
 
@@ -63,6 +63,7 @@ MC get_simpleMC()
  	t1.successor = 2;
  	s3.transitions.push_back(t1);
  	model.states.push_back(s3);
+
 
 model.add_IDs();
 return model;
@@ -86,7 +87,7 @@ MC get_parameterisedMC (unsigned probes, unsigned lossWT, unsigned notlossWT, un
  Model.modelparams[1].nom = 1;
  Model.modelparams[1].denom = 8;
 
-   //param [0] = constant;
+ //param [0] = constant;
 //initial state
  t1.type=FUNCTION;
 
