@@ -62,14 +62,14 @@ fractiont operator/(fractiont f1, fractiont f2)
 fractiont operator-(fractiont f1, fractiont f2)
 {
 	fractiont result;
-	if(f2.nom==0||f2.denom==0)
+	if(f2.nom==0)
 		{result.nom=f1.nom; result.denom=f1.denom;}
-	else if(f1.nom==0||f1.denom==0)
+	else if(f1.nom==0)
 		{result.nom=-f2.nom; result.denom=-f2.denom;}
 	else{
 	result.denom = f1.denom * f2.denom;
 	result.nom = f2.denom*f1.nom - f2.nom*f1.denom;}
-	result.simplify();
+//	result.simplify();
 	return result;	
 }
 

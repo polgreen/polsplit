@@ -55,7 +55,7 @@ MC get_simpleMC();
 MC get_ZeroConfMC(unsigned probes, unsigned lossWT, unsigned notlossWT, 
 	unsigned useWT, unsigned notuseWT);
 void printstate(statet s);
-tracet gettrace(std::default_random_engine &generator, MC model, unsigned length);
+tracet gettrace( MC model, unsigned length);
 void printtrace(tracet trace);
 
 MC get_parameterisedMC (unsigned probes, unsigned lossWT, 

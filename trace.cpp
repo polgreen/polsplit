@@ -5,9 +5,21 @@
 #include <cassert>
 #include "fraction.h"
 
+double Generate(const double from, const double to)
+{
+	double result;
+    std::random_device rd;
+
+   result =  std::bind(
+        std::uniform_real_distribution<>{from, to},
+        std::default_random_engine{ rd() })();
+     //   std::cout<<"from:"<<from<<" to:"<<to<<" random:" <<result<<"\n";
 
 
-tracet gettrace(std::default_random_engine &generator, MC model, unsigned length)
+        return result;
+}
+
+tracet gettrace(MC model, unsigned length)
 {	
 	tracet trace;
 	std::vector<std::vector<unsigned> > count;
@@ -25,19 +37,22 @@ tracet gettrace(std::default_random_engine &generator, MC model, unsigned length
         { //std::cout<<"debug 3 \n"; 
          sum = sum + model.weighting(t,state);}  
 
-		std::uniform_int_distribution<unsigned> distribution(0,sum.nom-1);
+		//std::uniform_int_distribution<unsigned> distribution(0,100);
         fractiont random;
-        random.nom = distribution(generator);
-        random.denom = sum.nom;
+        random.nom = Generate(0, 100);
+        random.denom = 100;
         fractiont mass;
+        fractiont subtraction;
         mass.zero();
-        
+       
         for(const auto& t : state.transitions)
          {
          	mass = mass + model.weighting(t,state);
-           if((mass - random)>0)
+         	subtraction = mass - random;
+           if((subtraction)>0)
             { next = t.successor; gotnext=true;break;}   
          }
+          
 
          if(gotnext==false){std::cout<<"ERROR NOT FOUND";
      		throw std::exception();}

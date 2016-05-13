@@ -18,8 +18,8 @@ int main(int argc, const char *argv[])
  std::vector<tokent> tokenseq;
  std::cout<< "Number of strings: "<<argc<<"\n";
  pctlformula f;
-
-  if(argc==2)
+   std::random_device rd;
+/*  if(argc==2)
   {
     tokenseq = pctl_tokenizer(argv[1]);
     outputtoken(tokenseq);
@@ -33,21 +33,19 @@ int main(int argc, const char *argv[])
    catch(std::exception& ex)
         {std::cout << "parsing failed\n";}
 
-  }
+  }*/
 
   
   try{
   tracet trace;
-  std::random_device rd;
-  std::default_random_engine generator(rd());
   MC model, model2, model3, model4;
 
   model = get_simpleMC();
-  model.outputPRISM(std::cout);
-  model.PRISMsynthesis(f);
- for(unsigned n=0; n<1; n++)
+ // model.outputPRISM(std::cout);
+ // model.PRISMsynthesis(f);
+ for(unsigned n=0; n<100; n++)
  {
-  trace = gettrace(generator, model, 100);
+  trace = gettrace(model, 100);
   printtrace(trace);
   model.get_trace_counts(trace);
  }
