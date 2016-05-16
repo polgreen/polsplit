@@ -93,7 +93,6 @@ std::vector<fractiont> sample_parameter_distributions(MC model, std::vector<doub
 		}	
  	}
 
-
 	for(unsigned i=0; i<result.size(); i++)
 	{
 		std::cout<<"dist: "<<result[i].nom<<" "<<result[i].denom;
@@ -117,7 +116,12 @@ double MC::missing_data_sample()
   	r = gsl_rng_alloc (T);
   	fractiont frac;
   	double prob;
-// get one sample of missing data
+	// get one sample of missing data
+
+  	//fill parameter values from uniform prior
+  	for(unsigned p_index=0; p_index<modelparams.size(); p_index++)
+  	{modelparams[p_index] = gsl_ran_beta(r,1,1);}
+
 	for(auto &s: states)
 	{
 		if(s.added==false)
@@ -126,7 +130,8 @@ double MC::missing_data_sample()
 		 {
 			if(t.added==true)
 			{
-				//FILL PROB VALUE???????????////////////////////
+				frac = weighting(t,s);
+				prob = frac.nom/frac.denom;
 				t.count = gsl_ran_binomial(r, prob, s.input);
 				states[t.successor].input +=t.count;
 			}
@@ -141,8 +146,8 @@ double MC::missing_data_sample()
 		 {
 			if(t.added==true)
 			{	
-				//FILL PROB VALUE???????????////////////////////
-							
+				frac = weighting(t,s);
+				prob = frac.nom/frac.denom;				
 				t.count = gsl_ran_binomial(r, prob, s.input);
 				states[t.successor].input+=t.count;
 			}
