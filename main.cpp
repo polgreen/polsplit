@@ -7,6 +7,7 @@
 #include <fstream>
 #include "pctl_tokenizer.h"
 #include "pctl_parser.h"
+#include "distributions.h"
 
 
 
@@ -15,6 +16,13 @@
 
 int main(int argc, const char *argv[])
 {
+
+  unsigned prob;
+  prob = Beta_probability(0.2, 0.7, 5, 5);
+  std::cout<<prob;
+}
+ 
+ /* 
  std::vector<tokent> tokenseq;
  std::cout<< "Number of strings: "<<argc<<"\n";
  pctlformula f;
@@ -35,7 +43,7 @@ int main(int argc, const char *argv[])
 
   }*/
 
-  
+  /*
   try{
   tracet trace;
   MC model, model2, model3, model4;
@@ -46,12 +54,12 @@ int main(int argc, const char *argv[])
  for(unsigned n=0; n<100; n++)
  {
   trace = gettrace(model, 100);
-  printtrace(trace);
+//  printtrace(trace);
   model.get_trace_counts(trace);
  }
  parameter_distributions(model);
  model.outputMC(std::cout);
-/*
+
   std::cout<<"Model 2 \n";
   model2 = get_parameterisedMC(4,10,10,10,10);
 
@@ -65,14 +73,11 @@ int main(int argc, const char *argv[])
   model4.get_trace_counts(trace);
    model4.outputMC(std::cout); 
   parameter_distributions(model4);
-*/
 
-
-  
 
 }
 catch(...)
 {std::cout<<"exception caught at end of main \n";}
 
 }
-
+*/

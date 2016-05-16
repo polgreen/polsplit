@@ -180,6 +180,7 @@ void MC::outputMC (std::ostream &out)
 	for (const auto &s : states)
 	{
 		out<<"S"<<s.ID <<": \n";
+		out<<s.input<<" input count \n";
 		for(const auto & t: s.transitions)
 		{
 			if(t.type==FUNCTION){out<<"FUNCTION ";}

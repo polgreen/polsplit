@@ -72,8 +72,10 @@ MC state_split1(MC model)
 			   		t1.type = CONST;
 			   		t1.successor = t0.successor;
 			   		t1.prob.one();
+			   		t1.added = true;
 			   		new_state.transitions.push_back(t1);
 			   		new_state.ID = model.states.size();
+			   		new_state.added = true;
 			   		model.states.push_back(new_state);
 			   		
 			   	 //add transitions from state to new state
@@ -81,6 +83,7 @@ MC state_split1(MC model)
 					t2.successor = new_state.ID;
 					p1=t0.params[i];
 					t2.params.push_back(p1);
+					t2.added = true;
 					model.states[s_index].transitions.push_back(t2);
 					//temp.push_back(t2);
 					//std::cout<<temp.size();
@@ -138,16 +141,19 @@ MC state_split2(MC model)
 	 				t2={};
 	 				new_state={};
 	 				new_state.ID = model.states.size() + temp_states.size();
+	 				new_state.added = true;
 	 				t1.type = FUNCTION;
 	 				t1.successor = t0.successor;
 	 				t1.params.push_back(t0.params[0]);
 	 				t1.params[0].first.one(); //transition probability = parameter multiplied by 1
 	 				t2.type = REMAINDER;
 	 				t2.successor = t_remainder.successor;
+	 				t1.added = true;
+	 				t2.added = true;
 	 				new_state.transitions.push_back(t1);
 	 				new_state.transitions.push_back(t2);
 	 				temp_states.push_back(new_state);
-
+	 				t3.added = true;
 	 				t3.successor = new_state.ID;
 	 				t3.type = CONST;
 	 				t3.prob = t0.params[0].first;

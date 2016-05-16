@@ -88,39 +88,13 @@ void MC::get_trace_counts(tracet trace)
 		throw std::exception();}
 		for(unsigned t=0; t<states[trace[i].ID].transitions.size(); t++)
 		{
-		
 			if(states[trace[i].ID].transitions[t].successor==trace[i+1].ID)
-			{states[trace[i].ID].transitions[t].count++;}
+			{states[trace[i].ID].transitions[t].count++;
+			 states[trace[i+1].ID].input++;}
 		}
 	}
 }
 
-std::vector<fractiont> parameter_distributions(MC model)
-{
-	std::cout<<"parameter distributions \n";
-	std::vector< std::vector< std::pair < statet, unsigned> > > param_states;
-	param_states = model.get_parameterised_states();
-	std::vector<fractiont> result;
-
-	result.resize(param_states.size());
-	for(auto r: result) //initialise vector
-		{r.zero();}
-
-	for(unsigned p_index=0; p_index<param_states.size(); p_index++)
-	{
-		for(const auto s: param_states[p_index])
-		{result[p_index] = result[p_index] + s.first.transitions[s.second].count;}
-	}
-
-	for(auto f: result)
-	{
-		std::cout<<"dist: "<<f.nom<<" "<<f.denom;
-		std::cout<<"\n";
-	}
-
-
-return result;
-}
 
 
 void printtrace(tracet trace)

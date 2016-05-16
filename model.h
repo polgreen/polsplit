@@ -11,22 +11,28 @@ enum transitiontype {CONST, FUNCTION, REMAINDER};
 
 
 struct transitiont {
-	transitiont(){count=0;}
+	transitiont(){count=0; added = false; countset=false;}
 	transitiontype type; 
 	unsigned successor; 
 	fractiont prob; 
 	std::vector <std::pair < fractiont, unsigned> > params;
 	unsigned count;
+	bool added;
+	bool countset;
 	//first = parameter multiplier
 	//second = parameter index
 //	std::vector<unsigned> params; 
 //	std::vector<unsigned> paramindex;
 	};
 struct statet {
+	statet(){added=false; input=0;}
 	unsigned ID; 
 	std::vector<transitiont> transitions; 
 	bool init; 
 	unsigned label;
+	
+	bool added;
+	unsigned input;
 	};
 
 	typedef std::vector<statet> tracet; 
@@ -45,6 +51,7 @@ struct MC {
 	void get_trace_counts(tracet trace);
 	void PRISMsynthesis(pctlformula property);
 	void check();
+	double missing_data_sample();
 	};
 
 	
