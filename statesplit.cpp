@@ -116,9 +116,9 @@ MC state_split2(MC model)
  	std::vector<transitiont> temp;
  	std::vector<statet> temp_states;
 
- 	std::cout<<"MODEL SIZE:  ";
- 	std::cout<<model.states.size();
- 	std::cout<<"\n";
+ 	//std::cout<<"MODEL SIZE:  ";
+ 	//std::cout<<model.states.size();
+ 	//std::cout<<"\n";
  	temp_states = {};
 
  	for(unsigned s_index=0; s_index<model.states.size(); s_index++)

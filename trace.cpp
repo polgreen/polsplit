@@ -82,16 +82,19 @@ unsigned trace_count(unsigned s1, unsigned s2, tracet t)
 
 void MC::get_trace_counts(tracet trace)
 {
-	for(unsigned i=0; i<trace.size(); i++)
+	for(unsigned i=0; i<trace.size()-1; i++)
 	{
 		if(states[trace[i].ID].transitions.size()==0){std::cout<<"Error no transitions on state"<<trace[i].ID<<"\n";
-		throw std::exception();}
+			throw std::exception();}
 		for(unsigned t=0; t<states[trace[i].ID].transitions.size(); t++)
 		{
 			if(states[trace[i].ID].transitions[t].successor==trace[i+1].ID)
-			{states[trace[i].ID].transitions[t].count++;
-			 states[trace[i+1].ID].input++;}
+				{
+					states[trace[i].ID].transitions[t].count++;
+					states[trace[i].ID].input++;
+				}
 		}
+
 	}
 }
 

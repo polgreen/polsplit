@@ -16,11 +16,51 @@
 
 int main(int argc, const char *argv[])
 {
+  std::vector<double> lower_bounds;
+  std::vector<double> upper_bounds;
+  try{
+  tracet trace;
+  MC model, model2;
 
-  unsigned prob;
-  prob = Beta_probability(0.2, 0.7, 5, 5);
-  std::cout<<prob;
+  //model = get_parameterisedMC(4,10,10,10,10);
+model = get_simpleMC();
+
+  lower_bounds.resize(model.modelparams.size());
+  upper_bounds.resize(model.modelparams.size());
+  for(unsigned i=0; i<lower_bounds.size(); i++)
+  {
+    lower_bounds[i] = 0;
+    upper_bounds[i] = 0.5;
+  }
+
+  model.outputPRISM(std::cout);
+
+ // model.PRISMsynthesis(f);
+ for(unsigned n=0; n<100; n++)
+ {
+  trace = gettrace(model, 10);
+  model.get_trace_counts(trace);
+ }
+
+//model2 = state_split1(model);
+//model2 = state_split2(model2);
+model.outputMC(std::cout);
+ //model2.get_parameterised_states();
+parameter_distributions(model, lower_bounds, upper_bounds);
+ //model.outputMC(std::cout);
+//model2.outputMC(std::cout);
+
+
 }
+catch(...)
+{std::cout<<"exception caught at end of main \n";}
+
+}
+
+
+
+
+
  
  /* 
  std::vector<tokent> tokenseq;

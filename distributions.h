@@ -3,7 +3,7 @@
 
 #include "fraction.h"
 double Beta_probability(double lower_bound, double upper_bound, double alpha1, double alpha2);
-std::vector<fractiont> parameter_distributions(MC model);
+std::vector<double> parameter_distributions(MC model, std::vector<double> lower_bounds, std::vector<double> upper_bounds);
 bool sample_distribution(double lower_bound, double upper_bound, double alpha1, double alpha2);
 
 #endif

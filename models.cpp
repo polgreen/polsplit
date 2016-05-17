@@ -83,11 +83,11 @@ MC get_parameterisedMC (unsigned probes, unsigned lossWT, unsigned notlossWT, un
  Model.modelparams.resize(3);
  Model.modelparams[0].one();
  Model.modelparams[2].nom = 1;
- Model.modelparams[2].denom =10;
+ Model.modelparams[2].denom =2;
  Model.modelparams[1].nom = 1;
- Model.modelparams[1].denom = 8;
+ Model.modelparams[1].denom = 2;
 
- //param [0] = constant;
+//param [0] = constant;
 //initial state
  t1.type=FUNCTION;
 
@@ -129,7 +129,8 @@ MC get_parameterisedMC (unsigned probes, unsigned lossWT, unsigned notlossWT, un
  t2 = {};
  t1.type=CONST;
  t1.prob.one();
- t1.successor=probes+1;
+ t1.successor=0;
+// t1.successor=probes+1;
  state.transitions.push_back(t1);
  state.init=false;
  state.label=0;//fail
@@ -139,7 +140,8 @@ MC get_parameterisedMC (unsigned probes, unsigned lossWT, unsigned notlossWT, un
  state = {}; t1 = {}; t2 = {};
  t1.type=CONST;
  t1.prob.one();
- t1.successor=probes+2;
+ t1.successor=0;
+ //t1.successor=probes+2;
  state.transitions.push_back(t1);
  state.init=false;
  state.label=1; //transmit message

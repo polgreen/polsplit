@@ -51,13 +51,14 @@ std::vector< std::vector< std::pair < statet, unsigned> > > MC::get_parameterise
 		std::cout<<"no model states found\n";
 		throw std::exception();}
 	std::vector< std::vector< std::pair < statet, unsigned> > > result;
+	//vector of < vectors of <state and transition index >
 	result.resize(modelparams.size());
 	//for(const auto & v: result) //initialise result vector of vectors to empty for each parameter
 	//{v = {};}
 	std::pair<statet, unsigned> pair;
 	bool found=false;
 
-	for(const auto &s:states)
+	for(auto &s:states)
 	{
 		for (unsigned t=0; t<s.transitions.size(); t++)
 		{
@@ -68,8 +69,12 @@ std::vector< std::vector< std::pair < statet, unsigned> > > MC::get_parameterise
 					pair.first = s;
 					pair.second = t;
 					result[s.transitions[t].params[0].second].push_back(pair);
+					std::cout<<"transition count"<<s.transitions[t].count<<"out of "<<s.input<<"\n";
 					found=true;
-				}			
+				}
+			if(s.transitions[t].type==FUNCTION && s.transitions[t].params.size()!=1)
+			{std::cout<<"Error, invalid parameterised state S"<<s.ID<<", apply state split\n";
+			throw std::exception();}			
 		}
 		
 	}
@@ -81,9 +86,9 @@ std::vector< std::vector< std::pair < statet, unsigned> > > MC::get_parameterise
 	{
 		for(const auto & v: vector)
 		{
+			std::cout<<"result: S"<<v.first.ID<<" transition number";
+			std::cout<<v.second<<" count "<<v.first.transitions[v.second].count<<"from "<<v.first.input<<"\n";
 
-			std::cout<<"result: "<<v.first.ID<<" ";
-			std::cout<<v.second<<"\n";
 		}
 	}
 

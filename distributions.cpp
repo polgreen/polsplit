@@ -12,13 +12,14 @@
 double Beta_probability(double lower_bound, double upper_bound, double alpha1, double alpha2)
 {
 	double result, lower, upper;
-//	std::cout<<"lower bound: "<<lower_bound<<" upper bound: "<<upper_bound<<"\n";
+
+	std::cout<<"lower, upper, alpha1, alpha2: "<<lower_bound<<" "<<upper_bound<<" "<<alpha1<<" "<<alpha2<<"\n";
+		if(alpha1==0 ||alpha2==0)
+		{std::cout<<"Error, alpha value = 0 \n";
+		throw std::exception();}
 	lower = gsl_cdf_beta_P(lower_bound, alpha1, alpha2);
-//	std::cout<<"P lower "<<lower<< " ";
 	upper = gsl_cdf_beta_Q(upper_bound, alpha1, alpha2);
-//	std::cout<<" P upper "<<upper<<" \n";
 	result = 1 - lower - upper;
-//	std::cout<<"result: "<<result<<"\n";
 
 return result;
 }
@@ -30,18 +31,28 @@ std::vector<double> parameter_distributions(MC model, std::vector<double> lower_
 	param_states = model.get_parameterised_states();
 	std::vector<fractiont> result;
 	std::vector<double> probabilities;
+	unsigned placeholder;
 	probabilities.resize(param_states.size());
 	result.resize(param_states.size());
+	if(lower_bounds.size()!=model.modelparams.size()||lower_bounds.size()!=upper_bounds.size()
+		||param_states.size()!=model.modelparams.size())
+	{
+		std::cout<<"Error: lower_bounds must match upper_bounds and params in size \n";
+		throw std::exception();
+	}
 
-	for(auto r: result) //initialise vector
-		{r.zero();}
+	for(unsigned r=0; r<result.size(); r++)
+	{
+		result[r].one();
+	}
+
 
 	for(unsigned p_index=0; p_index<param_states.size(); p_index++)
 	{
 		//result[p_index].denom = param_states[p_index].first.input;
 		for(const auto s: param_states[p_index])
 		{result[p_index].nom = result[p_index].nom + s.first.transitions[s.second].count;
-		result[p_index].denom += s.first.input;}
+		result[p_index].denom += s.first.input - s.first.transitions[s.second].count;}
 	}
 
 	for(unsigned i=0; i<result.size(); i++)
@@ -49,6 +60,7 @@ std::vector<double> parameter_distributions(MC model, std::vector<double> lower_
 		std::cout<<"dist: "<<result[i].nom<<" "<<result[i].denom;
 		std::cout<<"\n";
 		probabilities[i]=Beta_probability(lower_bounds[i], upper_bounds[i], result[i].nom, result[i].denom);
+		//std::cout<<probabilities[i];
 	}
 
 return probabilities;
