@@ -69,29 +69,32 @@ MC state_split1(MC model)
 		 		   t1 = {};
 		 		   t2 = {};
 		 		   new_state = {};
-			   		t1.type = CONST;
+			   		t1.type = NEWCONST;
+			   		t1.countknown=false;
 			   		t1.successor = t0.successor;
 			   		t1.prob.one();
-			   		t1.added = true;
 			   		new_state.transitions.push_back(t1);
 			   		new_state.ID = model.states.size();
-			   		new_state.added = true;
+			   		new_state.inputknown = false;
+			   		new_state.outputknown=false;
 			   		model.states.push_back(new_state);
 			   		
 			   	 //add transitions from state to new state
-			   	 	t2.type = FUNCTION;
+			   	 	t2.type = NEWFUNCTION;
 					t2.successor = new_state.ID;
+					t2.countknown=false;
 					p1=t0.params[i];
 					t2.params.push_back(p1);
-					t2.added = true;
 					model.states[s_index].transitions.push_back(t2);
 					//temp.push_back(t2);
-					//std::cout<<temp.size();
+					//std::cout<<temp.size();--ik
 				  }	
 				model.states[s_index].transitions.erase(model.states[s_index].transitions.begin()+t_index);
+				model.states[s_index].inputknown=true;
+				model.states[s_index].outputknown=false;
 
 		 	}
-		 	if(t0.type==FUNCTION && t0.params.size()==1)
+		 	if(t0.type==FUNCTION && t0.params.size()==0)
 		 		{std::cout<<"Error in state_split1, state "<<current_state.ID<<" has FUNCTION transition with no parameters\n";
 
 		 		throw std::exception();}
@@ -132,7 +135,7 @@ MC state_split2(MC model)
 	 	for(unsigned t_index=0; t_index<current_state.transitions.size(); t_index++)
 	 	{
 	 		t0=current_state.transitions[t_index];
-	 		if(t0.type==FUNCTION)
+	 		if(t0.type==NEWFUNCTION || t0.type==FUNCTION)
 	 		{
 	 			if(t0.params.size()==1)
 	 			{
@@ -141,23 +144,25 @@ MC state_split2(MC model)
 	 				t2={};
 	 				new_state={};
 	 				new_state.ID = model.states.size() + temp_states.size();
-	 				new_state.added = true;
-	 				t1.type = FUNCTION;
+	 				new_state.inputknown=false;
+	 				new_state.outputknown=false;
+	 				t1.type = NEWFUNCTION;
 	 				t1.successor = t0.successor;
+	 				t1.countknown=false;
 	 				t1.params.push_back(t0.params[0]);
 	 				t1.params[0].first.one(); //transition probability = parameter multiplied by 1
-	 				t2.type = REMAINDER;
+	 				t1.count = t0.count; //transition count is same as original deleted transition
+	 				t2.type = NEWREMAINDER;
 	 				t2.successor = t_remainder.successor;
-	 				t1.added = true;
-	 				t2.added = true;
 	 				new_state.transitions.push_back(t1);
 	 				new_state.transitions.push_back(t2);
 	 				temp_states.push_back(new_state);
-	 				t3.added = true;
 	 				t3.successor = new_state.ID;
-	 				t3.type = CONST;
+	 				t3.type = NEWCONST;
+	 				t3.countknown=false;
 	 				t3.prob = t0.params[0].first;
 	 				model.states[s_index].transitions[t_index] = t3;
+	 				model.states[s_index].outputknown=false;
 	 			}
 	 			else{std::cout<<"error in state_split2: please apply state split 1 first \n";
 	 				throw std::exception();}

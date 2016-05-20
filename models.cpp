@@ -61,6 +61,7 @@ MC get_simpleMC()
  	t1.successor = 0;
  	s3.transitions.push_back(t1);
  	t1.successor = 2;
+ 	t1.type = REMAINDER;
  	s3.transitions.push_back(t1);
  	model.states.push_back(s3);
 
