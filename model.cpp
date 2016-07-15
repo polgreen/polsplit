@@ -44,15 +44,14 @@ void MC::check()
 }
 
 
-std::vector< std::vector< std::pair < statet, unsigned> > > MC::get_parameterised_states()
+std::vector< std::pair < statet, unsigned> > MC::get_parameterised_states()
 {
 
 	if(states.size()==0){
 		std::cout<<"no model states found\n";
 		throw std::exception();}
-	std::vector< std::vector< std::pair < statet, unsigned> > > result;
+	std::vector< std::pair < statet, unsigned> > result;
 	//vector of < vectors of <state and transition index >
-	result.resize(modelparams.size());
 	//for(const auto & v: result) //initialise result vector of vectors to empty for each parameter
 	//{v = {};}
 	std::pair<statet, unsigned> pair;
@@ -63,34 +62,21 @@ std::vector< std::vector< std::pair < statet, unsigned> > > MC::get_parameterise
 		for (unsigned t=0; t<s.transitions.size(); t++)
 		{
 
-			if((s.transitions[t].type==FUNCTION || s.transitions[t].type ==NEWFUNCTION) && s.transitions[t].params.size()==1)
+			if((s.transitions[t].type==FUNCTION || s.transitions[t].type ==NEWFUNCTION))
 				{	
-				//	std::cout<<"S"<<s.ID<<" transition to S"<<s.transitions[t].successor<<"\n";
+				
 					pair.first = s;
 					pair.second = t;
-					result[s.transitions[t].params[0].second].push_back(pair);
-				//	std::cout<<"transition count "<<s.transitions[t].count<<" out of "<<s.input<<"\n";
+					result.push_back(pair);
 					found=true;
 				}
-			if((s.transitions[t].type==FUNCTION ||s.transitions[t].type==NEWFUNCTION) && s.transitions[t].params.size()!=1)
-			{std::cout<<"Error, invalid parameterised state S"<<s.ID<<", apply state split\n";
-			throw std::exception();}			
+			
 		}
 		
 	}
 
 	if(found==false){std::cout<<"error in get_parameterised_states: no parameterised states found \n";
 		throw std::exception();}
-	//std::cout<<"\nNumber of parameters: "<<result.size()<<"\n";
-	//for (const auto & vector: result)
-	//{
-		//std::cout<<"\nNumber of parameterised states "<<result.size()<<"\n";
-		//for(const auto & v: vector)
-		//{
-		//	std::cout<<"Parameterised State: S"<<v.first.ID<<" transition number ";
-		//	std::cout<<v.second<<" count "<<v.first.transitions[v.second].count<<" from "<<v.first.input<<"\n";
-		//}
-	//}
 
 return result;
 
@@ -133,9 +119,9 @@ fractiont MC::remainderWeight(statet s)
 	sum_state.zero();
 	for(const auto & t: s.transitions)
 	 {
-	 	if(t.type==REMAINDER && remainderfound==false)
+	 	if((t.type==REMAINDER || t.type==NEWREMAINDER) && remainderfound==false)
 	 	{remainderfound=true;}
-	 	else if(t.type==REMAINDER && remainderfound==true)
+	 	else if((t.type==REMAINDER || t.type==NEWREMAINDER) && remainderfound==true)
 	 	{std::cout<<"error, 2 transitions of type REMAINDER found on S"<<s.ID<<"\n";
 		 throw std::exception();}
 	 	else{sum_state = sum_state + weighting(t, s);}
@@ -187,7 +173,20 @@ void MC::outputMC (std::ostream &out)
 	out<<"\nSTATES \n";
 	for (const auto &s : states)
 	{
-		out<<"S"<<s.ID <<": \n";
+		out<<"\nS"<<s.ID;
+		switch (s.newtype){
+			case S1: out<<" type 1"; break;
+			case S2: out<<" type 2"; break;
+			case S3: out<<" type 3"; break;
+			case S0: break;
+			default:;
+		}
+		
+		//if(s.inputknown==true){out<<" input known ";}
+		//if(s.outputknown==true){out<<" output known ";}
+		//(s.inputknown==false){out<<" input unknown ";}
+		//if(s.outputknown==false){out<<" output unknown ";}
+		out<<": \n";
 		out<<s.input<<" input count \n";
 		for(const auto & t: s.transitions)
 		{
@@ -198,7 +197,17 @@ void MC::outputMC (std::ostream &out)
 			if(result.nom==0){std::cout<<"ERROR ZERO VALUE RETURNED";}
 			result.output(out);
 			out<<", count: "<<t.count;
+			
+			switch (t.newtype){
+				case T1: out<<" type 1"; break;
+				case T2: out<<" type 2"; break;
+				case T3: out<<" type 3"; break;
+				case T4: out<<" type 4"; break;
+				case T0: break;
+				default:;
+			}
 			out<<"\n";
+
 		}
 	}			
 

@@ -86,6 +86,7 @@ void MC::get_trace_counts(tracet trace)
 	{
 		if(states[trace[i].ID].transitions.size()==0){std::cout<<"Error no transitions on state"<<trace[i].ID<<"\n";
 			throw std::exception();}
+			
 		for(unsigned t=0; t<states[trace[i].ID].transitions.size(); t++)
 		{
 			if(states[trace[i].ID].transitions[t].successor==trace[i+1].ID)

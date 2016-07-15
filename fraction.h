@@ -9,6 +9,7 @@ struct fractiont{
 	int denom;
 	friend fractiont operator+(fractiont, fractiont);
 	friend bool operator==(fractiont, fractiont);
+	friend bool operator!=(fractiont, fractiont);
 	friend bool operator>=(fractiont, fractiont);
 	friend bool operator<=(fractiont, fractiont);
 	friend bool operator>(fractiont, fractiont);

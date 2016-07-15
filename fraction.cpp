@@ -74,7 +74,10 @@ fractiont operator-(fractiont f1, fractiont f2)
 }
 
 bool operator==(fractiont f1, fractiont f2)
-{return(f1.nom==f2.nom && f1.denom==f1.denom);}
+{return(f1.nom*f2.denom == f1.denom*f2.nom);}
+
+bool operator!=(fractiont f1, fractiont f2)
+{return(f1.nom*f2.denom != f1.denom*f2.nom);}
 
 bool operator>(fractiont f1, fractiont f2)
 {return((f1.nom*f2.denom) > (f1.denom*f2.nom));}

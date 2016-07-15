@@ -23,7 +23,6 @@ int main(int argc, const char *argv[])
   MC model, model2;
 
   model = get_parameterisedMC(4,10,10,10,10);
-//model = get_simpleMC();
 
   lower_bounds.resize(model.modelparams.size());
   upper_bounds.resize(model.modelparams.size());
@@ -34,26 +33,16 @@ int main(int argc, const char *argv[])
   }
 
   //model.outputPRISM(std::cout);
-
  // model.PRISMsynthesis(f);
+
  for(unsigned n=0; n<10; n++)
  {
   trace = gettrace(model, 100);
   model.get_trace_counts(trace);
- // printtrace(trace);
-//  model.outputMC(std::cout);
- }
+  model.sample_parameter_distributions(lower_bounds, upper_bounds, 10);
 
-model2 = state_split1(model);
-model2.outputPRISM(std::cout);
-model2 = state_split2(model2);
-//model.outputMC(std::cout);
-model2.outputPRISM(std::cout);
- //model2.get_parameterised_states();
-//parameter_distributions(model, lower_bounds, upper_bounds);
-model2.sample_parameter_distributions(lower_bounds,upper_bounds,4);
- //model.outputMC(std::cout);
-//model2.outputMC(std::cout);
+ }
+model.outputMC(std::cout);
 
 
 }

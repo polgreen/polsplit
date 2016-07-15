@@ -69,10 +69,12 @@ MC state_split1(MC model)
 		 		   t1 = {};
 		 		   t2 = {};
 		 		   new_state = {};
+		 		   	t1.newtype = T1;
 			   		t1.type = NEWCONST;
 			   		t1.countknown=false;
 			   		t1.successor = t0.successor;
 			   		t1.prob.one();
+			   		new_state.newtype = S1;
 			   		new_state.transitions.push_back(t1);
 			   		new_state.ID = model.states.size();
 			   		new_state.inputknown = false;
@@ -81,11 +83,13 @@ MC state_split1(MC model)
 			   		
 			   	 //add transitions from state to new state
 			   	 	t2.type = NEWFUNCTION;
+			   	 	t2.newtype = T3;
 					t2.successor = new_state.ID;
 					t2.countknown=false;
 					p1=t0.params[i];
 					t2.params.push_back(p1);
 					model.states[s_index].transitions.push_back(t2);
+					model.states[s_index].newtype=S3;
 					//temp.push_back(t2);
 					//std::cout<<temp.size();--ik
 				  }	
@@ -146,19 +150,26 @@ MC state_split2(MC model)
 	 				new_state.ID = model.states.size() + temp_states.size();
 	 				new_state.inputknown=false;
 	 				new_state.outputknown=false;
+	 				new_state.newtype=S2;
 	 				t1.type = NEWFUNCTION;
+	 				t1.newtype = T2;
 	 				t1.successor = t0.successor;
 	 				t1.countknown=false;
 	 				t1.params.push_back(t0.params[0]);
 	 				t1.params[0].first.one(); //transition probability = parameter multiplied by 1
-	 				t1.count = t0.count; //transition count is same as original deleted transition
+	 				if(t0.countknown){t1.count = t0.count;t1.countknown=true;}
+	 				else{t1.countknown=false;} //transition count is same as original deleted transition
 	 				t2.type = NEWREMAINDER;
+	 				t2.newtype=T4;
+	 				t2.countknown=false;
 	 				t2.successor = t_remainder.successor;
 	 				new_state.transitions.push_back(t1);
 	 				new_state.transitions.push_back(t2);
+	 				new_state.newtype=S3;
 	 				temp_states.push_back(new_state);
 	 				t3.successor = new_state.ID;
 	 				t3.type = NEWCONST;
+	 				t3.newtype=T2;
 	 				t3.countknown=false;
 	 				t3.prob = t0.params[0].first;
 	 				model.states[s_index].transitions[t_index] = t3;
@@ -171,6 +182,7 @@ MC state_split2(MC model)
 	 }
 	 for(const auto & s: temp_states)
 	 {
+	 	//s.inputknown=false; s.outputknown=false;
 	 	model.states.push_back(s);
 	 }
 
