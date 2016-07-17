@@ -201,12 +201,125 @@ std::vector<fractiont> MC::confidencecalc(unsigned num_samples, std::vector<doub
 		{r=0;}
 	for(unsigned i=0; i<num_samples; i++)
 	{
-		sample_transition_counts();
+		
+
+  	std::vector<unsigned> param_counts;
+  	std::vector<unsigned> inv_param_counts;
+  	param_counts.resize(modelparams.size());
+  	inv_param_counts.resize(modelparams.size());
+  	unsigned kcount;
+  	double prob;
+  	bool all_constants_equal_one = true;
+  	//sample parameters randomly
+  	for(unsigned p_index=1; p_index<modelparams.size(); p_index++)
+  		{	
+  			modelparams[p_index].nom = 100*gsl_ran_beta(r,1,1);
+  			modelparams[p_index].denom = 100;
+  			param_counts[p_index] = 0;
+  			inv_param_counts [p_index] = 0;
+
+  		}
+
+ 	std::vector< std::pair < statet, unsigned> > param_states;
+	param_states = get_parameterised_states();
+
+	for(auto s: param_states)
+	{
+		
+		for(const auto t: s.first.transitions)
+		{
+			if(t.params.size()==1)
+			{
+				
+				if(t.params[0].first==1)
+				{
+					
+					param_counts[t.params[0].second] = param_counts[t.params[0].second] + t.count;
+					inv_param_counts[t.params[0].second] = inv_param_counts[t.params[0].second] + s.first.sum_outputs()-t.count;
+				}
+				else
+				{
+					
+					param_counts[t.params[0].second] = param_counts[t.params[0].second]+t.count;
+					prob = t.params[0].first.nom/(double)t.params[0].first.denom;
+					while(kcount<t.count)
+					{	kcount = gsl_ran_binomial(r, prob, s.first.input);
+						std::cout<<"sampling for kcount \n";}
+					inv_param_counts[t.params[0].second] = inv_param_counts[t.params[0].second] + kcount - t.count;
+				}
+			}
+			else
+			{
+				
+				for(const auto p: t.params)
+				{if(p.first!=1){all_constants_equal_one=false;
+					}}
+
+				if(all_constants_equal_one)
+				{
+			
+					double probs[t.params.size()];
+  					unsigned int sample[t.params.size()];
+					//probs.resize(t.params.size());
+					//sample.resize(t.params.size());
+					for(unsigned i=0; i<t.params.size(); i++)
+					{	probs[i] = modelparams[t.params[i].second].nom/(double)modelparams[t.params[i].second].denom;}
+
+					gsl_ran_multinomial(r, t.params.size(), s.first.input, probs,sample);
+
+					for(unsigned i=0; i<t.params.size(); i++)
+					{
+						param_counts[i] = param_counts[i] + sample[i];
+						inv_param_counts[i] = param_counts[i] + s.first.input - sample[i];
+					}
+
+				}
+				else
+				{
+			
+					double probs1 [t.params.size()+1];
+					unsigned int sample1[t.params.size()+1];
+					double probs2[t.params.size()];
+					unsigned int sample2[t.params.size()];
+					probs1[t.params.size()+1] = 1;	
+					for(unsigned i=0; i<t.params.size(); i++)
+					{
+						probs2[i] = modelparams[t.params[i].second].nom/(double)modelparams[t.params[i].second].denom;;
+						probs1[i] = 1 - probs2[i];
+						probs1[t.params.size()+1] = probs1[t.params.size()+1] - t.params[i].first.nom/(double)t.params[i].first.denom;
+					}
+					
+					gsl_ran_multinomial(r, t.params.size(), t.count, probs2,sample2);
+					gsl_ran_multinomial(r, t.params.size()+1, s.first.input - t.count, probs1,sample1);
+
+					for(unsigned i=0; i<t.params.size(); i++)
+					{
+						param_counts[i] = param_counts[i] + sample2[i];
+						inv_param_counts[i] = param_counts[i] + sample1[i];
+					}
+
+		
+				}
+
+
+
+			}
+		}
+	}
+
+
+for(const auto pc: param_counts)
+{
+	std::cout<<"Param count: "<<pc<<"\n";
+}
+
+parametercounts = param_counts;
+inv_parametercounts = inv_param_counts;
+
+
 		for(unsigned j=0; j<parametercounts.size(); j++)
 		{
 			result[j].denom = result[j].denom+1;
-
-
 
   			double sample;
 			sample = gsl_ran_beta(r, parametercounts[j], inv_parametercounts[j]);
@@ -217,10 +330,10 @@ std::vector<fractiont> MC::confidencecalc(unsigned num_samples, std::vector<doub
 		}
 
 	}
-	std::cout<<"\n";
+	std::cout<<"Probability of parameters falling within acceptable range \n";
 for(const auto r: result)
 {
-	std::cout<<r.nom<<"/"<<r.denom<<" ";
+	std::cout<<<r.nom<<"/"<<r.denom<<" ";
 }
 return result;
 }
