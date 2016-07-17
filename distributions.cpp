@@ -70,6 +70,7 @@ void MC::sample_transition_counts()
   	gsl_rng * r;
   	T = gsl_rng_default;
   	r = gsl_rng_alloc (T);
+
   	std::vector<unsigned> param_counts;
   	std::vector<unsigned> inv_param_counts;
   	param_counts.resize(modelparams.size());
@@ -92,21 +93,21 @@ void MC::sample_transition_counts()
 
 	for(auto s: param_states)
 	{
-		std::cout<<"DEBUG 0 \n";
+		
 		for(const auto t: s.first.transitions)
 		{
 			if(t.params.size()==1)
 			{
-				std::cout<<"DEBUG 1 \n";
+				
 				if(t.params[0].first==1)
 				{
-					std::cout<<"DEBUG 2 \n";
+					
 					param_counts[t.params[0].second] = param_counts[t.params[0].second] + t.count;
 					inv_param_counts[t.params[0].second] = inv_param_counts[t.params[0].second] + s.first.sum_outputs()-t.count;
 				}
 				else
 				{
-					std::cout<<"DEBUG 3 \n";
+					
 					param_counts[t.params[0].second] = param_counts[t.params[0].second]+t.count;
 					prob = t.params[0].first.nom/(double)t.params[0].first.denom;
 					while(kcount<t.count)
@@ -117,14 +118,14 @@ void MC::sample_transition_counts()
 			}
 			else
 			{
-				std::cout<<"DEBUG 4 \n";
+				
 				for(const auto p: t.params)
 				{if(p.first!=1){all_constants_equal_one=false;
-					std::cout<<"DEBUG 5 \n";}}
+					}}
 
 				if(all_constants_equal_one)
 				{
-					std::cout<<"DEBUG 6 \n";
+			
 					double probs[t.params.size()];
   					unsigned int sample[t.params.size()];
 					//probs.resize(t.params.size());
@@ -143,7 +144,7 @@ void MC::sample_transition_counts()
 				}
 				else
 				{
-					std::cout<<"DEBUG 7 \n";
+			
 					double probs1 [t.params.size()+1];
 					unsigned int sample1[t.params.size()+1];
 					double probs2[t.params.size()];
@@ -188,17 +189,31 @@ inv_parametercounts = inv_param_counts;
 
 std::vector<fractiont> MC::confidencecalc(unsigned num_samples, std::vector<double> lower_bounds, std::vector<double> upper_bounds)
 {
+	const gsl_rng_type * T;
+  	gsl_rng * r;
+	gsl_rng_env_setup();
+	T = gsl_rng_default;
+  	r = gsl_rng_alloc (T);
 
 	std::vector<fractiont> result;
+	result.resize(parametercounts.size());
+	for(auto r: result)
+		{r=0;}
 	for(unsigned i=0; i<num_samples; i++)
 	{
-		
 		sample_transition_counts();
 		for(unsigned j=0; j<parametercounts.size(); j++)
 		{
 			result[j].denom = result[j].denom+1;
-			if(sample_distribution(lower_bounds[j], upper_bounds[j], parametercounts[j], inv_parametercounts[j]))
-				{result[j].nom = result[j].nom + 1;}
+
+
+
+  			double sample;
+			sample = gsl_ran_beta(r, parametercounts[j], inv_parametercounts[j]);
+			std::cout<<"Sample: "<<sample<<"\n";
+			if(sample<upper_bounds[j] && sample>lower_bounds[j])
+			{result[j].nom = result[j].nom + 1;}
+	
 		}
 
 	}
