@@ -51,6 +51,7 @@ std::vector< std::pair < statet, unsigned> > MC::get_parameterised_states()
 		std::cout<<"no model states found\n";
 		throw std::exception();}
 	std::vector< std::pair < statet, unsigned> > result;
+
 	//vector of < vectors of <state and transition index >
 	//for(const auto & v: result) //initialise result vector of vectors to empty for each parameter
 	//{v = {};}
@@ -64,7 +65,8 @@ std::vector< std::pair < statet, unsigned> > MC::get_parameterised_states()
 
 			if((s.transitions[t].type==FUNCTION || s.transitions[t].type ==NEWFUNCTION))
 				{	
-				
+					std::cout<<"Found param state "<<s.ID<<" , param transition to "<<s.transitions[t].successor <<  "\n";
+
 					pair.first = s;
 					pair.second = t;
 					result.push_back(pair);

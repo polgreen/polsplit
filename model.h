@@ -56,7 +56,10 @@ struct MC {
 	void PRISMsynthesis(pctlformula property);
 	void check();
 	double missing_data_sample();
-	std::vector<unsigned> sample_parameter_distributions(std::vector<double> lower_bounds, std::vector<double> upper_bounds, unsigned N);
+	std::vector<unsigned> parametercounts;
+	std::vector<unsigned> inv_parametercounts;
+	void sample_transition_counts();
+	std::vector<fractiont> confidencecalc(unsigned num_samples, std::vector<double> lower_bounds, std::vector<double> upper_bounds);
 	std::vector<double> parameter_distributions(std::vector<double> lower_bounds, std::vector<double> upper_bounds);
 	};
 

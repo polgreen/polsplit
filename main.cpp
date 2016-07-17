@@ -39,11 +39,13 @@ int main(int argc, const char *argv[])
  {
   trace = gettrace(model, 100);
   model.get_trace_counts(trace);
-  model.sample_parameter_distributions(lower_bounds, upper_bounds, 10);
+
 
  }
 model.outputMC(std::cout);
-
+model.outputPRISM(std::cout);
+  model.sample_transition_counts();
+model.confidencecalc(10,lower_bounds, upper_bounds);
 
 }
 catch(...)
