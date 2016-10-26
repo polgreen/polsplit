@@ -1,21 +1,58 @@
+ /*****************************\
+          (\.---./)    
+           /.-.-.\
+          /| 0_0 |\
+         |_`-(v)-'_|
+         \`-._._.-'/      .-.
+   -~-(((.`-\_|_/-'.)))-~' <_
+          `.     .'
+            `._.'
+          BaeVer
+ Bayesian Verification for DTMCs     
+   -----~--~---~~~----~-`.-;~
+   elizabeth.polgreen@cs.ox.ac.uk
+\********************************/
+
+
+
 #include <vector>
 #include <cassert>
 #include <random>
 #include <algorithm>
 #include <iostream>
-#include "model.h"
 #include <fstream>
+
+#include "model.h"
 #include "pctl_tokenizer.h"
 #include "pctl_parser.h"
 #include "distributions.h"
 
 
 
-
-
-
 int main(int argc, const char *argv[])
 {
+  // parse pctl formula
+  std::vector<tokent> tokenseq;
+  std::cout<< "Number of strings: "<<argc<<"\n";
+  pctlformula f;
+
+  if(argc==2)
+  {
+    tokenseq = pctl_tokenizer(argv[1]);
+    outputtoken(tokenseq);
+
+   try{
+      f = parse_top(tokenseq);
+      std::cout<<"\n";
+      output(f);
+      std::cout<<"\n";
+        }
+   catch(std::exception& ex)
+        {std::cout << "parsing failed\n";}
+
+  }
+
+
   std::vector<double> lower_bounds;
   std::vector<double> upper_bounds;
   try{
@@ -34,6 +71,9 @@ int main(int argc, const char *argv[])
 
   //model.outputPRISM(std::cout);
  // model.PRISMsynthesis(f);
+  model.PRISMsynthesis(f);
+  
+
 
  for(unsigned n=0; n<10; n++)
  {
@@ -42,10 +82,10 @@ int main(int argc, const char *argv[])
 
 
  }
-model.outputMC(std::cout);
-model.outputPRISM(std::cout);
-  model.sample_transition_counts();
-model.confidencecalc(10,lower_bounds, upper_bounds);
+//model.outputMC(std::cout);
+//model.outputPRISM(std::cout);
+//  model.sample_transition_counts();
+//model.confidencecalc(10,lower_bounds, upper_bounds);
 
 }
 catch(...)

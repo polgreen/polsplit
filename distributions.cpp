@@ -333,7 +333,7 @@ inv_parametercounts = inv_param_counts;
 	std::cout<<"Probability of parameters falling within acceptable range \n";
 for(const auto r: result)
 {
-	std::cout<<<r.nom<<"/"<<r.denom<<" ";
+	std::cout<<r.nom<<"/"<<r.denom<<" ";
 }
 return result;
 }

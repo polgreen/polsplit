@@ -8,6 +8,7 @@
 #include <fstream>
 #include <cstdlib>
 #include "pctl_parser.h"
+#include "prism_parser.h"
 
 
 
@@ -48,7 +49,12 @@ void MC::PRISMsynthesis(pctlformula property)
 		command+=static_cast<char>(letter+p_index -1);
 		command+="=0:1,";
 	}
-	system(command.c_str());	
+	result = ssystem(command.c_str());	
+	for(const auto s: result)
+	{
+		std::cout<<s;
+	}
+	prism_find(result);
 }
 
 

@@ -1,40 +1,32 @@
-# polsplit
+# BaeVer
+
+Data efficient Bayesian verification for DTMCs: 
+http://link.springer.com/chapter/10.1007%2F978-3-319-43425-4_3
+
+This is not the experiment implementation used in the paper (which was done in Matlab), but follows the same methodology. 
+
+This implementation takes a PCTL property as input, e.g.,:
+./a.out "P>=0.5 [F "a"]"
+
+The DTMC used by the implementation is inputted via models.cpp (i.e., the code must be changed). 
+
+It parses the PCTL property (pctl_parser.cpp, pctl_tokenizer.cpp), and sends the model and property to PRISM for synthesis (prism_comms.cpp). 
+
+TODO: here there needs to be a parser that reads the output of prism's synthesis
+
+trace.cpp generates sample traces through the model.
+
+distributions.cpp contains the confidence calc functions, which calculate the confidence the model satisfies the property (TODO: the upper and lower bounds from the PRIS parameter synthesis need to be input here). Note that we don't do the *actual* state splitting as in the paper, instead we split the data as if we had split the states, i.e., we skip the intermediate steps and go straight from data to output result.
+
+This repository is a mess.. the key thing missing at the moment is the parser for the output from PRISM, so that the synthesis result can be inputted into the confidence calc.
 
 
-model.cpp 
-
-MC::check() - checks whether Markov chain violates any of:
-- must have states
-- sum of all transition probabilities on any state must be <=1
-- sum of all parameter multipliers on any transition must be <=1
-- must be no negative transition probabilities
-
-MC::get_parameterised_states() - finds transitions with parameters and returns a vector of pairs. The first element is the state, the second element is the transition number
-
-MC::weighting(transition, state) - given a transition and the state it came from, returns the probability of that transition calculated using the current model parameter values
-
-MC::remainderWeight(s) - calculates the probability of the remainder transition, i.e., 1 - all other transitions
-
-MC::get_init_state() - returns initial state
-
-void printstate(state) - prints to cout
-
-MC::outputMC(std::ostream) - prints markov chain
-
-models.cpp - contains functions that return hard-coded models
+Other stuff in this repo:
+- initial attempts at actually splitting the states
+- the beginnings of a statistical model checker (see polgreen/polcheck for more)
 
 
-pctl_parser.cpp - contains functions to parse a pctl property
-pctl_tokenizer.cpp - contains functions to tokenize an inputted pctl property
-
-fraction.cpp - fraction functions
-
-markov_chain.cpp = functions to get data from markov chain
-
-propcheck.cpp = checks pctl property is valid
-
-prism_comms.cpp - contains functions to write a prism file, and send file to prism parameter synthesis tool
-
-
-
-
+******************************
+TO DO LIST
+****************************
+- PRISM output PARSER!!!! 
