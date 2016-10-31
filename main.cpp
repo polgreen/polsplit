@@ -31,7 +31,7 @@
 
 int main(int argc, const char *argv[])
 {
-  // parse pctl formula
+ // parse pctl formula
   std::vector<tokent> tokenseq;
   std::cout<< "Number of strings: "<<argc<<"\n";
   pctlformula f;
@@ -41,18 +41,18 @@ int main(int argc, const char *argv[])
     tokenseq = pctl_tokenizer(argv[1]);
     outputtoken(tokenseq);
 
-   try{
+   try
+   {
       f = parse_top(tokenseq);
       std::cout<<"\n";
       output(f);
       std::cout<<"\n";
-        }
+   }
    catch(std::exception& ex)
         {std::cout << "parsing failed\n";}
-
   }
 
-
+  //get region for parameter from parameter synthesis tool
   std::vector<double> lower_bounds;
   std::vector<double> upper_bounds;
   try{
@@ -63,29 +63,25 @@ int main(int argc, const char *argv[])
 
   lower_bounds.resize(model.modelparams.size());
   upper_bounds.resize(model.modelparams.size());
+
   for(unsigned i=0; i<lower_bounds.size(); i++)
   {
     lower_bounds[i] = 0;
     upper_bounds[i] = 0.5;
   }
 
-  //model.outputPRISM(std::cout);
- // model.PRISMsynthesis(f);
   model.PRISMsynthesis(f);
+  model.outputPRISM(std::cout);
   
-
-
- for(unsigned n=0; n<10; n++)
- {
-  trace = gettrace(model, 100);
-  model.get_trace_counts(trace);
-
-
- }
-//model.outputMC(std::cout);
-//model.outputPRISM(std::cout);
-//  model.sample_transition_counts();
-//model.confidencecalc(10,lower_bounds, upper_bounds);
+//get data from model
+  for(unsigned n=0; n<10; n++)
+  {
+   trace = gettrace(model, 100);
+    model.get_trace_counts(trace);
+   }
+std::cout<<"Confidence calc\n";
+//do confidence calculation
+model.confidencecalc(10,lower_bounds, upper_bounds);
 
 }
 catch(...)
