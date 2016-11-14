@@ -80,19 +80,15 @@ std::vector< std::pair < statet, unsigned> > MC::get_parameterised_states()
 	{
 		for (unsigned t=0; t<s.transitions.size(); t++)
 		{
-
 			if((s.transitions[t].type==FUNCTION || s.transitions[t].type ==NEWFUNCTION))
 				{	
 					std::cout<<"Found param state "<<s.ID<<" , param transition to "<<s.transitions[t].successor <<  "\n";
-
 					pair.first = s;
 					pair.second = t;
 					result.push_back(pair);
 					found=true;
-				}
-			
-		}
-		
+				}			
+		}		
 	}
 
 	if(found==false){std::cout<<"error in get_parameterised_states: no parameterised states found \n";

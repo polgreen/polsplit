@@ -5,6 +5,7 @@
 #include <vector>
 #include "fraction.h"
 #include "pctl_parser.h"
+#include "distributions.h"
 enum transitiontype {CONST, FUNCTION, REMAINDER, NEWFUNCTION, NEWCONST, NEWREMAINDER };
 enum transadded {T1, T2, T3, T0, T4};
 enum statetype {S1, S2, S3, S0};
@@ -45,6 +46,10 @@ struct statet {
 struct MC {
 	std::vector<statet> states; 
 	std::vector<fractiont> modelparams; 
+	std::vector<unsigned> parametercounts;
+	std::vector<unsigned> inv_parametercounts;
+	std::vector<fractiont> confidence; 
+
 	void outputMC(std::ostream &out);
 	statet get_init_state();
 	void add_IDs();
@@ -56,11 +61,15 @@ struct MC {
 	void PRISMsynthesis(pctlformula property);
 	void check();
 	double missing_data_sample();
-	std::vector<unsigned> parametercounts;
-	std::vector<unsigned> inv_parametercounts;
-	void sample_transition_counts();
-	std::vector<fractiont> confidencecalc(unsigned num_samples, std::vector<double> lower_bounds, std::vector<double> upper_bounds);
+	void sample_transition_counts(random_distribution &);
+	void confidencecalc(unsigned num_samples, std::vector<double> lower_bounds, std::vector<double> upper_bounds);
 	std::vector<double> parameter_distributions(std::vector<double> lower_bounds, std::vector<double> upper_bounds);
+	void get_random_model_params(random_distribution &);
+	std::vector<unsigned> sample_transition(unsigned, transitiont, random_distribution &);
+	void sample_params_update_conf(random_distribution &,
+    std::vector<double> &, std::vector<double> & );
+    void sample_D_star(std::vector< std::pair < statet, unsigned> > &, random_distribution &);
+    void reset_confidence();
 	};
 
 	
