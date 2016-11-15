@@ -1,1 +1,1 @@
-g++ main.cpp model.cpp models.cpp statesplit.cpp prism_comms.cpp fraction.cpp trace.cpp pctl_parser.cpp pctl_tokenizer.cpp confidence.cpp prism_parser.cpp -std=c++11 -lgsl
+g++ main.cpp model.cpp models.cpp prism_comms.cpp fraction.cpp trace.cpp pctl_parser.cpp pctl_tokenizer.cpp confidence.cpp prism_parser.cpp -std=c++11 -lgsl
