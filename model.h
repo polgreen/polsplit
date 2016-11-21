@@ -48,7 +48,8 @@ struct MC {
 	std::vector<fractiont> modelparams; 
 	std::vector<unsigned> parametercounts;
 	std::vector<unsigned> inv_parametercounts;
-	std::vector<fractiont> confidence; 
+	std::vector<fractiont> confidence;
+	fractiont overall_confidence; 
 
 	std::vector<std::vector<std::string > >parameter_bounds;
 	std::vector<std::string> parameter_results;
@@ -75,6 +76,7 @@ struct MC {
     void sample_D_star(std::vector< std::pair < statet, unsigned> > &, random_distribution &);
     void reset_confidence();
     void prism_find(std::string);
+    bool is_in_range(std::vector<double>&);
 	};
 
 	
