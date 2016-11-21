@@ -21,7 +21,7 @@ void MC::reset_confidence()
 
 bool MC::is_in_range(std::vector<double> &sample)
 {
-
+  
 
 
 
