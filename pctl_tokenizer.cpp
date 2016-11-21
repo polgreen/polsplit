@@ -91,18 +91,18 @@ std::vector<tokent>  pctl_tokenizer(std::string input)
           case '&': t.kind = AND; tokenseq.push_back(t);break;
           case '|': t.kind = OR; tokenseq.push_back(t);break;
           case '>': pos++;
-          if(pos!= input.end() && *pos=='=')
-          { t.kind=GE; 
+            if(pos!= input.end() && *pos=='=')
+            { t.kind=GE; 
             tokenseq.push_back(t); break;}
-          else {t.kind = GT; tokenseq.push_back(t); pos--;break;}
+            else {t.kind = GT; tokenseq.push_back(t); pos--;break;}
           case '<': pos++;
-          if(pos!= input.end() && *pos=='=')
-          {t.kind=LE; tokenseq.push_back(t); break;}
-          else {t.kind = LT; tokenseq.push_back(t); pos--;break;}
+            if(pos!= input.end() && *pos=='=')
+            {t.kind=LE; tokenseq.push_back(t); break;}
+            else {t.kind = LT; tokenseq.push_back(t); pos--;break;}
           case '=': pos++;
-          if(pos!= input.end() && *pos=='>')
-          {t.kind=IMPLIES; tokenseq.push_back(t); break;}
-          else {t.kind = EQ; tokenseq.push_back(t); pos--;break;}
+            if(pos!= input.end() && *pos=='>')
+            {t.kind=IMPLIES; tokenseq.push_back(t); break;}
+            else {t.kind = EQ; tokenseq.push_back(t); pos--;break;}
           case '(': t.kind = LP; tokenseq.push_back(t); break;
           case ')': t.kind = RP; tokenseq.push_back(t); break;
           case '[': t.kind = SLP; tokenseq.push_back(t); break;

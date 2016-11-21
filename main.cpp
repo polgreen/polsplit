@@ -73,7 +73,7 @@ int main(int argc, const char *argv[])
   model.PRISMsynthesis(f);
   model.outputPRISM(std::cout);
   
-//get data from model
+/*//get data from model
   for(unsigned n=0; n<10; n++)
   {
    trace = gettrace(model, 100);
@@ -81,7 +81,7 @@ int main(int argc, const char *argv[])
    }
 std::cout<<"Confidence calc\n";
 //do confidence calculation
-model.confidencecalc(10,lower_bounds, upper_bounds);
+model.confidencecalc(10,lower_bounds, upper_bounds);*/
 
 }
 catch(...)

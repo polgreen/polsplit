@@ -50,6 +50,10 @@ struct MC {
 	std::vector<unsigned> inv_parametercounts;
 	std::vector<fractiont> confidence; 
 
+	std::vector<std::vector<std::string > >parameter_bounds;
+	std::vector<std::string> parameter_results;
+
+
 	void outputMC(std::ostream &out);
 	statet get_init_state();
 	void add_IDs();
@@ -70,6 +74,7 @@ struct MC {
     std::vector<double> &, std::vector<double> & );
     void sample_D_star(std::vector< std::pair < statet, unsigned> > &, random_distribution &);
     void reset_confidence();
+    void prism_find(std::string);
 	};
 
 	
