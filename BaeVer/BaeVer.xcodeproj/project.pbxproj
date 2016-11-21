@@ -8,27 +8,15 @@
 
 /* Begin PBXBuildFile section */
 		34C8E7DB1DE34D0400DE7B5B /* confidence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34C8E7B31DE34D0400DE7B5B /* confidence.cpp */; };
-		34C8E7DC1DE34D0400DE7B5B /* datasplit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34C8E7B51DE34D0400DE7B5B /* datasplit.cpp */; };
-		34C8E7DD1DE34D0400DE7B5B /* distributions2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34C8E7B71DE34D0400DE7B5B /* distributions2.cpp */; };
-		34C8E7DE1DE34D0400DE7B5B /* errors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34C8E7B81DE34D0400DE7B5B /* errors.cpp */; };
 		34C8E7DF1DE34D0400DE7B5B /* fraction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34C8E7B91DE34D0400DE7B5B /* fraction.cpp */; };
-		34C8E7E01DE34D0400DE7B5B /* function_parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34C8E7BB1DE34D0400DE7B5B /* function_parser.cpp */; };
-		34C8E7E11DE34D0400DE7B5B /* function_tokenizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34C8E7BC1DE34D0400DE7B5B /* function_tokenizer.cpp */; };
 		34C8E7E21DE34D0400DE7B5B /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34C8E7BD1DE34D0400DE7B5B /* main.cpp */; };
-		34C8E7E31DE34D0400DE7B5B /* markov_chain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34C8E7BE1DE34D0400DE7B5B /* markov_chain.cpp */; };
-		34C8E7E41DE34D0400DE7B5B /* MDP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34C8E7C01DE34D0400DE7B5B /* MDP.cpp */; };
-		34C8E7E51DE34D0400DE7B5B /* model_archive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34C8E7C21DE34D0400DE7B5B /* model_archive.cpp */; };
 		34C8E7E61DE34D0400DE7B5B /* model.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34C8E7C41DE34D0400DE7B5B /* model.cpp */; };
 		34C8E7E71DE34D0400DE7B5B /* models.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34C8E7C61DE34D0400DE7B5B /* models.cpp */; };
 		34C8E7E81DE34D0400DE7B5B /* pctl_parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34C8E7C71DE34D0400DE7B5B /* pctl_parser.cpp */; };
 		34C8E7E91DE34D0400DE7B5B /* pctl_tokenizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34C8E7C91DE34D0400DE7B5B /* pctl_tokenizer.cpp */; };
 		34C8E7EA1DE34D0400DE7B5B /* prism_comms.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34C8E7CB1DE34D0400DE7B5B /* prism_comms.cpp */; };
 		34C8E7EB1DE34D0400DE7B5B /* prism_parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34C8E7CC1DE34D0400DE7B5B /* prism_parser.cpp */; };
-		34C8E7EC1DE34D0400DE7B5B /* propcheck.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34C8E7CF1DE34D0400DE7B5B /* propcheck.cpp */; };
-		34C8E7ED1DE34D0400DE7B5B /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 34C8E7D31DE34D0400DE7B5B /* README.md */; };
 		34C8E7EE1DE34D0400DE7B5B /* sample_params.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34C8E7D41DE34D0400DE7B5B /* sample_params.cpp */; };
-		34C8E7EF1DE34D0400DE7B5B /* statesplit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34C8E7D51DE34D0400DE7B5B /* statesplit.cpp */; };
-		34C8E7F01DE34D0400DE7B5B /* statmodelchecker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34C8E7D61DE34D0400DE7B5B /* statmodelchecker.cpp */; };
 		34C8E7F11DE34D0400DE7B5B /* trace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 34C8E7D91DE34D0400DE7B5B /* trace.cpp */; };
 /* End PBXBuildFile section */
 
@@ -48,21 +36,9 @@
 		34C8E7A91DE34CE500DE7B5B /* BaeVer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = BaeVer; sourceTree = BUILT_PRODUCTS_DIR; };
 		34C8E7B31DE34D0400DE7B5B /* confidence.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = confidence.cpp; path = ../confidence.cpp; sourceTree = "<group>"; };
 		34C8E7B41DE34D0400DE7B5B /* confidence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = confidence.h; path = ../confidence.h; sourceTree = "<group>"; };
-		34C8E7B51DE34D0400DE7B5B /* datasplit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = datasplit.cpp; path = ../datasplit.cpp; sourceTree = "<group>"; };
-		34C8E7B61DE34D0400DE7B5B /* distributions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = distributions.h; path = ../distributions.h; sourceTree = "<group>"; };
-		34C8E7B71DE34D0400DE7B5B /* distributions2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = distributions2.cpp; path = ../distributions2.cpp; sourceTree = "<group>"; };
-		34C8E7B81DE34D0400DE7B5B /* errors.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = errors.cpp; path = ../errors.cpp; sourceTree = "<group>"; };
 		34C8E7B91DE34D0400DE7B5B /* fraction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fraction.cpp; path = ../fraction.cpp; sourceTree = "<group>"; };
 		34C8E7BA1DE34D0400DE7B5B /* fraction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fraction.h; path = ../fraction.h; sourceTree = "<group>"; };
-		34C8E7BB1DE34D0400DE7B5B /* function_parser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = function_parser.cpp; path = ../function_parser.cpp; sourceTree = "<group>"; };
-		34C8E7BC1DE34D0400DE7B5B /* function_tokenizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = function_tokenizer.cpp; path = ../function_tokenizer.cpp; sourceTree = "<group>"; };
 		34C8E7BD1DE34D0400DE7B5B /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../main.cpp; sourceTree = "<group>"; };
-		34C8E7BE1DE34D0400DE7B5B /* markov_chain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = markov_chain.cpp; path = ../markov_chain.cpp; sourceTree = "<group>"; };
-		34C8E7BF1DE34D0400DE7B5B /* markov_chain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = markov_chain.h; path = ../markov_chain.h; sourceTree = "<group>"; };
-		34C8E7C01DE34D0400DE7B5B /* MDP.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MDP.cpp; path = ../MDP.cpp; sourceTree = "<group>"; };
-		34C8E7C11DE34D0400DE7B5B /* MDP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MDP.h; path = ../MDP.h; sourceTree = "<group>"; };
-		34C8E7C21DE34D0400DE7B5B /* model_archive.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = model_archive.cpp; path = ../model_archive.cpp; sourceTree = "<group>"; };
-		34C8E7C31DE34D0400DE7B5B /* model_archive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = model_archive.h; path = ../model_archive.h; sourceTree = "<group>"; };
 		34C8E7C41DE34D0400DE7B5B /* model.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = model.cpp; path = ../model.cpp; sourceTree = "<group>"; };
 		34C8E7C51DE34D0400DE7B5B /* model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = model.h; path = ../model.h; sourceTree = "<group>"; };
 		34C8E7C61DE34D0400DE7B5B /* models.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = models.cpp; path = ../models.cpp; sourceTree = "<group>"; };
@@ -73,17 +49,7 @@
 		34C8E7CB1DE34D0400DE7B5B /* prism_comms.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = prism_comms.cpp; path = ../prism_comms.cpp; sourceTree = "<group>"; };
 		34C8E7CC1DE34D0400DE7B5B /* prism_parser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = prism_parser.cpp; path = ../prism_parser.cpp; sourceTree = "<group>"; };
 		34C8E7CD1DE34D0400DE7B5B /* prism_parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = prism_parser.h; path = ../prism_parser.h; sourceTree = "<group>"; };
-		34C8E7CE1DE34D0400DE7B5B /* prismfile.pm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.perl; name = prismfile.pm; path = ../prismfile.pm; sourceTree = "<group>"; };
-		34C8E7CF1DE34D0400DE7B5B /* propcheck.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = propcheck.cpp; path = ../propcheck.cpp; sourceTree = "<group>"; };
-		34C8E7D01DE34D0400DE7B5B /* propcheck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = propcheck.h; path = ../propcheck.h; sourceTree = "<group>"; };
-		34C8E7D11DE34D0400DE7B5B /* propertyfile.pctl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = propertyfile.pctl; path = ../propertyfile.pctl; sourceTree = "<group>"; };
-		34C8E7D21DE34D0400DE7B5B /* propertyfile.props */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = propertyfile.props; path = ../propertyfile.props; sourceTree = "<group>"; };
-		34C8E7D31DE34D0400DE7B5B /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		34C8E7D41DE34D0400DE7B5B /* sample_params.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = sample_params.cpp; path = ../sample_params.cpp; sourceTree = "<group>"; };
-		34C8E7D51DE34D0400DE7B5B /* statesplit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = statesplit.cpp; path = ../statesplit.cpp; sourceTree = "<group>"; };
-		34C8E7D61DE34D0400DE7B5B /* statmodelchecker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = statmodelchecker.cpp; path = ../statmodelchecker.cpp; sourceTree = "<group>"; };
-		34C8E7D71DE34D0400DE7B5B /* statmodelchecker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = statmodelchecker.h; path = ../statmodelchecker.h; sourceTree = "<group>"; };
-		34C8E7D81DE34D0400DE7B5B /* todo */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = todo; path = ../todo; sourceTree = "<group>"; };
 		34C8E7D91DE34D0400DE7B5B /* trace.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = trace.cpp; path = ../trace.cpp; sourceTree = "<group>"; };
 		34C8E7DA1DE34D0400DE7B5B /* trace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = trace.h; path = ../trace.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -104,21 +70,9 @@
 			children = (
 				34C8E7B31DE34D0400DE7B5B /* confidence.cpp */,
 				34C8E7B41DE34D0400DE7B5B /* confidence.h */,
-				34C8E7B51DE34D0400DE7B5B /* datasplit.cpp */,
-				34C8E7B61DE34D0400DE7B5B /* distributions.h */,
-				34C8E7B71DE34D0400DE7B5B /* distributions2.cpp */,
-				34C8E7B81DE34D0400DE7B5B /* errors.cpp */,
 				34C8E7B91DE34D0400DE7B5B /* fraction.cpp */,
 				34C8E7BA1DE34D0400DE7B5B /* fraction.h */,
-				34C8E7BB1DE34D0400DE7B5B /* function_parser.cpp */,
-				34C8E7BC1DE34D0400DE7B5B /* function_tokenizer.cpp */,
 				34C8E7BD1DE34D0400DE7B5B /* main.cpp */,
-				34C8E7BE1DE34D0400DE7B5B /* markov_chain.cpp */,
-				34C8E7BF1DE34D0400DE7B5B /* markov_chain.h */,
-				34C8E7C01DE34D0400DE7B5B /* MDP.cpp */,
-				34C8E7C11DE34D0400DE7B5B /* MDP.h */,
-				34C8E7C21DE34D0400DE7B5B /* model_archive.cpp */,
-				34C8E7C31DE34D0400DE7B5B /* model_archive.h */,
 				34C8E7C41DE34D0400DE7B5B /* model.cpp */,
 				34C8E7C51DE34D0400DE7B5B /* model.h */,
 				34C8E7C61DE34D0400DE7B5B /* models.cpp */,
@@ -129,17 +83,7 @@
 				34C8E7CB1DE34D0400DE7B5B /* prism_comms.cpp */,
 				34C8E7CC1DE34D0400DE7B5B /* prism_parser.cpp */,
 				34C8E7CD1DE34D0400DE7B5B /* prism_parser.h */,
-				34C8E7CE1DE34D0400DE7B5B /* prismfile.pm */,
-				34C8E7CF1DE34D0400DE7B5B /* propcheck.cpp */,
-				34C8E7D01DE34D0400DE7B5B /* propcheck.h */,
-				34C8E7D11DE34D0400DE7B5B /* propertyfile.pctl */,
-				34C8E7D21DE34D0400DE7B5B /* propertyfile.props */,
-				34C8E7D31DE34D0400DE7B5B /* README.md */,
 				34C8E7D41DE34D0400DE7B5B /* sample_params.cpp */,
-				34C8E7D51DE34D0400DE7B5B /* statesplit.cpp */,
-				34C8E7D61DE34D0400DE7B5B /* statmodelchecker.cpp */,
-				34C8E7D71DE34D0400DE7B5B /* statmodelchecker.h */,
-				34C8E7D81DE34D0400DE7B5B /* todo */,
 				34C8E7D91DE34D0400DE7B5B /* trace.cpp */,
 				34C8E7DA1DE34D0400DE7B5B /* trace.h */,
 				34C8E7AA1DE34CE500DE7B5B /* Products */,
@@ -212,27 +156,15 @@
 			files = (
 				34C8E7EB1DE34D0400DE7B5B /* prism_parser.cpp in Sources */,
 				34C8E7E91DE34D0400DE7B5B /* pctl_tokenizer.cpp in Sources */,
-				34C8E7ED1DE34D0400DE7B5B /* README.md in Sources */,
-				34C8E7DE1DE34D0400DE7B5B /* errors.cpp in Sources */,
 				34C8E7DF1DE34D0400DE7B5B /* fraction.cpp in Sources */,
 				34C8E7E21DE34D0400DE7B5B /* main.cpp in Sources */,
-				34C8E7DD1DE34D0400DE7B5B /* distributions2.cpp in Sources */,
-				34C8E7E51DE34D0400DE7B5B /* model_archive.cpp in Sources */,
 				34C8E7EA1DE34D0400DE7B5B /* prism_comms.cpp in Sources */,
 				34C8E7E71DE34D0400DE7B5B /* models.cpp in Sources */,
-				34C8E7F01DE34D0400DE7B5B /* statmodelchecker.cpp in Sources */,
-				34C8E7EC1DE34D0400DE7B5B /* propcheck.cpp in Sources */,
-				34C8E7E01DE34D0400DE7B5B /* function_parser.cpp in Sources */,
-				34C8E7E41DE34D0400DE7B5B /* MDP.cpp in Sources */,
 				34C8E7DB1DE34D0400DE7B5B /* confidence.cpp in Sources */,
 				34C8E7EE1DE34D0400DE7B5B /* sample_params.cpp in Sources */,
 				34C8E7F11DE34D0400DE7B5B /* trace.cpp in Sources */,
-				34C8E7EF1DE34D0400DE7B5B /* statesplit.cpp in Sources */,
-				34C8E7DC1DE34D0400DE7B5B /* datasplit.cpp in Sources */,
 				34C8E7E61DE34D0400DE7B5B /* model.cpp in Sources */,
 				34C8E7E81DE34D0400DE7B5B /* pctl_parser.cpp in Sources */,
-				34C8E7E11DE34D0400DE7B5B /* function_tokenizer.cpp in Sources */,
-				34C8E7E31DE34D0400DE7B5B /* markov_chain.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -323,6 +255,15 @@
 		34C8E7B11DE34CE500DE7B5B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				FRAMEWORK_SEARCH_PATHS = /library/Frameworks;
+				HEADER_SEARCH_PATHS = /usr/local/include;
+				OTHER_LDFLAGS = (
+					"-I/usr/local/include",
+					"-L/usr/local/lib",
+					"-lgsl",
+					"-lgslcblas",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -330,6 +271,15 @@
 		34C8E7B21DE34CE500DE7B5B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				FRAMEWORK_SEARCH_PATHS = /library/Frameworks;
+				HEADER_SEARCH_PATHS = /usr/local/include;
+				OTHER_LDFLAGS = (
+					"-I/usr/local/include",
+					"-L/usr/local/lib",
+					"-lgsl",
+					"-lgslcblas",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -353,6 +303,7 @@
 				34C8E7B21DE34CE500DE7B5B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

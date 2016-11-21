@@ -51,7 +51,7 @@ struct MC {
 	std::vector<fractiont> confidence;
 	fractiont overall_confidence; 
 
-	std::vector<std::vector<std::string > >parameter_bounds;
+	std::vector<std::vector<std::pair <double, double > > >parameter_bounds;
 	std::vector<std::string> parameter_results;
 
 

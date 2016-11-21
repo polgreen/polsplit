@@ -39,7 +39,7 @@ void MC::sample_D_star(std::vector< std::pair < statet, unsigned> > &param_state
     std::vector<unsigned> inv_param_counts;
     param_counts.resize(modelparams.size());
     inv_param_counts.resize(modelparams.size());
-    unsigned kcount;
+    unsigned kcount=0;
     double prob;
     bool all_constants_equal_one = true;
 

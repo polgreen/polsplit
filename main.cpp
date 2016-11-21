@@ -99,7 +99,7 @@ catch(...)
  std::cout<< "Number of strings: "<<argc<<"\n";
  pctlformula f;
    std::random_device rd;
-/*  if(argc==2)
+  if(argc==2)
   {
     tokenseq = pctl_tokenizer(argv[1]);
     outputtoken(tokenseq);
@@ -113,9 +113,7 @@ catch(...)
    catch(std::exception& ex)
         {std::cout << "parsing failed\n";}
 
-  }*/
-
-  /*
+  }
   try{
   tracet trace;
   MC model, model2, model3, model4;

@@ -482,7 +482,6 @@ std::cout<<"visited parse_top \n";
   {
 	std::cout<<"parse error: tokens after end of expression \n";
 	throw std::exception();
-	outputtoken(tokenseq);
 	  }
 
  return f;
