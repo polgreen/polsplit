@@ -19,11 +19,7 @@ void MC::reset_confidence()
 }
 
 
-
-
-
-void MC::sample_params_update_conf(random_distribution &rd,
-    std::vector<double> &lower_bounds, std::vector<double> &upper_bounds )
+void MC::sample_params_update_conf(random_distribution &rd)
 {
   std::cout<<"sample params and update confidence \n";
   std::vector<double> sample;
@@ -46,7 +42,7 @@ fractiont computeconfidence(std::vector<fractiont> conf_vector)
 
 
 void MC::confidencecalc(
-  unsigned num_samples, std::vector<double> lower_bounds, std::vector<double> upper_bounds)
+  unsigned num_samples)
 {
   std::cout<<"confidence calc \n";
 
@@ -62,9 +58,10 @@ void MC::confidencecalc(
   {
     get_random_model_params(rd);
     sample_D_star(param_states, rd);
-    sample_params_update_conf(rd, lower_bounds, upper_bounds);
+    sample_params_update_conf(rd);
 
   }
+  std::cout<<"overall confidence "<<overall_confidence;
 
 }
 

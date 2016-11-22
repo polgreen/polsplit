@@ -119,17 +119,6 @@ void MC::sample_D_star(std::vector< std::pair < statet, unsigned> > &param_state
     }
   }
 
-
-std::cout<<"Param counts: ";
-for(const auto pc: param_counts)
-    std::cout<<pc<<" ";
-std::cout<< "\nInv param counts: ";
-for(const auto pc: inv_param_counts)
-    std::cout<<pc<<" ";
-
-
 parametercounts = param_counts;
 inv_parametercounts = inv_param_counts;
-std::cout<<"debug \n";
-
 }

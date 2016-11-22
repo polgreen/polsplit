@@ -4,6 +4,8 @@
 #include "model.h"
 #include <assert.h>
 
+enum mathoperator {PLUS, MINUS, DIVIDE, MULTIPLY };
+
 std::pair<double, double> parse_bound(std::string &bound)
 {
   double lower, upper;
@@ -19,9 +21,8 @@ std::pair<double, double> parse_bound(std::string &bound)
 }
 
 
-void  MC::prism_find(std::string input)
+void  MC::prism_find(std::string& input)
 {
-  std::cout<<"PRISM parser \n";
   std::string res = "Result:";
   std::string substring, bound, result;
   std::string LP = "(";
@@ -79,12 +80,48 @@ void  MC::prism_find(std::string input)
 }
 
 
-bool result_bound_satisfied(unsigned i, double sample)
+bool MC::function_satisfied(std::string &bound, std::vector<double> &sample )
 {
-  
+  std::string::iterator pos =bound.begin();
+  char letter = 'a';
+  double nominator = 0;
+  double denominator=0;
+  bool added_to_result=false;
+  mathoperator mop = PLUS;
+  bool first=false;
+
+  std::cout<<"Parsing of PRISM output expression not yet supported:\n ";
+  std::cout<<bound<<" is expression\n";
+/*
+  while(pos!=bound.end())
+  {
+    for(unsigned i=0; i<modelparams.size(); i++)
+    {
+      if(*pos = static_cast<char>(letter + i))
+         {result  sample[i];
+          added_to_result=true;}
+    }
+    if(!added_to_result && isdigit(*pos))
+      result = result * atoi(*pos);
+    else if ()
+  }*/
+return false;
+}
 
 
-  return false;
+
+bool MC::result_bound_satisfied(unsigned i, std::vector<double>& sample)
+{
+  std::string truestr("true");
+  std::string falsestr("false");
+  std::size_t found = parameter_results[i].find(truestr);
+  if(found != std::string::npos)
+    return true;
+  found = parameter_results[i].find(falsestr);
+  if(found!=std::string::npos)
+    return false;
+
+  return function_satisfied(parameter_results[i], sample);
 }
 
 

@@ -34,19 +34,11 @@ public:
 
 void multinomial(size_t k, unsigned int N, const std::vector<double> &p, std::vector<unsigned> &n)
  {
- 	std::cout<<"multinomial probabilities";
- 	for(const auto prob: p)
- 		{std::cout<<prob<<" ";}
   gsl_ran_multinomial(rng, k, N, p.data(), n.data());
-  std::cout<<" and samples: ";
-   	for(const auto sample: n)
- 		{std::cout<<sample<<" ";}
- 	std::cout<<"\n";
  }
 
   unsigned int binomial(double p, unsigned int n)
  {
- 	std::cout<<"binomial\n";
    return gsl_ran_binomial(rng, p, n);
  }
 

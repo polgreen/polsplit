@@ -67,16 +67,18 @@ struct MC {
 	void check();
 	double missing_data_sample();
 	void sample_transition_counts(random_distribution &);
-	void confidencecalc(unsigned num_samples, std::vector<double> lower_bounds, std::vector<double> upper_bounds);
+	void confidencecalc(unsigned num_samples);
 	std::vector<double> parameter_distributions(std::vector<double> lower_bounds, std::vector<double> upper_bounds);
 	void get_random_model_params(random_distribution &);
 	std::vector<unsigned> sample_transition(unsigned, transitiont, random_distribution &);
-	void sample_params_update_conf(random_distribution &,
-    std::vector<double> &, std::vector<double> & );
+	void sample_params_update_conf(random_distribution &);
     void sample_D_star(std::vector< std::pair < statet, unsigned> > &, random_distribution &);
     void reset_confidence();
-    void prism_find(std::string);
+    void prism_find(std::string&);
     bool is_in_range(std::vector<double>&);
+    bool result_bound_satisfied(unsigned, std::vector<double>& );
+    bool function_satisfied(std::string &, std::vector<double> &);
+
 	};
 
 	
