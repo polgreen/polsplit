@@ -58,8 +58,8 @@ int main(int argc, const char *argv[])
   tracet trace;
   MC model, model2;
 
-  model = get_parameterisedMC(4,10,10,10,10);
-
+  //model = get_parameterisedMC(4,10,10,10,10);
+  model = get_simpleMC();
   model.PRISMsynthesis(f);
   model.outputPRISM(std::cout);
   
