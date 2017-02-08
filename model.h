@@ -53,16 +53,19 @@ struct MC {
 
 	std::vector<std::vector<std::pair <double, double > > >parameter_bounds;
 	std::vector<std::string> parameter_results;
-
+	unsigned verbose=2;
 
 	void outputMC(std::ostream &out);
 	statet get_init_state();
 	void add_IDs();
+	void callPrism();
 	void outputPRISM(std::ostream &out);
 	fractiont weighting(transitiont t, statet s);
 	fractiont remainderWeight(statet s);
 	std::vector< std::pair < statet, unsigned> >  get_parameterised_states();
-	void get_trace_counts(tracet trace);
+	void get_data(unsigned);
+	void get_trace_counts(tracet&);
+	tracet gettrace(unsigned );
 	void PRISMsynthesis(pctlformula property);
 	void check();
 	double missing_data_sample();
