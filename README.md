@@ -5,8 +5,18 @@ http://link.springer.com/chapter/10.1007%2F978-3-319-43425-4_3
 
 This is not the experiment implementation used in the paper (which was done in Matlab), but follows the same methodology. 
 
-- The markov chain is specified in models.cpp
-- The property is specified in propertyfile.props, in the same format as PRISM
-- the number of traces and length of traces are specified as command line arguments
+To compile the code:
+- git clone https://github.com/polgreen/BaeVer
+- download Gnu Scientific Library https://www.gnu.org/software/gsl/
+- make sure GSL is located here: /usr/local/include/gsl, if it's not, you will need to change the BaeVer compile file accordingly
+- download PRISM and add the path to your profile (or put the binary in BaeVer/src) http://www.prismmodelchecker.org/download.php
+- cd BaeVer/src
+- ./compile
+
+The model and system in Baever is hard coded in models.cpp, the property is in propertyfile.props. By default, it runs with 10 traces of length 10 transitions, but this can be changed with the command line arguments
+- --tracelength N
+- --traces N
+
+The system runs with greater verbosity with arg --debug
 
 
