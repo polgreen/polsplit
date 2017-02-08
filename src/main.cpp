@@ -38,7 +38,7 @@ void help()
 void output_header()
 {
   std::cout<<"\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n"
-            <<  "/*****************************/\ \n"
+            <<  "********************************* \n"
             << "         (\\.---.\/)\n"
             << "          /.-.-.\\ \n"
             << "         /| 0_0 |\\ \n"
@@ -50,7 +50,7 @@ void output_header()
             << "           BaeVer \n"
             << "  Bayesian Verification for DTMCs   \n"
             << " elizabeth.polgreen@cs.ox.ac.uk \n"
-            << "/\********************************/ \n\n";
+            << " ******************************** \n\n";
          //   <<"for help file use command line option --help\n\n";
 
 }
@@ -116,6 +116,6 @@ try{
 catch(...)
 {std::cout<<"exception caught at end of main \n";}
 
-
+std::cout<<"\n\n";
 }
 

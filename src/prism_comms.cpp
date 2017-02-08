@@ -39,7 +39,7 @@ void MC::callPrism()
   prismfile.close();
   std::string result;
   char letter='a';
-  std::string command ("prism prismfile.pm propertyfile.props -param ");
+  std::string command ("prism prismfile.pm ../propertyfile.props -param ");
   for(unsigned p_index=1; p_index<modelparams.size(); p_index++)
   {
     command+=static_cast<char>(letter+p_index -1);

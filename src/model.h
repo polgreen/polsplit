@@ -57,9 +57,13 @@ struct MC {
 	unsigned number_of_traces;
 
 
-	//building and checking models
+	//debugging
 	void outputMC(std::ostream &out);
+
+
+	//building and checking models
   void check();
+
 	statet get_init_state();
 	void add_IDs();
   fractiont weighting(transitiont t, statet s);
@@ -68,43 +72,36 @@ struct MC {
 	//parameter synthesis
 	void callPrism();
 	void outputPRISM(std::ostream &out);
+	void prism_find(std::string&);
 
-	//confidence calculation
+//get trace data
 	std::vector< std::pair < statet, unsigned> >  get_parameterised_states();
-  tracet gettrace(unsigned );
 	void get_data(unsigned);
+  tracet gettrace(unsigned );
 	void get_trace_counts(tracet&);
 
 
-	//void sample_transition_counts(random_distribution &);
-	void confidencecalc(unsigned num_samples);
-	std::vector<double> parameter_distributions(std::vector<double> lower_bounds, std::vector<double> upper_bounds);
+
+	//void sample_transition_counts(random_distribution &)
+  void confidencecalc(unsigned num_samples);
+  void reset_confidence();
 	void get_random_model_params(random_distribution &);
-	std::vector<unsigned> sample_transition(unsigned, transitiont, random_distribution &);
-	void sample_params_update_conf(random_distribution &);
-    void sample_D_star(std::vector< std::pair < statet, unsigned> > &, random_distribution &);
-    void reset_confidence();
-    void prism_find(std::string&);
-    bool is_in_range(std::vector<double>&);
-    bool result_bound_satisfied(unsigned, std::vector<double>& );
-    bool function_satisfied(std::string &, std::vector<double> &);
+	void sample_D_star(std::vector< std::pair < statet, unsigned> > &, random_distribution &);
+  void sample_params_update_conf(random_distribution &);
+
+//check if params are in feasible bounds
+  bool is_in_range(std::vector<double>&);
+  bool result_bound_satisfied(unsigned, std::vector<double>& );
+
 
 	};
 
-	
-std::vector<fractiont> parameter_distributions(MC model);
-
 
 MC get_simpleMC();
-MC get_ZeroConfMC(unsigned probes, unsigned lossWT, unsigned notlossWT, 
-	unsigned useWT, unsigned notuseWT);
+
+//debugging
 void printstate(statet s);
-tracet gettrace( MC model, unsigned length);
 void printtrace(tracet trace);
 
-MC get_parameterisedMC (unsigned probes, unsigned lossWT, 
-	unsigned notlossWT, unsigned useWT, unsigned notuseWT);
-MC state_split1(MC model);
-MC state_split2(MC model);
-fractiont remainderWeight(statet s);
+
 #endif
