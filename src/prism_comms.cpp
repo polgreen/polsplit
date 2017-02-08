@@ -50,6 +50,8 @@ void MC::callPrism()
   {
     std::cout<<s;
   }
+  if(verbose>1)
+    std::cout<<"Parsing prism output to find feasible set \n";
   prism_find(result);
 }
 
@@ -118,7 +120,7 @@ void MC::outputPRISM(std::ostream &out)
 		}out<<";\n";
 	}
 		out<<"\nendmodule \n \n";
-		out<< "label \"complete\"=(s=2);\n";
+		out<< "label \"complete\"=(s="<<success<<");\n";
 
 }
 
