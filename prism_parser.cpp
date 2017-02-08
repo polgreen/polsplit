@@ -79,37 +79,6 @@ void  MC::prism_find(std::string& input)
   }
 }
 
-
-bool MC::function_satisfied(std::string &bound, std::vector<double> &sample )
-{
-  std::string::iterator pos =bound.begin();
-  char letter = 'a';
-  double nominator = 0;
-  double denominator=0;
-  bool added_to_result=false;
-  mathoperator mop = PLUS;
-  bool first=false;
-
-  std::cout<<"Parsing of PRISM output expression not yet supported:\n ";
-  std::cout<<bound<<" is expression\n";
-/*
-  while(pos!=bound.end())
-  {
-    for(unsigned i=0; i<modelparams.size(); i++)
-    {
-      if(*pos = static_cast<char>(letter + i))
-         {result  sample[i];
-          added_to_result=true;}
-    }
-    if(!added_to_result && isdigit(*pos))
-      result = result * atoi(*pos);
-    else if ()
-  }*/
-return false;
-}
-
-
-
 bool MC::result_bound_satisfied(unsigned i, std::vector<double>& sample)
 {
   std::string truestr("true");
@@ -121,24 +90,28 @@ bool MC::result_bound_satisfied(unsigned i, std::vector<double>& sample)
   if(found!=std::string::npos)
     return false;
 
-  return function_satisfied(parameter_results[i], sample);
+  std::cout<<"ERROR: feasible sets expressed as polynomials not supported \n";
+  throw std::exception();
 }
-
 
 bool MC::is_in_range(std::vector<double> &sample)
 {
-  assert(sample.size()==modelparams.size());
-  bool found_bound=false;
+  if(verbose>1)
+    std::cout<<"sample from posterior distribution \n";
+  assert(sample.size()<=modelparams.size());
+  bool in_range=false;
 
   for(unsigned b=0; b<parameter_bounds.size(); b++)
   {
-    found_bound=true;
-    for(unsigned i=0; i< sample.size(); i++)
+    in_range=true;
+    for(unsigned i=1; i< sample.size(); i++)
     {
+      if(verbose>1)
+        std::cout<<"Sample P"<<i<<" "<<sample[i]<<"\n; ";
       if(sample[i]<parameter_bounds[b][i].first || sample[i]>parameter_bounds[b][i].second)
-        found_bound=false;
+        in_range=false;
     }  
-    if(found_bound==true)
+    if(in_range==true)
       return result_bound_satisfied(b, sample);
   }
 

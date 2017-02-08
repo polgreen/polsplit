@@ -30,6 +30,29 @@ std::string ssystem (const char *command)
 }
 
 
+void MC::callPrism()
+{
+
+  std::ofstream prismfile ("prismfile.pm");
+  if(!prismfile){throw std::exception();}
+  outputPRISM(prismfile);
+  prismfile.close();
+  std::string result;
+  char letter='a';
+  std::string command ("prism prismfile.pm propertyfile.props -param ");
+  for(unsigned p_index=1; p_index<modelparams.size(); p_index++)
+  {
+    command+=static_cast<char>(letter+p_index -1);
+    command+="=0:1,";
+  }
+  result = ssystem(command.c_str());
+  for(const auto s: result)
+  {
+    std::cout<<s;
+  }
+  prism_find(result);
+}
+
 void MC::PRISMsynthesis(pctlformula property)
 {
 	if(property.t.kind==INIT)

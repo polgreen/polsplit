@@ -19,11 +19,11 @@ double Generate(const double from, const double to)
         return result;
 }
 
-tracet gettrace(MC model, unsigned length)
+tracet MC::gettrace(unsigned length)
 {	
 	tracet trace;
 	std::vector<std::vector<unsigned> > count;
-	statet state = model.get_init_state();
+	statet state = get_init_state();
 	bool gotnext = false;
 	unsigned next=0;
 	trace.push_back(state);
@@ -35,7 +35,7 @@ tracet gettrace(MC model, unsigned length)
        //get total weighting of outgoing transitions
         for (const auto& t :state.transitions)
         { //std::cout<<"debug 3 \n"; 
-         sum = sum + model.weighting(t,state);}  
+         sum = sum + weighting(t,state);}
 
 		//std::uniform_int_distribution<unsigned> distribution(0,100);
         fractiont random;
@@ -47,7 +47,7 @@ tracet gettrace(MC model, unsigned length)
        
         for(const auto& t : state.transitions)
          {
-         	mass = mass + model.weighting(t,state);
+         	mass = mass + weighting(t,state);
          	subtraction = mass - random;
            if((subtraction)>0)
             { next = t.successor; gotnext=true;break;}   
@@ -55,10 +55,10 @@ tracet gettrace(MC model, unsigned length)
 
          if(gotnext==false){std::cout<<"ERROR NOT FOUND";
      		throw std::exception();}
-         if(state.ID>=model.states.size()|| next>=model.states.size())
+         if(state.ID>=states.size()|| next>=states.size())
          	{std::cout<<"error in get trace"; throw std::exception();}
         	 
-        state = model.states[next];
+        state = states[next];
 		trace.push_back(state);
 
 	}
@@ -79,7 +79,7 @@ unsigned trace_count(unsigned s1, unsigned s2, tracet t)
 	return count;
 }
 
-void MC::get_trace_counts(tracet trace)
+void MC::get_trace_counts(tracet &trace)
 {
 	for(unsigned i=0; i<trace.size()-1; i++)
 	{
@@ -98,6 +98,11 @@ void MC::get_trace_counts(tracet trace)
 	}
 }
 
+void MC::get_data(unsigned length)
+{
+  tracet T = gettrace(length);
+  get_trace_counts(T);
+}
 
 
 void printtrace(tracet trace)

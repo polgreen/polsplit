@@ -82,7 +82,8 @@ std::vector< std::pair < statet, unsigned> > MC::get_parameterised_states()
 		{
 			if((s.transitions[t].type==FUNCTION || s.transitions[t].type ==NEWFUNCTION))
 				{	
-					std::cout<<"Found param state "<<s.ID<<" , param transition to "<<s.transitions[t].successor <<  "\n";
+			    if(verbose>1)
+			      std::cout<<"Found param state "<<s.ID<<" , param transition to "<<s.transitions[t].successor <<  "\n";
 					pair.first = s;
 					pair.second = t;
 					result.push_back(pair);
