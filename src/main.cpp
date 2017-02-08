@@ -50,10 +50,12 @@ void output_header()
             << "           BaeVer \n"
             << "  Bayesian Verification for DTMCs   \n"
             << " elizabeth.polgreen@cs.ox.ac.uk \n"
-            << "/\********************************/ \n\n"
-            <<"for help file use command line option --help\n\n";
+            << "/\********************************/ \n\n";
+         //   <<"for help file use command line option --help\n\n";
 
 }
+
+
 
 
 int main(int argc, const char *argv[])
@@ -101,6 +103,7 @@ try{
   tracet trace;
   model = get_simpleMC();
   model.callPrism();
+  std::cout<<"\n";
 
   
 //get data from model
