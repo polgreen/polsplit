@@ -143,10 +143,12 @@ parametercounts = param_counts;
 inv_parametercounts = inv_param_counts;
 if(verbose>1)
 {
+  std::cout<<"\nParam counts: ";
   for(int i=0; i<param_counts.size(); i++)
   {
-    std::cout<<"P"<<i<<": "<<param_counts[i]<<"/"<<inv_param_counts[i]<<"\n";
+    std::cout<<"P"<<i<<": "<<param_counts[i]<<"/"<<inv_param_counts[i]<<" ";
   }
+  std::cout<<"\n";
 }
 
 }

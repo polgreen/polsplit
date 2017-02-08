@@ -60,8 +60,14 @@ tracet MC::gettrace(unsigned length)
         	 
         state = states[next];
 		trace.push_back(state);
-
 	}
+  if(verbose>1)
+  {
+    std::cout<<"trace: ";
+    for(const auto s: trace)
+      { std::cout<<" s"<<s.ID;}
+    std::cout<<"\n";
+  }
 
 	return trace;
 }
@@ -94,8 +100,19 @@ void MC::get_trace_counts(tracet &trace)
 					states[trace[i].ID].input++;
 				}
 		}
-
 	}
+	if(verbose>1)
+	{
+	  std::cout<<"transition counts: \n";
+	  for(const auto s: states)
+	  {
+	    for (const auto t: s.transitions)
+	    {
+	      std::cout<<"s"<<s.ID<<"-> s"<<t.successor<<": "<<t.count<<"\n";
+	    }
+	  }
+	}
+
 }
 
 void MC::get_data(unsigned length)
