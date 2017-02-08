@@ -1,5 +1,4 @@
 #include <string>
-#include "prism_parser.h"
 #include <iostream>
 #include "model.h"
 #include <assert.h>

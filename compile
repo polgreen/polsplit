@@ -5,8 +5,6 @@ models.cpp \
 prism_comms.cpp \
  fraction.cpp \
  trace.cpp \
- pctl_parser.cpp \
- pctl_tokenizer.cpp \
  confidence.cpp \
  sample_params.cpp \
  prism_parser.cpp -std=c++11 -lgsl
