@@ -1,13 +1,14 @@
 #include <vector>
-#include "model.h"
+#include <string>
 #include <random>
 #include <iostream>
 #include <cassert>
-#include "fraction.h"
 #include <sstream>
 #include <fstream>
 #include <cstdlib>
-#include "pctl_parser.h"
+
+#include "model.h"
+#include "fraction.h"
 #include "prism_parser.h"
 
 
@@ -51,33 +52,6 @@ void MC::callPrism()
     std::cout<<s;
   }
   prism_find(result);
-}
-
-void MC::PRISMsynthesis(pctlformula property)
-{
-	if(property.t.kind==INIT)
-		{std::cout<<"Property is undefined \n"; throw std::exception();}
-	std::ofstream prismfile ("prismfile.pm");
-	std::ofstream propertyfile ("propertyfile.props");
-	if(!prismfile || !propertyfile){throw std::exception();}
-	outputPRISM(prismfile);
-	outputproperty(property, propertyfile);
-	prismfile.close();
-	propertyfile.close();
-	std::string result;
-	char letter='a';
-	std::string command ("prism prismfile.pm propertyfile.props -param ");
-	for(unsigned p_index=1; p_index<modelparams.size(); p_index++)
-	{
-		command+=static_cast<char>(letter+p_index -1);
-		command+="=0:1,";
-	}
-	result = ssystem(command.c_str());	
-	for(const auto s: result)
-	{
-		std::cout<<s;
-	}
-	prism_find(result);
 }
 
 
