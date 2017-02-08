@@ -22,6 +22,8 @@ std::pair<double, double> parse_bound(std::string &bound)
 
 void  MC::prism_find(std::string& input)
 {
+  if(verbose>1)
+    std::cout<<"input to bound parsing: "<<input<<"\n";
   std::string res = "Result:";
   std::string substring, bound, result;
   std::string LP = "(";
@@ -76,6 +78,17 @@ void  MC::prism_find(std::string& input)
       pos++;
     }
   }
+  if(verbose>1)
+  {
+    for(unsigned i=0; i<parameter_bounds.size(); i++)
+    {
+      for(unsigned j=0; j<parameter_bounds[i].size(); j++)
+        {std::cout<<"bound "<<i<<" "<<parameter_bounds[i][j].first
+                  <<" -> "<<parameter_bounds[i][j].second;}
+        std::cout<<" : result "<< parameter_results[i]<<"\n";
+    }
+  }
+
 }
 
 bool MC::result_bound_satisfied(unsigned i, std::vector<double>& sample)
@@ -97,24 +110,36 @@ bool MC::is_in_range(std::vector<double> &sample)
 {
   if(verbose>1)
     std::cout<<"sample from posterior distribution \n";
-  assert(sample.size()<=modelparams.size());
+  assert(sample.size()==modelparams.size()-1);
   bool in_range=false;
+  bool all_params_ok=true;
 
-  for(unsigned b=0; b<parameter_bounds.size(); b++)
+  for(unsigned i=0; i<sample.size(); i++)
   {
-    in_range=true;
-    for(unsigned i=1; i< sample.size(); i++)
+    in_range=false;
+    if(verbose>1)
+      std::cout<<"Sample P"<<i<<" "<<sample[i]<<"\n; ";
+    for(unsigned b=0; b<parameter_bounds.size(); b++)
     {
-      if(verbose>1)
-        std::cout<<"Sample P"<<i<<" "<<sample[i]<<"\n; ";
-      if(sample[i]<parameter_bounds[b][i].first || sample[i]>parameter_bounds[b][i].second)
-        in_range=false;
-    }  
-    if(in_range==true)
-      return result_bound_satisfied(b, sample);
+      if(sample[i]>parameter_bounds[b][i].first && sample[i]<parameter_bounds[b][i].second)
+      {
+        if(verbose>1)
+          std::cout<<" parameter in range "<< parameter_bounds[b][i].first<<" ->"
+                  <<parameter_bounds[b][i].second<<"\n";
+        in_range=true;
+        if(result_bound_satisfied(b, sample))
+          {if(verbose > 1)
+              std::cout<<" true \n";}
+        else
+          {if(verbose>1)
+              std::cout<<" false\n";all_params_ok=false;}
+       }
+    }
+    if(in_range==false)
+    { all_params_ok=false;}
   }
 
-return false;
+return all_params_ok;
 }
 
 
