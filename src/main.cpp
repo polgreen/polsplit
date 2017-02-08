@@ -61,23 +61,23 @@ void output_header()
 int main(int argc, const char *argv[])
 {
   output_header();
-  MC model;
-  model.verbose=0;
-  model.number_of_traces=10;
-  model.trace_length=10;
+
+  int verbose=0;
+  int number_of_traces=10;
+  int trace_length=10;
 
   for(unsigned i=1; i<argc; i++)
    {
      if(std::string(argv[i])=="--verbose")
-       { model.verbose=1;}
+       { verbose=1;}
      else if(std::string(argv[i])=="--debug")
-       { model.verbose=2;}
+       { verbose=2;}
      else if(std::string(argv[i])=="--traces")
      {
        if(i+1<argc && isdigit(*argv[i+1]))
        {
          std::istringstream ss(argv[i+1]);
-         if (!(ss >> model.number_of_traces))
+         if (!(ss >> number_of_traces))
            {std::cerr << "Invalid number " << argv[i+1] << '\n';}
          i++;
         }
@@ -87,21 +87,25 @@ int main(int argc, const char *argv[])
        if(i+1<argc && isdigit(*argv[i+1]))
        {
          std::istringstream ss(argv[i+1]);
-         if (!(ss >> model.trace_length))
+         if (!(ss >> trace_length))
            {std::cerr << "Invalid number " << argv[i+1] << '\n';}
          i++;
         }
       }
    }
 
-  std::cout<<"Number of traces "<< model.number_of_traces<<"\n";
-  std::cout<<"Trace length "<< model.trace_length<<"\n";
+  std::cout<<"Number of traces "<< number_of_traces<<"\n";
+  std::cout<<"Trace length "<< trace_length<<"\n";
 
 
  //DO THE ACTUAL STUFF
 try{
   tracet trace;
-  model = get_simpleMC();
+  MC model = get_simpleMC();
+  model.verbose = verbose;
+  model.number_of_traces = number_of_traces;
+  model.trace_length = trace_length;
+
   model.callPrism();
   std::cout<<"\n";
 

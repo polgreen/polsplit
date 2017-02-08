@@ -1,4 +1,4 @@
-g++ -I/usr/local/include -L/usr/local/lib \
+g++ -o baever -I/usr/local/include -L/usr/local/lib \
 main.cpp \
 model.cpp \
 ../models.cpp \

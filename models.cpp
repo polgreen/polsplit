@@ -5,15 +5,6 @@
 #include "src/fraction.h"
 
 
-void MC::add_IDs ()
-{
-	for(unsigned i=0; i<states.size(); i++)
-	{
-		states[i].ID = i;
-	}
-}
-
-
 MC get_simpleMC()
 {
 	statet s0, s1, s2, s3;

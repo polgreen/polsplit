@@ -52,7 +52,7 @@ struct MC {
 
 	std::vector<std::vector<std::pair <double, double > > >parameter_bounds;
 	std::vector<std::string> parameter_results;
-	unsigned verbose=0;
+	unsigned verbose;
 	unsigned trace_length;
 	unsigned number_of_traces;
 

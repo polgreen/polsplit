@@ -23,7 +23,13 @@
 #include <cassert>
 #include "fraction.h"
 
-
+void MC::add_IDs ()
+{
+  for(unsigned i=0; i<states.size(); i++)
+  {
+    states[i].ID = i;
+  }
+}
 
 void MC::check()
 {
