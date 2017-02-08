@@ -1,8 +1,8 @@
 #include <vector>
-#include "model.h"
+#include "src/model.h"
 #include <iostream>
 #include <utility>
-#include "fraction.h"
+#include "src/fraction.h"
 
 
 void MC::add_IDs ()
