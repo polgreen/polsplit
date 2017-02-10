@@ -27,7 +27,7 @@
 
 #include "model.h"
 #include "distributions.h"
-#define NUMBERSAMPLES 100
+#define NUMBERSAMPLES 1000
 
 
 
@@ -110,7 +110,7 @@ try{
   model.callPrism();
   std::cout<<"\n";
 
-  
+
 //get data from model
   for(unsigned n=0; n<model.number_of_traces; n++)
     { model.get_data(model.trace_length);}

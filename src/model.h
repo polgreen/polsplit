@@ -49,6 +49,7 @@ struct MC {
 	std::vector<unsigned> inv_parametercounts;
 	std::vector<fractiont> confidence;
 	fractiont overall_confidence; 
+	unsigned success = 2;
 
 	std::vector<std::vector<std::pair <double, double > > >parameter_bounds;
 	std::vector<std::string> parameter_results;

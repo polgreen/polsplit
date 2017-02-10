@@ -71,7 +71,7 @@ void MC::confidencecalc(
     sample_params_update_conf(rd);
 
   }
-  std::cout<<"overall confidence "<<overall_confidence;
+  std::cout<<"overall confidence "<<overall_confidence.nom<<"/"<<overall_confidence.denom<<"\n";;
 
 }
 

@@ -17,6 +17,8 @@ The model and system in Baever is hard coded in models.cpp, the property is in p
 - --tracelength N
 - --traces N
 
-The system runs with greater verbosity with arg --debug
+e.g.,, to run 10 traces of length 100: ./baever --tracelength 100 --traces 10
+
+The system runs with greater verbosity with --debug
 
 

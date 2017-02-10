@@ -43,21 +43,18 @@ MC get_simpleMC()
  	s2.init=false;
  	t1.type = CONST;
  	t1.prob.one();
- 	t1.successor = 0;
+ 	t1.successor = 2;
  	s2.transitions.push_back(t1);
  	model.states.push_back(s2);
 
  	//s3
  	s3.init=false;
- 	t1.prob.nom = 1; t1.prob.denom = 2;
- 	t1.successor = 0;
- 	s3.transitions.push_back(t1);
- 	t1.successor = 2;
- 	t1.type = REMAINDER;
+ 	t1.prob.one();
+ 	t1.successor = 3;
  	s3.transitions.push_back(t1);
  	model.states.push_back(s3);
 
-
+model.success = 2;
 model.add_IDs();
 return model;
 }
