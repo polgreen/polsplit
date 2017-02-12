@@ -80,9 +80,7 @@ void MC::outputPRISM(std::ostream &out)
 			bool first_p=true;
 			switch(t.type)
 			{
-				case NEWCONST:
 				case CONST: t.prob.output(out);out<<" : (s'="<<t.successor<<") "; break;
-				case NEWFUNCTION:
 				case FUNCTION:
 				  for(auto & p: t.params)
 					{
@@ -92,14 +90,11 @@ void MC::outputPRISM(std::ostream &out)
 							out<<"*";
 						if(p.second>0){out<<static_cast<char>(letter + p.second -1);}
 					} out<<" : (s'="<<t.successor<<")"; break;
-				case NEWREMAINDER:
 				case REMAINDER: out<<"(1";
 						for(auto & t2: s.transitions)
 							switch(t2.type)
 						     {
-						      case NEWCONST:
 							  case CONST: out<<"-"; t2.prob.output(out); break;
-							  case NEWFUNCTION:
 							  case FUNCTION: 
 							  		for(auto & p2: t2.params)
 										{
@@ -108,8 +103,7 @@ void MC::outputPRISM(std::ostream &out)
 										  out<<"*";
 			                              if(p2.second>0){out<<static_cast<char>(letter + p2.second -1);}
 						    			 }
-									break;	
-							  case NEWREMAINDER:		
+									break;
 							  case REMAINDER: break;	
 				            default:;
 				           }

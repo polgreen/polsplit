@@ -5,9 +5,7 @@
 #include <vector>
 #include "fraction.h"
 #include "distributions.h"
-enum transitiontype {CONST, FUNCTION, REMAINDER, NEWFUNCTION, NEWCONST, NEWREMAINDER };
-enum transadded {T1, T2, T3, T0, T4};
-enum statetype {S1, S2, S3, S0};
+enum transitiontype {CONST, FUNCTION, REMAINDER};
 
 
 

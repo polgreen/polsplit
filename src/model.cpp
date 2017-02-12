@@ -86,7 +86,7 @@ std::vector< std::pair < statet, unsigned> > MC::get_parameterised_states()
 	{
 		for (unsigned t=0; t<s.transitions.size(); t++)
 		{
-			if((s.transitions[t].type==FUNCTION || s.transitions[t].type ==NEWFUNCTION))
+			if(s.transitions[t].type==FUNCTION)
 				{	
 			    if(verbose>1)
 			      std::cout<<"Found param state "<<s.ID<<" , param transition to "<<s.transitions[t].successor <<  "\n";
@@ -114,9 +114,7 @@ fractiont MC::weighting(transitiont t, statet s)
 
 	switch(t.type)
 	{
-		case CONST: 
-		case NEWCONST: return t.prob; break;
-		case NEWFUNCTION:
+		case CONST: return t.prob; break;
 		case FUNCTION:
 	    for(unsigned index=0; index<t.params.size(); index++)
          	  {
@@ -124,7 +122,6 @@ fractiont MC::weighting(transitiont t, statet s)
          	  	sum = prod + sum;
          	  }
           return sum; break;
- 		 case NEWREMAINDER:
          case REMAINDER: return remainderWeight(s) ;break;
         default: std::cout<<"error, state"<<s.ID<<"type unknown \n";
         		throw std::exception(); 
@@ -142,9 +139,9 @@ fractiont MC::remainderWeight(statet s)
 	sum_state.zero();
 	for(const auto & t: s.transitions)
 	 {
-	 	if((t.type==REMAINDER || t.type==NEWREMAINDER) && remainderfound==false)
+	 	if((t.type==REMAINDER) && remainderfound==false)
 	 	{remainderfound=true;}
-	 	else if((t.type==REMAINDER || t.type==NEWREMAINDER) && remainderfound==true)
+	 	else if((t.type==REMAINDER) && remainderfound==true)
 	 	{std::cout<<"error, 2 transitions of type REMAINDER found on S"<<s.ID<<"\n";
 		 throw std::exception();}
 	 	else{sum_state = sum_state + weighting(t, s);}
@@ -206,7 +203,7 @@ void MC::outputMC (std::ostream &out)
 		out<<s.input<<" input count \n";
 		for(const auto & t: s.transitions)
 		{
-			if(t.type==FUNCTION || t.type==NEWFUNCTION){out<<"FUNCTION ";}
+			if(t.type==FUNCTION){out<<"FUNCTION ";}
 			out<<"transition to S";
 			out<<t.successor<<" weighting: ";
 			result = weighting(t, s);
