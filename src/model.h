@@ -14,7 +14,7 @@ enum statetype {S1, S2, S3, S0};
 
 struct transitiont {
 	transitiont(){count=0; countknown=true;}
-	transitiontype type; 
+	transitiontype type;
 	unsigned successor; 
 	fractiont prob; 
 	std::vector <std::pair < fractiont, unsigned> > params;
