@@ -24,8 +24,9 @@
 #include <string>
 #include <sstream>
 
-#include "model.h"
 #include "distributions.h"
+#include "MC.h"
+#include "MDP.h"
 #define NUMBERSAMPLES 1000
 
 
@@ -48,7 +49,7 @@ void output_header()
             << "         `.     .' \n"
             << "           `._.'\n"
             << "           BaeVer \n"
-            << "  Bayesian Verification for DTMCs   \n"
+            << "  Bayesian Verification for DTMCs and MDPs   \n"
             << " elizabeth.polgreen@cs.ox.ac.uk \n"
             << " ******************************** \n\n";
          //   <<"for help file use command line option --help\n\n";
@@ -100,21 +101,17 @@ int main(int argc, const char *argv[])
 
  //DO THE ACTUAL STUFF
 try{
-  tracet trace;
-  MC model = get_simpleMC();
+
+#ifdef MC
+  MC model = get_MC();
+#endif
+#ifdef MDP
+  MDP model = get_MDP();
+#endif
   model.verbose = verbose;
   model.number_of_traces = number_of_traces;
   model.trace_length = trace_length;
-
-  model.callPrism();
-  std::cout<<"\n";
-
-
-//get data from model
-  for(unsigned n=0; n<model.number_of_traces; n++)
-    { model.get_data(model.trace_length);}
-//do confidence calculation
-  model.confidencecalc(NUMBERSAMPLES);
+  model();
 
 }
 catch(...)

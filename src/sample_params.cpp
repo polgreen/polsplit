@@ -1,5 +1,4 @@
 #include <vector>
-#include "model.h"
 #include <random>
 #include <iostream>
 #include <cassert>
@@ -9,6 +8,7 @@
 #include <gsl/gsl_cdf.h>
 #include <gsl/gsl_rng.h>
 #include <sys/time.h>
+#include "MC.h"
 
 
 unsigned statet::sum_outputs()

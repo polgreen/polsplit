@@ -1,7 +1,7 @@
 #include <string>
 #include <iostream>
-#include "model.h"
 #include <assert.h>
+#include "MC.h"
 
 enum mathoperator {PLUS, MINUS, DIVIDE, MULTIPLY };
 

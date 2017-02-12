@@ -1,13 +1,14 @@
 #include <vector>
 #include <random>
 #include <time.h>
-#include "model.h"
 #include <random>
 #include <iostream>
 #include <cassert>
 #include "fraction.h"
 #include "distributions.h"
+#include "MC.h"
 
+#ifdef MC
 void MC::reset_confidence()
 {
   if(verbose>1)
@@ -48,7 +49,7 @@ fractiont computeconfidence(std::vector<fractiont> conf_vector)
 }
 
 
-void MC::confidencecalc(
+fractiont MC::confidencecalc(
   unsigned num_samples)
 {
   if(verbose>1)
@@ -72,6 +73,6 @@ void MC::confidencecalc(
 
   }
   std::cout<<"overall confidence "<<overall_confidence.nom<<"/"<<overall_confidence.denom<<"\n";;
-
+return overall_confidence;
 }
-
+#endif

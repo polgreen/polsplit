@@ -1,11 +1,19 @@
 #include <vector>
-#include "src/model.h"
 #include <iostream>
 #include <utility>
 #include "src/fraction.h"
+#include "src/MC.h"
+#include "src/MDP.h"
 
-
-MC get_simpleMC()
+#ifdef MDP
+MDP get_MDP()
+{
+  MDP model;
+  return model;
+}
+#endif
+#ifdef MC
+MC get_MC()
 {
 	statet s0, s1, s2, s3;
 	transitiont t1, t2;
@@ -60,4 +68,4 @@ return model;
 }
 
 
-
+#endif

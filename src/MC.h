@@ -1,5 +1,6 @@
-#ifndef model_h
-#define model_h
+#ifdef MC
+#ifndef SRC_MC_H
+#define SRC_MC_H
 
 #include <random>
 #include <vector>
@@ -52,6 +53,7 @@ struct MC {
 	unsigned verbose;
 	unsigned trace_length;
 	unsigned number_of_traces;
+	unsigned numbersamples = 1000;
 
 
 	//debugging
@@ -80,7 +82,7 @@ struct MC {
 
 
 	//void sample_transition_counts(random_distribution &)
-  void confidencecalc(unsigned num_samples);
+  fractiont confidencecalc(unsigned num_samples);
   void reset_confidence();
 	void get_random_model_params(random_distribution &);
 	void sample_D_star(std::vector< std::pair < statet, unsigned> > &, random_distribution &);
@@ -90,15 +92,17 @@ struct MC {
   bool is_in_range(std::vector<double>&);
   bool result_bound_satisfied(unsigned, std::vector<double>& );
 
+  fractiont operator()();
 
 	};
 
 
-MC get_simpleMC();
+MC get_MC();
 
 //debugging
 void printstate(statet s);
 void printtrace(tracet trace);
 
 
+#endif //SRC_MC_H
 #endif

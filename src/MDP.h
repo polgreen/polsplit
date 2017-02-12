@@ -4,12 +4,12 @@
  *  Created on: 10 Feb 2017
  *      Author: elipol
  */
-
+#ifdef MDP
 #ifndef SRC_MDP_H_
 #define SRC_MDP_H_
 
 
-#include "model.h"
+#include "MC.h"
 
 
 
@@ -19,9 +19,13 @@ class MDP{
     typedef std::vector<transitiont> action;
 
     struct MDP_statet {
+        MDP_statet(){input=0;inputknown=true; outputknown=true;}
         unsigned ID;
         bool init;
         unsigned label;
+        bool outputknown;
+        bool inputknown;
+        unsigned input;
         std::vector<action> actions;
     };
 
@@ -36,7 +40,16 @@ class MDP{
     std::vector<fractiont> confidence;
     fractiont overall_confidence;
 
+    unsigned verbose;
+    unsigned trace_length;
+    unsigned number_of_traces;
+
+    void outputPrism(std::ostream &);
+    void callPrism();
+    void get_data(unsigned);
+    std::vector<unsigned> synthStrategy();
     MC induceMarkovChain(std::vector<unsigned>&);
+    fractiont operator()();
 };
 
 
@@ -45,3 +58,4 @@ class MDP{
 
 
 #endif /* SRC_MDP_H_ */
+#endif

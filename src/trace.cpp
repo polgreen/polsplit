@@ -1,9 +1,9 @@
 #include <vector>
-#include "model.h"
 #include <random>
 #include <iostream>
 #include <cassert>
 #include "fraction.h"
+#include "MC.h"
 
 double Generate(const double from, const double to)
 {
@@ -19,6 +19,33 @@ double Generate(const double from, const double to)
         return result;
 }
 
+//make this pass by reference
+unsigned trace_count(unsigned s1, unsigned s2, tracet& t)
+{
+  unsigned count;
+  for(unsigned i=0; i<t.size(); i++)
+  {
+    if(t[i].ID==s1 && t[i+1].ID==s2)
+      {count++;}
+    i++;
+  }
+  return count;
+}
+
+
+
+void printtrace(tracet &trace)
+{
+  std::cout<<"\n";
+    for(const auto &s: trace)
+    {
+        printstate(s);
+    }
+    std::cout<<"\n";
+}
+
+
+#ifdef MC
 tracet MC::gettrace(unsigned length)
 {	
 	tracet trace;
@@ -72,47 +99,33 @@ tracet MC::gettrace(unsigned length)
 	return trace;
 }
 
-//make this pass by reference
-unsigned trace_count(unsigned s1, unsigned s2, tracet t)
-{
-	unsigned count;
-	for(unsigned i=0; i<t.size(); i++)
-	{
-		if(t[i].ID==s1 && t[i+1].ID==s2)
-			{count++;}
-		i++;
-	}
-	return count;
-}
-
 void MC::get_trace_counts(tracet &trace)
 {
-	for(unsigned i=0; i<trace.size()-1; i++)
-	{
-		if(states[trace[i].ID].transitions.size()==0){std::cout<<"Error no transitions on state"<<trace[i].ID<<"\n";
-			throw std::exception();}
-			
-		for(unsigned t=0; t<states[trace[i].ID].transitions.size(); t++)
-		{
-			if(states[trace[i].ID].transitions[t].successor==trace[i+1].ID)
-				{
-					states[trace[i].ID].transitions[t].count++;
-					states[trace[i].ID].input++;
-				}
-		}
-	}
-	if(verbose>1)
-	{
-	  std::cout<<"transition counts: \n";
-	  for(const auto s: states)
-	  {
-	    for (const auto t: s.transitions)
-	    {
-	      std::cout<<"s"<<s.ID<<"-> s"<<t.successor<<": "<<t.count<<"\n";
-	    }
-	  }
-	}
+  for(unsigned i=0; i<trace.size()-1; i++)
+  {
+    if(states[trace[i].ID].transitions.size()==0){std::cout<<"Error no transitions on state"<<trace[i].ID<<"\n";
+      throw std::exception();}
 
+    for(unsigned t=0; t<states[trace[i].ID].transitions.size(); t++)
+    {
+      if(states[trace[i].ID].transitions[t].successor==trace[i+1].ID)
+        {
+          states[trace[i].ID].transitions[t].count++;
+          states[trace[i].ID].input++;
+        }
+    }
+  }
+  if(verbose>1)
+  {
+    std::cout<<"transition counts: \n";
+    for(const auto s: states)
+    {
+      for (const auto t: s.transitions)
+      {
+        std::cout<<"s"<<s.ID<<"-> s"<<t.successor<<": "<<t.count<<"\n";
+      }
+    }
+  }
 }
 
 void MC::get_data(unsigned length)
@@ -121,13 +134,4 @@ void MC::get_data(unsigned length)
   get_trace_counts(T);
 }
 
-
-void printtrace(tracet trace)
-{
-	std::cout<<"\n";
-    for(const auto &s: trace) 
-    {
-        printstate(s);
-    }
-    std::cout<<"\n";
-}
+#endif

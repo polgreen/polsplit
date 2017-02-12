@@ -13,11 +13,9 @@
    elizabeth.polgreen@cs.ox.ac.uk
 \********************************/
 
-
-
-
+#ifdef MC
+#include "MC.h"
 #include <vector>
-#include "model.h"
 #include <random>
 #include <iostream>
 #include <cassert>
@@ -217,3 +215,14 @@ void MC::outputMC (std::ostream &out)
 
 }
 
+fractiont MC::operator()()
+{
+  callPrism();
+  std::cout<<"\n";
+  //get data from model
+   for(unsigned n=0; n<number_of_traces; n++)
+      { get_data(trace_length);}
+  //do confidence calculation
+return confidencecalc(numbersamples);
+}
+#endif //ifdef MC

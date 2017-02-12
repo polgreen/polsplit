@@ -7,8 +7,8 @@
 #include <fstream>
 #include <cstdlib>
 
-#include "model.h"
 #include "fraction.h"
+#include "MC.h"
 
 
 
@@ -29,7 +29,25 @@ std::string ssystem (const char *command)
     return result;
 }
 
+#ifdef MDP
+void MDP::callPrism()
+{
 
+  //call prism for MDP parameters
+
+
+}
+
+void MDP::outputPrism(std::ostream &out)
+{
+
+//output the prism file for an MDP
+
+
+}
+
+#endif
+#ifdef MC
 void MC::callPrism()
 {
 
@@ -118,5 +136,5 @@ void MC::outputPRISM(std::ostream &out)
 
 }
 
-
+#endif
 
