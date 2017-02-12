@@ -7,4 +7,5 @@ prism_comms.cpp \
  trace.cpp \
  confidence.cpp \
  sample_params.cpp \
+ MDP.cpp\
  prism_parser.cpp -std=c++11 -lgsl
