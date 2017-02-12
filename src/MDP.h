@@ -4,7 +4,7 @@
  *  Created on: 10 Feb 2017
  *      Author: elipol
  */
-#ifdef MDP
+#ifdef MarkovDecisionProcess
 #ifndef SRC_MDP_H_
 #define SRC_MDP_H_
 

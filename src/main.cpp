@@ -13,7 +13,7 @@
    elizabeth.polgreen@cs.ox.ac.uk
 \********************************/
 
-
+#define MarkovChain
 
 #include <vector>
 #include <cassert>
@@ -102,10 +102,10 @@ int main(int argc, const char *argv[])
  //DO THE ACTUAL STUFF
 try{
 
-#ifdef MC
+#ifdef MarkovChain
   MC model = get_MC();
 #endif
-#ifdef MDP
+#ifdef MarkovDecisionProcess
   MDP model = get_MDP();
 #endif
   model.verbose = verbose;

@@ -5,7 +5,7 @@
  *  Created on: 12 Feb 2017
  *      Author: elipol
  */
-#ifdef MDP
+#ifdef MarkovDecisionProcess
 #include <assert.h>
 #include "MDP.h"
 #include "fraction.h"

@@ -4,7 +4,7 @@
  *  Created on: 12 Feb 2017
  *      Author: elipol
  */
-#ifdef MDP
+#ifdef MarkovDecisionProcess
 #include "MDP.h"
 
 std::vector<unsigned> MDP::synthStrategy()

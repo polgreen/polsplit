@@ -5,14 +5,14 @@
 #include "src/MC.h"
 #include "src/MDP.h"
 
-#ifdef MDP
+#ifdef MarkovDecisionProcess
 MDP get_MDP()
 {
   MDP model;
   return model;
 }
 #endif
-#ifdef MC
+#ifdef MarkovChain
 MC get_MC()
 {
 	statet s0, s1, s2, s3;

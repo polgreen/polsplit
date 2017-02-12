@@ -1,6 +1,6 @@
-g++ -o baever -I/usr/local/include -L/usr/local/lib \
+g++ -D MarkovChain -o baever -I/usr/local/include -L/usr/local/lib \
 main.cpp \
-model.cpp \
+MC.cpp \
 ../models.cpp \
 prism_comms.cpp \
  fraction.cpp \

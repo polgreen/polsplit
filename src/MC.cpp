@@ -13,7 +13,7 @@
    elizabeth.polgreen@cs.ox.ac.uk
 \********************************/
 
-#ifdef MC
+#ifdef MarkovChain
 #include "MC.h"
 #include <vector>
 #include <random>

@@ -29,7 +29,7 @@ std::string ssystem (const char *command)
     return result;
 }
 
-#ifdef MDP
+#ifdef MarkovDecisionProcess
 void MDP::callPrism()
 {
 
@@ -47,7 +47,7 @@ void MDP::outputPrism(std::ostream &out)
 }
 
 #endif
-#ifdef MC
+#ifdef MarkovChain
 void MC::callPrism()
 {
 

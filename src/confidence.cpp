@@ -8,7 +8,7 @@
 #include "distributions.h"
 #include "MC.h"
 
-#ifdef MC
+#ifdef MarkovChain
 void MC::reset_confidence()
 {
   if(verbose>1)

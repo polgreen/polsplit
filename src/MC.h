@@ -1,4 +1,4 @@
-#ifdef MC
+#ifdef MarkovChain
 #ifndef SRC_MC_H
 #define SRC_MC_H
 
