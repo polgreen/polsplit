@@ -197,13 +197,6 @@ void MC::outputMC (std::ostream &out)
 	for (const auto &s : states)
 	{
 		out<<"\nS"<<s.ID;
-		switch (s.newtype){
-			case S1: out<<" type 1"; break;
-			case S2: out<<" type 2"; break;
-			case S3: out<<" type 3"; break;
-			case S0: break;
-			default:;
-		}
 		
 		//if(s.inputknown==true){out<<" input known ";}
 		//if(s.outputknown==true){out<<" output known ";}
@@ -220,15 +213,6 @@ void MC::outputMC (std::ostream &out)
 			if(result.nom==0){std::cout<<"ERROR ZERO VALUE RETURNED";}
 			result.output(out);
 			out<<", count: "<<t.count;
-			
-			switch (t.newtype){
-				case T1: out<<" type 1"; break;
-				case T2: out<<" type 2"; break;
-				case T3: out<<" type 3"; break;
-				case T4: out<<" type 4"; break;
-				case T0: break;
-				default:;
-			}
 			out<<"\n";
 
 		}

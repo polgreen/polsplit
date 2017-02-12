@@ -13,21 +13,20 @@ enum statetype {S1, S2, S3, S0};
 
 
 struct transitiont {
-	transitiont(){count=0; countknown=true; newtype=T0;}
+	transitiont(){count=0; countknown=true;}
 	transitiontype type; 
 	unsigned successor; 
 	fractiont prob; 
 	std::vector <std::pair < fractiont, unsigned> > params;
 	unsigned count;
 	bool countknown;
-	transadded newtype;
 	//first = parameter multiplier
 	//second = parameter index
 //	std::vector<unsigned> params; 
 //	std::vector<unsigned> paramindex;
 	};
 struct statet {
-	statet(){input=0;inputknown=true; outputknown=true; newtype=S0;}
+	statet(){input=0;inputknown=true; outputknown=true;}
 	unsigned ID; 
 	std::vector<transitiont> transitions; 
 	bool init; 
@@ -35,7 +34,6 @@ struct statet {
 	bool outputknown;
 	bool inputknown;
 	unsigned input;
-	statetype newtype;
 	unsigned sum_outputs();
 	};
 
@@ -49,7 +47,7 @@ struct MC {
 	std::vector<unsigned> inv_parametercounts;
 	std::vector<fractiont> confidence;
 	fractiont overall_confidence; 
-	unsigned success = 2;
+	unsigned success = 2; //success state in property.
 
 	std::vector<std::vector<std::pair <double, double > > >parameter_bounds;
 	std::vector<std::string> parameter_results;
