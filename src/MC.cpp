@@ -217,12 +217,15 @@ void MC::outputMC (std::ostream &out)
 
 fractiont MC::operator()()
 {
+  std::cout<<"Calling PRISM for parameter synthesis ... \n";
   callPrism();
   std::cout<<"\n";
+  std::cout<<"Generating data from underlying system ... \n";
   //get data from model
    for(unsigned n=0; n<number_of_traces; n++)
       { get_data(trace_length);}
   //do confidence calculation
+  std::cout<<"Computing confidence system satisfies property ... \n";
 return confidencecalc(numbersamples);
 }
 

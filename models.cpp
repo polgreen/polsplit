@@ -5,14 +5,13 @@
 #include "src/MC.h"
 #include "src/MDP.h"
 
-#ifdef MarkovDecisionProcess
+
 MDP get_MDP()
 {
   MDP model;
   return model;
 }
-#endif
-#ifdef MarkovChain
+
 MC get_MC()
 {
 	statet s0, s1, s2, s3;
@@ -22,8 +21,8 @@ MC get_MC()
 
  	model.modelparams.resize(2);
  	model.modelparams[0].one();
- 	model.modelparams[1].nom = 5;
- 	model.modelparams[1].denom = 10;
+ 	model.modelparams[1].nom = 75;
+ 	model.modelparams[1].denom = 100;
 
  	//s0
  	s0 = {};
@@ -68,4 +67,4 @@ return model;
 }
 
 
-#endif
+

@@ -53,7 +53,7 @@ struct MC {
 	unsigned verbose;
 	unsigned trace_length;
 	unsigned number_of_traces;
-	unsigned numbersamples = 1000;
+	unsigned numbersamples = 10000;
 
 
 	//debugging

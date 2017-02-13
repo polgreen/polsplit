@@ -13,7 +13,7 @@
    elizabeth.polgreen@cs.ox.ac.uk
 \********************************/
 
-#define MarkovChain
+
 
 #include <vector>
 #include <cassert>
@@ -64,8 +64,8 @@ int main(int argc, const char *argv[])
   output_header();
 
   int verbose=0;
-  int number_of_traces=10;
-  int trace_length=10;
+  int number_of_traces=1000;
+  int trace_length=1000;
 
   for(unsigned i=1; i<argc; i++)
    {
@@ -102,12 +102,11 @@ int main(int argc, const char *argv[])
  //DO THE ACTUAL STUFF
 try{
 
-#ifdef MarkovChain
+
   MC model = get_MC();
-#endif
-#ifdef MarkovDecisionProcess
-  MDP model = get_MDP();
-#endif
+
+ // MDP model = get_MDP();
+
   model.verbose = verbose;
   model.number_of_traces = number_of_traces;
   model.trace_length = trace_length;
