@@ -32,6 +32,8 @@ class MDP{
   //  std::vector<actionNumber> strategy;
 
     std::vector<MDP_statet> MDPstates;
+    //note that slot 0 in modelparams is 1, and used
+    //to represent known constants in param functions
     std::vector<fractiont> modelparams;
     std::vector<unsigned> parametercounts;
     std::vector<unsigned> inv_parametercounts;
@@ -53,7 +55,8 @@ class MDP{
     void get_data(unsigned);
     MC induceMarkovChain(std::vector<unsigned>&);
     fractiont operator()();
-    void assignImportanceRewards();
+    void paramImportance();
+    void assignActionRewards(std::vector<int> &);
 };
 
 

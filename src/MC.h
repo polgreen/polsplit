@@ -41,6 +41,8 @@ struct statet {
 
 struct MC {
 	std::vector<statet> states; 
+	//note that slot 0 in modelparams is 1, and used
+	//to represent known constants in param functions
 	std::vector<fractiont> modelparams; 
 	std::vector<unsigned> parametercounts;
 	std::vector<unsigned> inv_parametercounts;
