@@ -62,7 +62,10 @@ void MDP::paramImportance()
   assignActionRewards(param_rewards);
 }
 
+std::vector<unsigned> MDP::brute_force_strategySynthesis()
+{
 
+}
 
 std::vector<unsigned> MDP::synthStrategy()
 {
