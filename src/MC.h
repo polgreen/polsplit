@@ -1,4 +1,4 @@
-#ifdef MarkovChain
+
 #ifndef SRC_MC_H
 #define SRC_MC_H
 
@@ -105,4 +105,4 @@ void printtrace(tracet trace);
 
 
 #endif //SRC_MC_H
-#endif
+

@@ -13,7 +13,7 @@
    elizabeth.polgreen@cs.ox.ac.uk
 \********************************/
 
-#ifdef MarkovChain
+
 #include "MC.h"
 #include <vector>
 #include <random>
@@ -225,4 +225,4 @@ fractiont MC::operator()()
   //do confidence calculation
 return confidencecalc(numbersamples);
 }
-#endif //ifdef MC
+

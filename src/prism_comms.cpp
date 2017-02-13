@@ -9,6 +9,7 @@
 
 #include "fraction.h"
 #include "MC.h"
+#include "MDP.h"
 
 
 
@@ -29,7 +30,7 @@ std::string ssystem (const char *command)
     return result;
 }
 
-#ifdef MarkovDecisionProcess
+
 void MDP::callPrism()
 {
 
@@ -46,8 +47,7 @@ void MDP::outputPrism(std::ostream &out)
 
 }
 
-#endif
-#ifdef MarkovChain
+
 void MC::callPrism()
 {
 
@@ -136,5 +136,5 @@ void MC::outputPRISM(std::ostream &out)
 
 }
 
-#endif
+
 
