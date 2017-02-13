@@ -4,15 +4,12 @@
  *  Created on: 10 Feb 2017
  *      Author: elipol
  */
-#ifdef MarkovDecisionProcess
+
 #ifndef SRC_MDP_H_
 #define SRC_MDP_H_
 
 
 #include "MC.h"
-
-
-
 
 class MDP{
   public:
@@ -27,6 +24,7 @@ class MDP{
         bool inputknown;
         unsigned input;
         std::vector<action> actions;
+        std::vector<int>action_rewards;
     };
 
     //memoryless strategy: strategy[i] = j, pick action[j] in MDP_state[i].
@@ -40,16 +38,22 @@ class MDP{
     std::vector<fractiont> confidence;
     fractiont overall_confidence;
 
+    std::vector<std::vector<std::pair <double, double > > >parameter_bounds;
+    std::vector<std::string> parameter_results;
+
     unsigned verbose;
     unsigned trace_length;
     unsigned number_of_traces;
+    unsigned number_samples; //for monte carlo integration
 
+    std::vector<unsigned> synthStrategy();
+    void getData(unsigned,std::vector<unsigned>&);
     void outputPrism(std::ostream &);
     void callPrism();
     void get_data(unsigned);
-    std::vector<unsigned> synthStrategy();
     MC induceMarkovChain(std::vector<unsigned>&);
     fractiont operator()();
+    void assignImportanceRewards();
 };
 
 
@@ -58,4 +62,4 @@ class MDP{
 
 
 #endif /* SRC_MDP_H_ */
-#endif
+

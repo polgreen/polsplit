@@ -124,19 +124,25 @@ bool MC::is_in_range(std::vector<double> &sample)
       if(sample[i]>parameter_bounds[b][i].first && sample[i]<parameter_bounds[b][i].second)
       {
         if(verbose>1)
-          std::cout<<" parameter in range "<< parameter_bounds[b][i].first<<" ->"
-                  <<parameter_bounds[b][i].second<<"\n";
+          {std::cout<<" parameter in range "<< parameter_bounds[b][i].first<<" ->"
+                  <<parameter_bounds[b][i].second<<"\n";}
         in_range=true;
         if(result_bound_satisfied(b, sample))
-          {if(verbose > 1)
-              std::cout<<" true \n";}
+         {
+          confidence[i].nom++; //update individual param confidences
+          if(verbose > 1)
+              std::cout<<" true \n";
+         }
         else
-          {if(verbose>1)
+        {
+          if(verbose>1)
               std::cout<<" false\n";all_params_ok=false;}
        }
     }
     if(in_range==false)
-    { all_params_ok=false;}
+      { all_params_ok=false;}
+    else
+    {confidence[i].denom++;}
   }
 
 return all_params_ok;

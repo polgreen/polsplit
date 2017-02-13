@@ -45,7 +45,7 @@ void printtrace(tracet &trace)
 }
 
 
-#ifdef MarkovChain
+
 tracet MC::gettrace(unsigned length)
 {	
 	tracet trace;
@@ -134,4 +134,4 @@ void MC::get_data(unsigned length)
   get_trace_counts(T);
 }
 
-#endif
+
