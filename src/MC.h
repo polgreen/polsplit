@@ -19,11 +19,8 @@ struct transitiont {
 	std::vector <std::pair < fractiont, unsigned> > params;
 	unsigned count;
 	bool countknown;
-	//first = parameter multiplier
-	//second = parameter index
-//	std::vector<unsigned> params; 
-//	std::vector<unsigned> paramindex;
 	};
+
 struct statet {
 	statet(){input=0;inputknown=true; outputknown=true;}
 	unsigned ID; 

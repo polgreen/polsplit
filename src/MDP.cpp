@@ -6,6 +6,32 @@
 #include "MC.h"
 
 
+void MDP::add_IDs ()
+{
+  for(unsigned i=0; i<MDPstates.size(); i++)
+  {
+    MDPstates[i].ID = i;
+  }
+}
+
+
+MDP::MDP_statet MDP::get_init_state()
+{
+  bool found;
+  for (const auto& s: MDPstates)
+  {
+    if(s.init==true && found==false)
+    {return s;}
+    else if(s.init==true && found==true)
+      {std::cout<<"error in get_init_state: found 2 initial states \n";
+      throw std::exception();}
+  }
+ //if we get here throw exception
+  std::cout<<"error in get_init_state: no initial state found \n";
+     throw std::exception();
+
+}
+
 
 statet MDP_to_MC_state(MDP::MDP_statet &mS, unsigned actionNumber)
 {

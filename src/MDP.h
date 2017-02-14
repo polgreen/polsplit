@@ -13,6 +13,7 @@
 
 class MDP{
   public:
+
     typedef std::vector<transitiont> action;
 
     struct MDP_statet {
@@ -52,18 +53,22 @@ class MDP{
     void getData(unsigned,std::vector<unsigned>&);
     void outputPrism(std::ostream &);
     void callPrism();
+    void prism_find(std::string &);
     void get_data(unsigned);
     MC induceMarkovChain(std::vector<unsigned>&);
     fractiont operator()();
     void paramImportance();
     void assignActionRewards(std::vector<int> &);
     std::vector<unsigned> brute_force_strategySynthesis();
+    MDP_statet get_init_state();
+    void add_IDs();
+    int success=2;
 
 };
 
 
 
-
+MDP get_MDP();
 
 
 #endif /* SRC_MDP_H_ */

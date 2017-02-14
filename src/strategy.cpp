@@ -64,7 +64,15 @@ void MDP::paramImportance()
 
 std::vector<unsigned> MDP::brute_force_strategySynthesis()
 {
+  std::vector<unsigned>strategy;
+  strategy.resize(MDPstates.size());
 
+  for(int i=0; i<trace_length; i++)
+  {
+
+
+
+  }
 }
 
 std::vector<unsigned> MDP::synthStrategy()
