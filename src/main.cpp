@@ -103,15 +103,15 @@ int main(int argc, const char *argv[])
 try{
 
 
- // MC model = get_MC();
+  MC model = get_MC();
 
-  MDP model = get_MDP();
+ // MDP model = get_MDP();
 
   model.verbose = verbose;
   model.number_of_traces = number_of_traces;
   model.trace_length = trace_length;
- // model();
-  model.outputPrism(std::cout);
+  model();
+  //model.outputPrism(std::cout);
 
 }
 catch(...)
