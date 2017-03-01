@@ -1,4 +1,4 @@
-# BaeVer
+#BaeVer
 
 Data efficient Bayesian verification for DTMCs: 
 http://link.springer.com/chapter/10.1007%2F978-3-319-43425-4_3
