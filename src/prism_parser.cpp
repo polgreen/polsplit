@@ -144,8 +144,6 @@ bool MC::is_in_range(std::vector<double> &sample)
     else
     {confidence[i].denom++;}
   }
-  std::cout<<"return from is in range func \n";
-
 return all_params_ok;
 }
 
