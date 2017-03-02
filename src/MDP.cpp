@@ -75,10 +75,10 @@ MC MDP::induceMarkovChain(std::vector<unsigned>& strategy)
   return model;
 }
 
-void MDP::getData(unsigned tracelength,std::vector<unsigned>& strategy)
+void MDP::getData(unsigned tracelength,std::vector<unsigned>& strategy, random_distribution &rd)
 {
   MC model = induceMarkovChain(strategy);
-  model.get_data(tracelength); //get single trace
+  model.get_data(tracelength, rd); //get single trace
   model.confidencecalc(false,number_samples); //update posterior distributions for single trace
   //copy these numbers back and forth is pretty inefficient, but this was a quick hack
 
@@ -98,10 +98,12 @@ fractiont MDP::operator()()
   callPrism();
   if(verbose>1)
     std::cout<<"collect data \n";
+  random_distribution rd;
+  rd.set_seed(0);
   for(unsigned n=0; n<number_of_traces; n++)
   {
     std::vector<unsigned> strategy = synthStrategy();
-    getData(trace_length, strategy); //and update posterior
+    getData(trace_length, strategy, rd); //and update posterior
   }
 
   //confidence was computed at end of each sampling, just return it

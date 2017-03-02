@@ -50,7 +50,7 @@ class MDP{
     unsigned number_samples=1000; //for monte carlo integration
 
     std::vector<unsigned> synthStrategy();
-    void getData(unsigned,std::vector<unsigned>&);
+    void getData(unsigned,std::vector<unsigned>&, random_distribution &);
     void outputPrism(std::ostream &);
     void callPrism();
     void prism_find(std::string &);

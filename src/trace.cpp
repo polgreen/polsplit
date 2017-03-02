@@ -1,22 +1,15 @@
 #include <vector>
-#include <random>
 #include <iostream>
 #include <cassert>
 #include "fraction.h"
 #include "MC.h"
+#include "distributions.h"
 
-double Generate(const double from, const double to)
+double Generate(const double from, const double to, random_distribution &rd)
 {
 	double result;
-    std::random_device rd;
-
-   result =  std::bind(
-        std::uniform_real_distribution<>{from, to},
-        std::default_random_engine{ rd() })();
-     //   std::cout<<"from:"<<from<<" to:"<<to<<" random:" <<result<<"\n";
-
-
-        return result;
+	    result = (to-from)* rd.beta(1,1)+from;
+    return result;
 }
 
 //make this pass by reference
@@ -46,7 +39,7 @@ void printtrace(tracet &trace)
 
 
 
-tracet MC::gettrace(unsigned length)
+tracet MC::gettrace(unsigned length, random_distribution &rd)
 {	
 	tracet trace;
 	std::vector<std::vector<unsigned> > count;
@@ -66,7 +59,7 @@ tracet MC::gettrace(unsigned length)
 
 		//std::uniform_int_distribution<unsigned> distribution(0,100);
         fractiont random;
-        random.nom = Generate(0, 100);
+        random.nom = Generate(0, 100, rd);
         random.denom = 100;
         fractiont mass;
         fractiont subtraction;
@@ -128,9 +121,9 @@ void MC::get_trace_counts(tracet &trace)
   }
 }
 
-void MC::get_data(unsigned length)
+void MC::get_data(unsigned length, random_distribution &rd)
 {
-  tracet T = gettrace(length);
+  tracet T = gettrace(length, rd);
   get_trace_counts(T);
 }
 

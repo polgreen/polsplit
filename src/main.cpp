@@ -74,7 +74,7 @@ int main(int argc, const char *argv[])
      if(std::string(argv[i])=="--verbose")
        { verbose=1;}
      else if(std::string(argv[i])=="--debug")
-       { verbose=2;}
+       { verbose=3;}
      else if(std::string(argv[i])=="--traces")
      {
        if(i+1<argc && isdigit(*argv[i+1]))

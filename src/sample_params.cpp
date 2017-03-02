@@ -56,6 +56,8 @@ void MC::sample_D_star(std::vector< std::pair < statet, unsigned> > &param_state
       std::cout<<"Param state S"<<s.first.ID<<":\n";
     for(const auto t: s.first.transitions)
     {
+      if(t.type==REMAINDER)
+        break;
       if(verbose>1)
         std::cout<<" transition to S"<<t.successor<<" :";
       if(t.params.size()==1)
@@ -64,14 +66,17 @@ void MC::sample_D_star(std::vector< std::pair < statet, unsigned> > &param_state
         {
           param_counts[t.params[0].second] = param_counts[t.params[0].second] + t.count;
           inv_param_counts[t.params[0].second] = inv_param_counts[t.params[0].second] + s.first.sum_outputs()-t.count;
-          if(verbose>1)
+          if(verbose>2)
             std::cout<<" only 1 parameter, P"<<t.params[0].second<<": count + "
                     <<t.count<<" = "<<param_counts[t.params[0].second]<<", inverse count + "<<s.first.sum_outputs()-t.count
                     <<"= "<<inv_param_counts[t.params[0].second]<<"\n";
 
+
         }
         else
         {
+          if(verbose>2)
+            std::cout<<" parameter has a multiplier";
           param_counts[t.params[0].second] = param_counts[t.params[0].second]+t.count;
           prob = t.params[0].first.nom/(double)t.params[0].first.denom;
           while(kcount<t.count)
@@ -80,7 +85,7 @@ void MC::sample_D_star(std::vector< std::pair < statet, unsigned> > &param_state
             std::cout<<"Sampled kcount "<<kcount<<std::flush;
           }
           inv_param_counts[t.params[0].second] = inv_param_counts[t.params[0].second] + kcount - t.count;
-          if(verbose>1)
+          if(verbose>2)
                     std::cout<<" only 1 parameter,"<<t.params[0].first.nom<<"/"<<t.params[0].first.denom<<"*P"<<t.params[0].second
                             <<": count + "
                             <<t.count<<" = "<<param_counts[t.params[0].second]<<", inverse count + "<< kcount-t.count
@@ -98,6 +103,8 @@ void MC::sample_D_star(std::vector< std::pair < statet, unsigned> > &param_state
 
         if(all_constants_equal_one)
         {
+          if(verbose>2)
+            std::cout<<"all parameter multiplers are equal to 1 ";
           std::vector<double> probs(t.params.size());
           std::vector<unsigned> sample(t.params.size());  
 

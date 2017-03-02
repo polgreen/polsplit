@@ -229,8 +229,10 @@ fractiont MC::operator()()
   std::cout<<"\n";
   std::cout<<"Generating data from underlying system ... \n";
   //get data from model
+  random_distribution rd;
+  rd.set_seed(0);
    for(unsigned n=0; n<number_of_traces; n++)
-      { get_data(trace_length);}
+      { get_data(trace_length, rd);}
   //do confidence calculation
   std::cout<<"Computing confidence system satisfies property ... \n";
 return confidencecalc(true,numbersamples);
