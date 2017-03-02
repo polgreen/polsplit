@@ -17,19 +17,26 @@ void MDP::add_IDs ()
 
 MDP::MDP_statet MDP::get_init_state()
 {
-  bool found;
+  bool found=false;
+  MDP_statet result;
   for (const auto& s: MDPstates)
   {
     if(s.init==true && found==false)
-    {return s;}
+    {
+      found=true;
+      result= s;
+    }
     else if(s.init==true && found==true)
       {std::cout<<"error in get_init_state: found 2 initial states \n";
       throw std::exception();}
   }
- //if we get here throw exception
-  std::cout<<"error in get_init_state: no initial state found \n";
-     throw std::exception();
+  if(found==false)
+  {
+    std::cout<<"error in get_init_state: no initial state found \n";
+       throw std::exception();
+  }
 
+return result;
 }
 
 
