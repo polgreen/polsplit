@@ -66,6 +66,8 @@ int main(int argc, const char *argv[])
   int verbose=0;
   int number_of_traces=1000;
   int trace_length=10;
+  bool modelMDP=false;
+
 
   for(unsigned i=1; i<argc; i++)
    {
@@ -93,6 +95,10 @@ int main(int argc, const char *argv[])
          i++;
         }
       }
+     else if(std::string(argv[i])=="--MDP")
+     {
+         modelMDP=true;
+     }
    }
 
   std::cout<<"Number of traces "<< number_of_traces<<"\n";
@@ -102,18 +108,24 @@ int main(int argc, const char *argv[])
  //DO THE ACTUAL STUFF
 try{
 
-
- // MC model = get_MC();
-
-  MDP model = get_MDP();
-
-  model.verbose = verbose;
-  model.number_of_traces = number_of_traces;
-  model.trace_length = trace_length;
-  model.outputPrism(std::cout);
-  model();
-
-
+  if(modelMDP)
+  {
+    std::cout<<"Model = simple Markov decision process \n";
+    MDP model = get_MDP();
+    model.verbose = verbose;
+    model.number_of_traces = number_of_traces;
+    model.trace_length = trace_length;
+    model();
+  }
+  else
+  {
+    std::cout<<"Model = simple Markov chain \n";
+    MC model = get_MC();
+    model.verbose = verbose;
+    model.number_of_traces = number_of_traces;
+    model.trace_length = trace_length;
+    model();
+  }
 }
 catch(...)
 {std::cout<<"exception caught at end of main \n";}
