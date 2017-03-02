@@ -1,18 +1,11 @@
 #include <vector>
+#include "model.h"
 #include <iostream>
 #include <utility>
-#include "src/fraction.h"
-#include "src/MC.h"
-#include "src/MDP.h"
+#include "fraction.h"
 
 
-MDP get_MDP()
-{
-  MDP model;
-  return model;
-}
-
-MC get_MC()
+MC get_simpleMC()
 {
 	statet s0, s1, s2, s3;
 	transitiont t1, t2;
@@ -21,8 +14,8 @@ MC get_MC()
 
  	model.modelparams.resize(2);
  	model.modelparams[0].one();
- 	model.modelparams[1].nom = 75;
- 	model.modelparams[1].denom = 100;
+ 	model.modelparams[1].nom = 5;
+ 	model.modelparams[1].denom = 10;
 
  	//s0
  	s0 = {};

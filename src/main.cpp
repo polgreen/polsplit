@@ -23,10 +23,8 @@
 #include <fstream>
 #include <string>
 #include <sstream>
-
+#include "model.h"
 #include "distributions.h"
-#include "MC.h"
-#include "MDP.h"
 #define NUMBERSAMPLES 1000
 
 
@@ -40,7 +38,7 @@ void output_header()
 {
   std::cout<<"\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n"
             <<  "********************************* \n"
-            << "         (\\.---.\/)\n"
+            << "         (\\.---.//)\n"
             << "          /.-.-.\\ \n"
             << "         /| 0_0 |\\ \n"
             << "        |_`-(v)-'_|  \n"
@@ -49,7 +47,7 @@ void output_header()
             << "         `.     .' \n"
             << "           `._.'\n"
             << "           BaeVer \n"
-            << "  Bayesian Verification for DTMCs and MDPs   \n"
+            << "  Bayesian Verification for DTMCs   \n"
             << " elizabeth.polgreen@cs.ox.ac.uk \n"
             << " ******************************** \n\n";
          //   <<"for help file use command line option --help\n\n";
@@ -64,8 +62,8 @@ int main(int argc, const char *argv[])
   output_header();
 
   int verbose=0;
-  int number_of_traces=1000;
-  int trace_length=1000;
+  int number_of_traces=10;
+  int trace_length=10;
 
   for(unsigned i=1; i<argc; i++)
    {
@@ -101,17 +99,21 @@ int main(int argc, const char *argv[])
 
  //DO THE ACTUAL STUFF
 try{
-
-
-  MC model = get_MC();
-
- // MDP model = get_MDP();
-
+  tracet trace;
+  MC model = get_simpleMC();
   model.verbose = verbose;
   model.number_of_traces = number_of_traces;
   model.trace_length = trace_length;
-  model();
-  //model.outputPrism(std::cout);
+
+  model.callPrism();
+  std::cout<<"\n";
+
+
+//get data from model
+  for(unsigned n=0; n<model.number_of_traces; n++)
+    { model.get_data(model.trace_length);}
+//do confidence calculation
+  model.confidencecalc(NUMBERSAMPLES);
 
 }
 catch(...)

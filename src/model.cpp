@@ -14,8 +14,10 @@
 \********************************/
 
 
-#include "MC.h"
+
+
 #include <vector>
+#include "model.h"
 #include <random>
 #include <iostream>
 #include <cassert>
@@ -84,7 +86,7 @@ std::vector< std::pair < statet, unsigned> > MC::get_parameterised_states()
 	{
 		for (unsigned t=0; t<s.transitions.size(); t++)
 		{
-			if(s.transitions[t].type==FUNCTION)
+			if((s.transitions[t].type==FUNCTION || s.transitions[t].type ==NEWFUNCTION))
 				{	
 			    if(verbose>1)
 			      std::cout<<"Found param state "<<s.ID<<" , param transition to "<<s.transitions[t].successor <<  "\n";
@@ -112,7 +114,9 @@ fractiont MC::weighting(transitiont t, statet s)
 
 	switch(t.type)
 	{
-		case CONST: return t.prob; break;
+		case CONST: 
+		case NEWCONST: return t.prob; break;
+		case NEWFUNCTION:
 		case FUNCTION:
 	    for(unsigned index=0; index<t.params.size(); index++)
          	  {
@@ -120,6 +124,7 @@ fractiont MC::weighting(transitiont t, statet s)
          	  	sum = prod + sum;
          	  }
           return sum; break;
+ 		 case NEWREMAINDER:
          case REMAINDER: return remainderWeight(s) ;break;
         default: std::cout<<"error, state"<<s.ID<<"type unknown \n";
         		throw std::exception(); 
@@ -137,9 +142,9 @@ fractiont MC::remainderWeight(statet s)
 	sum_state.zero();
 	for(const auto & t: s.transitions)
 	 {
-	 	if((t.type==REMAINDER) && remainderfound==false)
+	 	if((t.type==REMAINDER || t.type==NEWREMAINDER) && remainderfound==false)
 	 	{remainderfound=true;}
-	 	else if((t.type==REMAINDER) && remainderfound==true)
+	 	else if((t.type==REMAINDER || t.type==NEWREMAINDER) && remainderfound==true)
 	 	{std::cout<<"error, 2 transitions of type REMAINDER found on S"<<s.ID<<"\n";
 		 throw std::exception();}
 	 	else{sum_state = sum_state + weighting(t, s);}
@@ -192,6 +197,13 @@ void MC::outputMC (std::ostream &out)
 	for (const auto &s : states)
 	{
 		out<<"\nS"<<s.ID;
+		switch (s.newtype){
+			case S1: out<<" type 1"; break;
+			case S2: out<<" type 2"; break;
+			case S3: out<<" type 3"; break;
+			case S0: break;
+			default:;
+		}
 		
 		//if(s.inputknown==true){out<<" input known ";}
 		//if(s.outputknown==true){out<<" output known ";}
@@ -201,31 +213,26 @@ void MC::outputMC (std::ostream &out)
 		out<<s.input<<" input count \n";
 		for(const auto & t: s.transitions)
 		{
-			if(t.type==FUNCTION){out<<"FUNCTION ";}
+			if(t.type==FUNCTION || t.type==NEWFUNCTION){out<<"FUNCTION ";}
 			out<<"transition to S";
 			out<<t.successor<<" weighting: ";
 			result = weighting(t, s);
 			if(result.nom==0){std::cout<<"ERROR ZERO VALUE RETURNED";}
 			result.output(out);
 			out<<", count: "<<t.count;
+			
+			switch (t.newtype){
+				case T1: out<<" type 1"; break;
+				case T2: out<<" type 2"; break;
+				case T3: out<<" type 3"; break;
+				case T4: out<<" type 4"; break;
+				case T0: break;
+				default:;
+			}
 			out<<"\n";
 
 		}
 	}			
 
-}
-
-fractiont MC::operator()()
-{
-  std::cout<<"Calling PRISM for parameter synthesis ... \n";
-  callPrism();
-  std::cout<<"\n";
-  std::cout<<"Generating data from underlying system ... \n";
-  //get data from model
-   for(unsigned n=0; n<number_of_traces; n++)
-      { get_data(trace_length);}
-  //do confidence calculation
-  std::cout<<"Computing confidence system satisfies property ... \n";
-return confidencecalc(numbersamples);
 }
 

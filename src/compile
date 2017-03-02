@@ -1,12 +1,10 @@
-g++ -D MarkovChain -o baever -I/usr/local/include -L/usr/local/lib \
+g++ -o baever -I/usr/local/include -L/usr/local/lib \
 main.cpp \
-MC.cpp \
+model.cpp \
 ../models.cpp \
 prism_comms.cpp \
  fraction.cpp \
  trace.cpp \
  confidence.cpp \
  sample_params.cpp \
- MDP.cpp\
- strategy.cpp\
  prism_parser.cpp -std=c++11 -lgsl

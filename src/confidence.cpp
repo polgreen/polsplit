@@ -1,13 +1,12 @@
 #include <vector>
 #include <random>
 #include <time.h>
+#include "model.h"
 #include <random>
 #include <iostream>
 #include <cassert>
 #include "fraction.h"
 #include "distributions.h"
-#include "MC.h"
-
 
 void MC::reset_confidence()
 {
@@ -30,7 +29,9 @@ void MC::sample_params_update_conf(random_distribution &rd)
   for(unsigned i=1; i<modelparams.size(); i++)
     {sample.push_back(rd.beta(parametercounts[i],inv_parametercounts[i]));}
   if(is_in_range(sample))
-    { overall_confidence.nom++;}
+    {
+    overall_confidence.nom++;
+    }
   overall_confidence.denom++;
  if(verbose>1)
    std::cout<<"confidence = "<<overall_confidence.nom<<"/"<<overall_confidence.denom<<"\n";
@@ -47,7 +48,7 @@ fractiont computeconfidence(std::vector<fractiont> conf_vector)
 }
 
 
-fractiont MC::confidencecalc(
+void MC::confidencecalc(
   unsigned num_samples)
 {
   if(verbose>1)
@@ -71,6 +72,6 @@ fractiont MC::confidencecalc(
 
   }
   std::cout<<"overall confidence "<<overall_confidence.nom<<"/"<<overall_confidence.denom<<"\n";;
-return overall_confidence;
+
 }
 

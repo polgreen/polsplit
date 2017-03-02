@@ -1,28 +1,33 @@
-
-#ifndef SRC_MC_H
-#define SRC_MC_H
+#ifndef model_h
+#define model_h
 
 #include <random>
 #include <vector>
 #include "fraction.h"
 #include "distributions.h"
-enum transitiontype {CONST, FUNCTION, REMAINDER};
+enum transitiontype {CONST, FUNCTION, REMAINDER, NEWFUNCTION, NEWCONST, NEWREMAINDER };
+enum transadded {T1, T2, T3, T0, T4};
+enum statetype {S1, S2, S3, S0};
 
 
 
 
 struct transitiont {
-	transitiont(){count=0; countknown=true;}
-	transitiontype type;
+	transitiont(){count=0; countknown=true; newtype=T0;}
+	transitiontype type; 
 	unsigned successor; 
 	fractiont prob; 
 	std::vector <std::pair < fractiont, unsigned> > params;
 	unsigned count;
 	bool countknown;
+	transadded newtype;
+	//first = parameter multiplier
+	//second = parameter index
+//	std::vector<unsigned> params; 
+//	std::vector<unsigned> paramindex;
 	};
-
 struct statet {
-	statet(){input=0;inputknown=true; outputknown=true;}
+	statet(){input=0;inputknown=true; outputknown=true; newtype=S0;}
 	unsigned ID; 
 	std::vector<transitiont> transitions; 
 	bool init; 
@@ -30,6 +35,7 @@ struct statet {
 	bool outputknown;
 	bool inputknown;
 	unsigned input;
+	statetype newtype;
 	unsigned sum_outputs();
 	};
 
@@ -38,21 +44,18 @@ struct statet {
 
 struct MC {
 	std::vector<statet> states; 
-	//note that slot 0 in modelparams is 1, and used
-	//to represent known constants in param functions
 	std::vector<fractiont> modelparams; 
 	std::vector<unsigned> parametercounts;
 	std::vector<unsigned> inv_parametercounts;
 	std::vector<fractiont> confidence;
 	fractiont overall_confidence; 
-	unsigned success = 2; //success state in property.
+	unsigned success = 2;
 
 	std::vector<std::vector<std::pair <double, double > > >parameter_bounds;
 	std::vector<std::string> parameter_results;
 	unsigned verbose;
 	unsigned trace_length;
 	unsigned number_of_traces;
-	unsigned numbersamples = 10000;
 
 
 	//debugging
@@ -81,7 +84,7 @@ struct MC {
 
 
 	//void sample_transition_counts(random_distribution &)
-  fractiont confidencecalc(unsigned num_samples);
+  void confidencecalc(unsigned num_samples);
   void reset_confidence();
 	void get_random_model_params(random_distribution &);
 	void sample_D_star(std::vector< std::pair < statet, unsigned> > &, random_distribution &);
@@ -91,17 +94,15 @@ struct MC {
   bool is_in_range(std::vector<double>&);
   bool result_bound_satisfied(unsigned, std::vector<double>& );
 
-  fractiont operator()();
 
 	};
 
 
-MC get_MC();
+MC get_simpleMC();
 
 //debugging
 void printstate(statet s);
 void printtrace(tracet trace);
 
 
-#endif //SRC_MC_H
-
+#endif
