@@ -84,7 +84,10 @@ void MDP::getData(unsigned tracelength,std::vector<unsigned>& strategy)
 
 fractiont MDP::operator()()
 {
-  fractiont confidence;
+  confidence.resize(modelparams.size());
+  parametercounts.resize(modelparams.size());
+  inv_parametercounts.resize(modelparams.size());
+
   callPrism();
   if(verbose>1)
     std::cout<<"collect data \n";

@@ -1,4 +1,4 @@
-g++ -D MarkovChain -o baever -I/usr/local/include -L/usr/local/lib \
+g++ -g -D MarkovChain -o baever -I/usr/local/include -L/usr/local/lib \
 main.cpp \
 MC.cpp \
 ../models.cpp \
