@@ -109,12 +109,13 @@ try{
   model.callPrism();
   std::cout<<"\n";
 
-
+random_distribution rd;
+rd.set_seed(0);
 //get data from model
   for(unsigned n=0; n<model.number_of_traces; n++)
-    { model.get_data(model.trace_length);}
+    { model.get_data(model.trace_length, rd);}
 //do confidence calculation
-  model.confidencecalc(NUMBERSAMPLES);
+ // model.confidencecalc(NUMBERSAMPLES);
 
 }
 catch(...)

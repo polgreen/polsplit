@@ -77,8 +77,8 @@ struct MC {
 
 //get trace data
 	std::vector< std::pair < statet, unsigned> >  get_parameterised_states();
-	void get_data(unsigned);
-  tracet gettrace(unsigned );
+	void get_data(unsigned, random_distribution &);
+  tracet gettrace(unsigned, random_distribution & );
 	void get_trace_counts(tracet&);
 
 

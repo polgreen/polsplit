@@ -6,23 +6,17 @@
 
 #include "fraction.h"
 #include "model.h"
+#include "distributions.h"
 
 
-double Generate(const double from, const double to)
+double Generate(const double from, const double to, random_distribution& dist)
 {
 	double result;
-    std::random_device rd;
-
-   result =  std::bind(
-        std::uniform_real_distribution<>{from, to},
-        std::default_random_engine{ rd() })();
-     //   std::cout<<"from:"<<from<<" to:"<<to<<" random:" <<result<<"\n";
-
-
-        return result;
+    result =(to - from)* dist.beta(1,1) + from;
+  return result;
 }
 
-tracet MC::gettrace(unsigned length)
+tracet MC::gettrace(unsigned length, random_distribution& rd)
 {	
 	tracet trace;
 	std::vector<std::vector<unsigned> > count;
@@ -42,7 +36,7 @@ tracet MC::gettrace(unsigned length)
 
 		//std::uniform_int_distribution<unsigned> distribution(0,100);
         fractiont random;
-        random.nom = Generate(0, 100);
+        random.nom = Generate(0, 100, rd);
         random.denom = 100;
         fractiont mass;
         fractiont subtraction;
@@ -56,7 +50,7 @@ tracet MC::gettrace(unsigned length)
             { next = t.successor; gotnext=true;break;}   
          }
 
-         if(gotnext==false){std::cout<<"ERROR NOT FOUND";
+         if(gotnext==false){std::cout<<"ERROR STATE NOT FOUND";
      		throw std::exception();}
          if(state.ID>=states.size()|| next>=states.size())
          	{std::cout<<"error in get trace"; throw std::exception();}
@@ -118,9 +112,9 @@ void MC::get_trace_counts(tracet &trace)
 
 }
 
-void MC::get_data(unsigned length)
+void MC::get_data(unsigned length, random_distribution &rd)
 {
-  tracet T = gettrace(length);
+  tracet T = gettrace(length, rd);
   get_trace_counts(T);
 }
 
