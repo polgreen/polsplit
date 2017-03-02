@@ -1,12 +1,14 @@
 #include <vector>
 #include <random>
 #include <time.h>
-#include "model.h"
 #include <random>
 #include <iostream>
 #include <cassert>
+
 #include "fraction.h"
 #include "distributions.h"
+#include "model.h"
+
 
 void MC::reset_confidence()
 {

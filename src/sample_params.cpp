@@ -1,14 +1,15 @@
 #include <vector>
-#include "model.h"
 #include <random>
 #include <iostream>
 #include <cassert>
-#include "fraction.h"
-#include "distributions.h"
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_cdf.h>
 #include <gsl/gsl_rng.h>
 #include <sys/time.h>
+
+#include "fraction.h"
+#include "model.h"
+#include "distributions.h"
 
 
 unsigned statet::sum_outputs()

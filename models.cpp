@@ -1,7 +1,8 @@
 #include <vector>
-#include "src/model.h"
 #include <iostream>
 #include <utility>
+
+#include "src/model.h"
 #include "src/fraction.h"
 
 
