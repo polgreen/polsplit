@@ -60,8 +60,18 @@ void MDP::paramImportance()
     param_rewards[importance[i].first] = i;
   }
   param_rewards[0]=0;
+  if(verbose>1)
+  {
+    std::cout<<"rewards ";
+    for(const auto p: param_rewards)
+    {
+      std::cout<<p<<" ";
+    }
+    std::cout<<std::endl;
+  }
+
   //add rewards to MDP model
-  assignActionRewards(param_rewards);
+ // assignActionRewards(param_rewards);
 }
 
 std::vector<unsigned> MDP::brute_force_strategySynthesis()
@@ -72,7 +82,7 @@ std::vector<unsigned> MDP::brute_force_strategySynthesis()
 std::vector<unsigned> MDP::synthStrategy()
 {
   std::vector<unsigned> strategy;
- // paramImportance();
+  paramImportance();
   //do strategy synthesis (via prismgames?)
  strategy.resize(MDPstates.size());
  for(auto s: strategy)
