@@ -1,9 +1,12 @@
 #include <vector>
-#include "model.h"
 #include <random>
 #include <iostream>
 #include <cassert>
+#include <functional>
+
 #include "fraction.h"
+#include "model.h"
+
 
 double Generate(const double from, const double to)
 {
