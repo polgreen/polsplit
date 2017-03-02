@@ -1,24 +1,20 @@
 #include <vector>
-#include "model.h"
 #include <random>
 #include <iostream>
 #include <cassert>
-#include "fraction.h"
 #include <functional>
-std::random_device rd;
-std::default_random_engine gen(rd());
 
-double Generate(const double from, const double to) {
+#include "fraction.h"
+#include "model.h"
+#include "distributions.h"
+
+double Generate(const double from, const double to, random_distribution& dist) {
     double result;
-    std::uniform_real_distribution<> dis(from, to);
-    result = dis(gen);
-    //std::cout << "from:" << from << " to:" << to << " random:" << result << "\n";
-
-
+    result = (to - from) * dist.beta(1, 1) + from;
     return result;
 }
 
-tracet MC::gettrace(unsigned length) {
+tracet MC::gettrace(unsigned length, random_distribution& rd) {
     tracet trace;
     std::vector<std::vector<unsigned> > count;
     statet state = get_init_state();
@@ -36,7 +32,7 @@ tracet MC::gettrace(unsigned length) {
 
         //std::uniform_int_distribution<unsigned> distribution(0,100);
         fractiont random;
-        random.nom = Generate(0, 100);
+        random.nom = Generate(0, 100, rd);
         random.denom = 100;
         fractiont mass;
         fractiont subtraction;
@@ -53,7 +49,7 @@ tracet MC::gettrace(unsigned length) {
         }
 
         if (gotnext == false) {
-            std::cout << "ERROR NOT FOUND";
+            std::cout << "ERROR STATE NOT FOUND";
             throw std::exception();
         }
         if (state.ID >= states.size() || next >= states.size()) {
@@ -113,8 +109,8 @@ void MC::get_trace_counts(tracet &trace) {
 
 }
 
-void MC::get_data(unsigned length) {
-    tracet T = gettrace(length);
+void MC::get_data(unsigned length, random_distribution &rd) {
+    tracet T = gettrace(length, rd);
     get_trace_counts(T);
 }
 

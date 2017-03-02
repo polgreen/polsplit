@@ -1,7 +1,8 @@
 #include <string>
 #include <iostream>
-#include "model.h"
 #include <assert.h>
+
+#include "model.h"
 
 enum mathoperator {
     PLUS, MINUS, DIVIDE, MULTIPLY
@@ -10,15 +11,13 @@ enum mathoperator {
 std::pair<double, double> parse_bound(std::string &bound) {
     double lower, upper;
     std::pair<double, double> result;
-    //std::string::size_type sz;
-
     const char* tempStr = bound.c_str();
     char* pEnd;
     lower = std::strtod(tempStr, &pEnd);
     std::string remainderstr(pEnd + 1);
-    upper=std::strtod(remainderstr.c_str(),NULL);    
+    upper = std::strtod(remainderstr.c_str(), NULL);
     result.first = lower;
-    result.second = upper;    
+    result.second = upper;
     return result;
 }
 
