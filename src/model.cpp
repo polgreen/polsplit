@@ -161,19 +161,26 @@ fractiont MC::remainderWeight(statet s)
 
 statet MC::get_init_state()
 {
-	bool found;
+	bool found=false;
+	statet result;
 	for (const auto& s: states)
 	{
 		if(s.init==true && found==false)
-		{return s;}
+		{
+		  found=true;
+		  result = s;
+		}
 		else if(s.init==true && found==true)
 			{std::cout<<"error in get_init_state: found 2 initial states \n";
 			throw std::exception();}
 	}
  //if we get here throw exception
-	std::cout<<"error in get_init_state: no initial state found \n";
-		 throw std::exception();
-
+	if(found==false)
+	{
+	  std::cout<<"error in get_init_state: no initial state found \n";
+  throw std::exception();
+	}
+return result;
 }
 
 
