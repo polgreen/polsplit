@@ -115,7 +115,7 @@ rd.set_seed(0);
   for(unsigned n=0; n<model.number_of_traces; n++)
     { model.get_data(model.trace_length, rd);}
 //do confidence calculation
- // model.confidencecalc(NUMBERSAMPLES);
+  model.confidencecalc(NUMBERSAMPLES);
 
 }
 catch(...)
