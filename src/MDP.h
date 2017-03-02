@@ -47,13 +47,16 @@ class MDP{
     unsigned verbose;
     unsigned trace_length;
     unsigned number_of_traces;
-    unsigned number_samples; //for monte carlo integration
+    unsigned number_samples=1000; //for monte carlo integration
 
     std::vector<unsigned> synthStrategy();
     void getData(unsigned,std::vector<unsigned>&);
     void outputPrism(std::ostream &);
     void callPrism();
     void prism_find(std::string &);
+    bool is_in_range(std::vector<double> &);
+    bool result_bound_satisfied(unsigned , std::vector<double>& );
+
     void get_data(unsigned);
     MC induceMarkovChain(std::vector<unsigned>&);
     fractiont operator()();
@@ -62,6 +65,8 @@ class MDP{
     std::vector<unsigned> brute_force_strategySynthesis();
     MDP_statet get_init_state();
     void add_IDs();
+
+
     int success=2;
 
 };

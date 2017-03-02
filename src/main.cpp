@@ -65,7 +65,7 @@ int main(int argc, const char *argv[])
 
   int verbose=0;
   int number_of_traces=1000;
-  int trace_length=1000;
+  int trace_length=10;
 
   for(unsigned i=1; i<argc; i++)
    {
@@ -103,15 +103,16 @@ int main(int argc, const char *argv[])
 try{
 
 
-  MC model = get_MC();
+ // MC model = get_MC();
 
- // MDP model = get_MDP();
+  MDP model = get_MDP();
 
   model.verbose = verbose;
   model.number_of_traces = number_of_traces;
   model.trace_length = trace_length;
+  model.outputPrism(std::cout);
   model();
-  //model.outputPrism(std::cout);
+
 
 }
 catch(...)

@@ -54,7 +54,7 @@ void MDP::callPrism()
     }
     if(verbose>1)
       std::cout<<"Parsing prism output to find feasible set \n";
-   // prism_find(result);
+    prism_find(result);
 }
 
 void MDP::outputPrism(std::ostream &out)

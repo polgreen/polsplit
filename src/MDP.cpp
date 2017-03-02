@@ -64,7 +64,7 @@ MC MDP::induceMarkovChain(std::vector<unsigned>& strategy)
   model.parameter_results = parameter_results;
   model.parametercounts = parametercounts;
   model.inv_parametercounts = inv_parametercounts;
-
+  model.confidence = confidence;
   return model;
 }
 
@@ -72,8 +72,9 @@ void MDP::getData(unsigned tracelength,std::vector<unsigned>& strategy)
 {
   MC model = induceMarkovChain(strategy);
   model.get_data(tracelength); //get single trace
-  model.confidencecalc(number_samples); //update posterior distributions for single trace
+  model.confidencecalc(false,number_samples); //update posterior distributions for single trace
   //copy these numbers back and forth is pretty inefficient, but this was a quick hack
+
   parametercounts = model.parametercounts;
   inv_parametercounts = model.inv_parametercounts;
   confidence = model.confidence;//transfer over posterior distribution
@@ -85,6 +86,8 @@ fractiont MDP::operator()()
 {
   fractiont confidence;
   callPrism();
+  if(verbose>1)
+    std::cout<<"collect data \n";
   for(unsigned n=0; n<number_of_traces; n++)
   {
     std::vector<unsigned> strategy = synthStrategy();

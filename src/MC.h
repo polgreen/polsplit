@@ -81,7 +81,7 @@ struct MC {
 
 
 	//void sample_transition_counts(random_distribution &)
-  fractiont confidencecalc(unsigned num_samples);
+  fractiont confidencecalc(bool, unsigned);
   void reset_confidence();
 	void get_random_model_params(random_distribution &);
 	void sample_D_star(std::vector< std::pair < statet, unsigned> > &, random_distribution &);

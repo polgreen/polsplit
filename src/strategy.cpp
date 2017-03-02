@@ -39,6 +39,8 @@ void MDP::assignActionRewards(std::vector<int> &param_rewards)
 
 void MDP::paramImportance()
 {
+  if(verbose>1)
+    std::cout<<"calculate param importance \n";
   //difference between (confidence) and (1-confidence) for each parameter
   std::vector<std::pair<int, int>> importance;
   importance.resize(confidence.size());
@@ -64,23 +66,25 @@ void MDP::paramImportance()
 
 std::vector<unsigned> MDP::brute_force_strategySynthesis()
 {
-  std::vector<unsigned>strategy;
-  strategy.resize(MDPstates.size());
 
-  for(int i=0; i<trace_length; i++)
-  {
-
-
-
-  }
 }
 
 std::vector<unsigned> MDP::synthStrategy()
 {
-std::vector<unsigned> strategy;
- paramImportance();
+  std::vector<unsigned> strategy;
+ // paramImportance();
   //do strategy synthesis (via prismgames?)
+ strategy.resize(MDPstates.size());
+ for(auto s: strategy)
+   {s=0;}
 
+ if(verbose>1)
+ {
+   std::cout<<"Memoryless strategy: ";
+   for(const auto s: strategy)
+     std::cout<<" a"<<s;
+   std::cout<<"\n";
+ }
   return strategy;
 }
 

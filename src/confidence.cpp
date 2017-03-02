@@ -47,19 +47,20 @@ fractiont computeconfidence(std::vector<fractiont> conf_vector)
 }
 
 
-fractiont MC::confidencecalc(
+fractiont MC::confidencecalc(bool reset,
   unsigned num_samples)
 {
   if(verbose>1)
-    std::cout<<"confidence calc \n";
+    std::cout<<"confidence calc, number samples "<<num_samples <<"\n";
   unsigned seed=0;
   random_distribution rd;
   if(verbose>1)
-    std::cout<<" Using seed of "<< seed<<"\n";
+    std::cout<<"Using seed of "<< seed<<"\n";
   rd.set_seed(seed);  //we use the same seed so that we can reproduce experiments
   std::vector<fractiont> result(modelparams.size(), 0);
   std::vector< std::pair < statet, unsigned> > param_states;
-  reset_confidence();
+  if(reset)
+    reset_confidence();
 
   param_states = get_parameterised_states();
 
