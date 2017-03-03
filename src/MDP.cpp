@@ -82,11 +82,22 @@ void MDP::getData(unsigned tracelength,std::vector<unsigned>& strategy, random_d
   model.confidencecalc(false,num_int_samples); //update posterior distributions for single trace
   //copy these numbers back and forth is pretty inefficient, but this was a quick hack
 
+  updateTransitionCounts(model, strategy);
   parametercounts = model.parametercounts;
   inv_parametercounts = model.inv_parametercounts;
   confidence = model.confidence;//transfer over posterior distribution
 }
 
+void MDP::updateTransitionCounts(MC & model, std::vector<unsigned>& strategy)
+{
+  for(unsigned i=0; i<MDPstates.size(); i++)
+  {
+    for(unsigned j=0; j<model.states[i].transitions.size(); j++)
+    {
+      MDPstates[i].actions[strategy[i]][j].count = model.states[i].transitions[j].count;
+    }
+  }
+}
 
 
 fractiont MDP::operator()()
@@ -103,8 +114,10 @@ fractiont MDP::operator()()
   for(unsigned n=0; n<number_of_traces; n++)
   {
     std::vector<unsigned> strategy = synthStrategy();
-    getData(trace_length, strategy, rd); //and update posterior
+    getData(trace_length, strategy, rd);//and update posterior
   }
+
+  std::cout<<"parameter counts: "<<parametercounts[1]<<" "<<inv_parametercounts[1]<<std::endl;
 
   //confidence was computed at end of each sampling, just return it
   return overall_confidence;

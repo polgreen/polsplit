@@ -59,6 +59,7 @@ class MDP{
 
     void get_data(unsigned);
     MC induceMarkovChain(std::vector<unsigned>&);
+    void updateTransitionCounts(MC &, std::vector<unsigned>& );
     fractiont operator()();
     void paramImportance();
     void assignActionRewards(std::vector<int> &);
