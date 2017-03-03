@@ -74,7 +74,8 @@ fractiont MC::confidencecalc(bool reset,
     sample_params_update_conf(rd);
 
   }
-  std::cout<<"overall confidence "<<overall_confidence.nom<<"/"<<overall_confidence.denom<<"\n";;
+  if(verbose>0)
+    std::cout<<"MC confidence "<<overall_confidence.nom<<"/"<<overall_confidence.denom<<"\n";;
 return overall_confidence;
 }
 

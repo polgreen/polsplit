@@ -120,6 +120,7 @@ int main(int argc, const char *argv[])
  //DO THE ACTUAL STUFF
 try{
 
+  fractiont confidence;
   if(modelMDP)
   {
     std::cout<<"Model = simple Markov decision process \n";
@@ -128,7 +129,7 @@ try{
     model.number_of_traces = number_of_traces;
     model.trace_length = trace_length;
     model.num_int_samples = num_int_samples;
-    model();
+    confidence = model();
   }
   else
   {
@@ -138,8 +139,9 @@ try{
     model.number_of_traces = number_of_traces;
     model.trace_length = trace_length;
     model.num_int_samples = num_int_samples;
-    model();
+    confidence = model();
   }
+  std::cout<<"\nFinal confidence: "<<confidence.nom<<" \ "<< confidence.denom<<std::endl;
 }
 catch(...)
 {std::cout<<"exception caught at end of main \n";}
