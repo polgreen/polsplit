@@ -50,14 +50,14 @@ class MDP{
     unsigned num_int_samples; //for monte carlo integration
 
     std::vector<unsigned> synthStrategy();
-    void getData(unsigned,std::vector<unsigned>&, random_distribution &);
+    void getData(unsigned,std::vector<unsigned>&, random_distribution &, int);
     void outputPrism(std::ostream &);
     void callPrism();
     void prism_find(std::string &);
     bool is_in_range(std::vector<double> &);
     bool result_bound_satisfied(unsigned , std::vector<double>& );
 
-    void get_data(unsigned);
+   // void get_data(unsigned);
     MC induceMarkovChain(std::vector<unsigned>&);
     void updateTransitionCounts(MC &, std::vector<unsigned>& );
     fractiont operator()();

@@ -75,11 +75,11 @@ MC MDP::induceMarkovChain(std::vector<unsigned>& strategy)
   return model;
 }
 
-void MDP::getData(unsigned tracelength,std::vector<unsigned>& strategy, random_distribution &rd)
+void MDP::getData(unsigned tracelength,std::vector<unsigned>& strategy, random_distribution &rd, int integration_samples)
 {
   MC model = induceMarkovChain(strategy);
   model.get_data(tracelength, rd); //get single trace
-  model.confidencecalc(false,num_int_samples); //update posterior distributions for single trace
+  model.confidencecalc(false,integration_samples); //update posterior distributions for single trace
   //copy these numbers back and forth is pretty inefficient, but this was a quick hack
 
   updateTransitionCounts(model, strategy);
@@ -111,10 +111,13 @@ fractiont MDP::operator()()
     std::cout<<"collect data \n";
   random_distribution rd;
   rd.set_seed(0);
+  int int_samples=100;
   for(unsigned n=0; n<number_of_traces; n++)
   {
+    if(n==number_of_traces-1)
+      int_samples = num_int_samples;
     std::vector<unsigned> strategy = synthStrategy();
-    getData(trace_length, strategy, rd);//and update posterior
+    getData(trace_length, strategy, rd, int_samples);//and update posterior
   }
 
   if(verbose>1)
