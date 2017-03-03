@@ -33,7 +33,18 @@
 
 void help()
 {
-  std::cout<<"BaeVer \n";
+  std::cout<<"BaeVer is the experimental implementation for paper DOI:10.1007/978-3-319-43425-4_3. \n"
+          <<"It runs the experiments for two simple models, one Markov Chain and one Markov Decision Process. \n"
+          <<" The models are input in the file models.cpp.\n"
+          <<"For installation instructions please see https://github.com/polgreen/BaeVer\n"
+          <<" The following command line arguments are available:\n"
+          <<"--verbose increases the verbosity of the output\n"
+          <<"--debug gives the maximally verbose output\n"
+          <<"--traces N sets the number of traces to N, default is 1000\n"
+          <<"--tracelength N sets the length of each trace to N transitions, default is 1000\n"
+          <<"--integrationsamples N sets the number of samples used by"
+          <<" monte-carlo integration to N, default is 10,000\n"
+          <<"--MDP runs the simple MDP model, default is to run the MC model\n\n";
 }
 
 void output_header()
@@ -51,8 +62,8 @@ void output_header()
             << "           BaeVer \n"
             << "  Bayesian Verification for DTMCs and MDPs   \n"
             << " elizabeth.polgreen@cs.ox.ac.uk \n"
-            << " ******************************** \n\n";
-         //   <<"for help file use command line option --help\n\n";
+            << " ******************************** \n\n"
+            <<"for help file use command line option --help\n\n";
 
 }
 
@@ -111,6 +122,11 @@ int main(int argc, const char *argv[])
      {
          modelMDP=true;
      }
+     else if(std::string(argv[i])=="--help")
+          {
+              help();
+              return 0;
+          }
    }
 
   std::cout<<"Number of traces "<< number_of_traces<<"\n";
@@ -147,5 +163,6 @@ catch(...)
 {std::cout<<"exception caught at end of main \n";}
 
 std::cout<<"\n\n";
+return 0;
 }
 
