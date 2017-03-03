@@ -66,8 +66,11 @@ fractiont MC::confidencecalc(bool reset,
 
   for(unsigned i=0; i<num_samples; i++)
   {
-    get_random_model_params(rd);
-    sample_D_star(param_states, rd);
+    if(need_state_splitting)
+    {
+      get_random_model_params(rd);
+      sample_D_star(param_states, rd);
+    }
     sample_params_update_conf(rd);
 
   }
