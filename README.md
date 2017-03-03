@@ -7,7 +7,7 @@ This is not the experiment implementation used in the paper (which was done in M
 
 To compile the code:
 - git clone https://github.com/polgreen/BaeVer
-- download Gnu Scientific Library https://www.gnu.org/software/gsl/
+- download and install Gnu Scientific Library https://www.gnu.org/software/gsl/, instructions: http://coral.ise.lehigh.edu/jild13/2016/07/11/hello/
 - make sure GSL is located here: /usr/local/include/gsl, if it's not, you will need to change the BaeVer compile file accordingly
 - download PRISM and add the path to your profile (or put the binary in BaeVer/src) http://www.prismmodelchecker.org/download.php
 - cd BaeVer/src
