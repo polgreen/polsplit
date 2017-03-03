@@ -121,7 +121,7 @@ bool MC::is_in_range(std::vector<double> &sample)
       std::cout<<"Sample P"<<i<<" "<<sample[i]<<"\n; ";
     for(unsigned b=0; b<parameter_bounds.size(); b++)
     {
-      if(sample[i]>parameter_bounds[b][i].first && sample[i]<parameter_bounds[b][i].second)
+      if(sample[i]>=parameter_bounds[b][i].first && sample[i]<=parameter_bounds[b][i].second)
       {
         if(verbose>1)
           {std::cout<<" parameter in range "<< parameter_bounds[b][i].first<<" ->"
@@ -248,7 +248,7 @@ bool MDP::is_in_range(std::vector<double> &sample)
       std::cout<<"Sample P"<<i<<" "<<sample[i]<<"\n; ";
     for(unsigned b=0; b<parameter_bounds.size(); b++)
     {
-      if(sample[i]>parameter_bounds[b][i].first && sample[i]<parameter_bounds[b][i].second)
+      if(sample[i]>=parameter_bounds[b][i].first && sample[i]<=parameter_bounds[b][i].second)
       {
         if(verbose>1)
           {std::cout<<" parameter in range "<< parameter_bounds[b][i].first<<" ->"
