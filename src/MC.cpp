@@ -235,6 +235,6 @@ fractiont MC::operator()()
       { get_data(trace_length, rd);}
   //do confidence calculation
   std::cout<<"Computing confidence system satisfies property ... \n";
-return confidencecalc(true,numbersamples);
+return confidencecalc(true,num_int_samples);
 }
 

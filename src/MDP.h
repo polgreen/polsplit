@@ -47,7 +47,7 @@ class MDP{
     unsigned verbose;
     unsigned trace_length;
     unsigned number_of_traces;
-    unsigned number_samples=1000; //for monte carlo integration
+    unsigned num_int_samples; //for monte carlo integration
 
     std::vector<unsigned> synthStrategy();
     void getData(unsigned,std::vector<unsigned>&, random_distribution &);

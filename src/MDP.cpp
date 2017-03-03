@@ -79,7 +79,7 @@ void MDP::getData(unsigned tracelength,std::vector<unsigned>& strategy, random_d
 {
   MC model = induceMarkovChain(strategy);
   model.get_data(tracelength, rd); //get single trace
-  model.confidencecalc(false,number_samples); //update posterior distributions for single trace
+  model.confidencecalc(false,num_int_samples); //update posterior distributions for single trace
   //copy these numbers back and forth is pretty inefficient, but this was a quick hack
 
   parametercounts = model.parametercounts;

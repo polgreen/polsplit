@@ -27,7 +27,7 @@
 #include "distributions.h"
 #include "MC.h"
 #include "MDP.h"
-#define NUMBERSAMPLES 1000
+
 
 
 
@@ -63,9 +63,11 @@ int main(int argc, const char *argv[])
 {
   output_header();
 
+  //default values
   int verbose=0;
   int number_of_traces=1000;
   int trace_length=10;
+  int num_int_samples=10000;
   bool modelMDP=false;
 
 
@@ -95,6 +97,16 @@ int main(int argc, const char *argv[])
          i++;
         }
       }
+     else if(std::string(argv[i])=="--integrationsamples")
+         {
+           if(i+1<argc && isdigit(*argv[i+1]))
+           {
+             std::istringstream ss(argv[i+1]);
+             if (!(ss >> num_int_samples))
+               {std::cerr << "Invalid number " << argv[i+1] << '\n';}
+             i++;
+            }
+          }
      else if(std::string(argv[i])=="--MDP")
      {
          modelMDP=true;
@@ -115,6 +127,7 @@ try{
     model.verbose = verbose;
     model.number_of_traces = number_of_traces;
     model.trace_length = trace_length;
+    model.num_int_samples = num_int_samples;
     model();
   }
   else
@@ -124,6 +137,7 @@ try{
     model.verbose = verbose;
     model.number_of_traces = number_of_traces;
     model.trace_length = trace_length;
+    model.num_int_samples = num_int_samples;
     model();
   }
 }

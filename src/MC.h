@@ -52,7 +52,8 @@ struct MC {
 	unsigned verbose;
 	unsigned trace_length;
 	unsigned number_of_traces;
-	unsigned numbersamples = 1000;
+	unsigned num_int_samples;
+	bool need_state_splitting=true;
 
 
 	//debugging

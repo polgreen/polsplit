@@ -39,6 +39,7 @@ void MC::get_random_model_params(random_distribution &rd)
 
 void MC::sample_D_star(std::vector< std::pair < statet, unsigned> > &param_states, random_distribution &rd)
 {
+  need_state_splitting=false;
   if(verbose>1)
       std::cout<<"Sample D* \n";
     std::vector<unsigned> param_counts;
@@ -75,6 +76,7 @@ void MC::sample_D_star(std::vector< std::pair < statet, unsigned> > &param_state
         }
         else
         {
+          need_state_splitting=true;
           if(verbose>2)
             std::cout<<" parameter has a multiplier";
           param_counts[t.params[0].second] = param_counts[t.params[0].second]+t.count;
@@ -94,7 +96,7 @@ void MC::sample_D_star(std::vector< std::pair < statet, unsigned> > &param_state
       }
       else
       {
-        
+        need_state_splitting=true;
         for(const auto p: t.params)
         { 
           if(p.first!=1)
