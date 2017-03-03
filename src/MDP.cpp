@@ -117,7 +117,8 @@ fractiont MDP::operator()()
     getData(trace_length, strategy, rd);//and update posterior
   }
 
-  std::cout<<"parameter counts: "<<parametercounts[1]<<" "<<inv_parametercounts[1]<<std::endl;
+  if(verbose>1)
+    std::cout<<"parameter counts: "<<parametercounts[1]<<" "<<inv_parametercounts[1]<<std::endl;
 
   //confidence was computed at end of each sampling, just return it
   return overall_confidence;
