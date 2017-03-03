@@ -86,6 +86,7 @@ void MDP::getData(unsigned tracelength,std::vector<unsigned>& strategy, random_d
   parametercounts = model.parametercounts;
   inv_parametercounts = model.inv_parametercounts;
   confidence = model.confidence;//transfer over posterior distribution
+  overall_confidence = model.overall_confidence;
 }
 
 void MDP::updateTransitionCounts(MC & model, std::vector<unsigned>& strategy)

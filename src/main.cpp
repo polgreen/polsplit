@@ -141,7 +141,7 @@ try{
     model.num_int_samples = num_int_samples;
     confidence = model();
   }
-  std::cout<<"\nFinal confidence: "<<confidence.nom<<" \ "<< confidence.denom<<std::endl;
+  std::cout<<"\nFinal confidence: "<<confidence.nom<<" / "<< confidence.denom<<std::endl;
 }
 catch(...)
 {std::cout<<"exception caught at end of main \n";}
