@@ -28,6 +28,17 @@ void MC::add_IDs ()
     states[i].ID = i;
   }
 }
+/*
+void MC::zeroTransitionCounts()
+{
+  for(auto &s: states)
+  {
+    for(auto &t: s)
+    {
+      t.count=0;
+    }
+  }
+}*/
 
 void MC::check()
 {
@@ -104,7 +115,7 @@ return result;
 }
 
 
-fractiont MC::weighting(transitiont t, statet s)
+fractiont MC::weighting(transitiont& t, statet& s)
 {
 	fractiont sum, prod;
 	sum.zero();
@@ -129,7 +140,7 @@ fractiont MC::weighting(transitiont t, statet s)
 
 
 
-fractiont MC::remainderWeight(statet s)
+fractiont MC::remainderWeight(statet& s)
 {
 	fractiont sum_state;
 	fractiont result;
@@ -179,7 +190,7 @@ statet MC::get_init_state()
   }
 
 
-void printstate(statet s)
+void printstate(statet& s)
 {
 	std::cout<<s.ID <<", ";
 }

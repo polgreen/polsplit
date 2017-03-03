@@ -45,7 +45,6 @@ statet MDP_to_MC_state(MDP::MDP_statet &mS, unsigned actionNumber)
   statet s;
   s.ID = mS.ID;
   s.init = mS.init;
-  s.label = mS.label;
   assert(actionNumber<s.transitions.size() && actionNumber<mS.actions.size());
   s.transitions  = mS.actions[actionNumber];
   return s;

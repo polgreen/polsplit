@@ -16,8 +16,7 @@ unsigned statet::sum_outputs()
   unsigned sum=0;
   for(const auto &t: transitions)
   {
-    if(t.countknown==true)
-    {sum = sum + t.count;}
+    sum = sum + t.count;
 
   }return sum;
 }
