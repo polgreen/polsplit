@@ -46,6 +46,7 @@ statet MDP_to_MC_state(MDP::MDP_statet &mS, unsigned actionNumber)
   s.ID = mS.ID;
   s.init = mS.init;
   s.label = mS.label;
+  assert(actionNumber<s.transitions.size() && actionNumber<mS.actions.size());
   s.transitions  = mS.actions[actionNumber];
   return s;
 }
@@ -121,8 +122,8 @@ fractiont MDP::operator()()
     getData(trace_length, strategy, rd, int_samples);//and update posterior
   }
 
-  if(verbose>1)
-    std::cout<<"parameter counts: "<<parametercounts[1]<<" "<<inv_parametercounts[1]<<std::endl;
+  if(verbose>0)
+    std::cout<<"Final parameter counts: "<<parametercounts[1]<<" "<<inv_parametercounts[1]<<std::endl;
 
   //confidence was computed at end of each sampling, just return it
   return overall_confidence;
