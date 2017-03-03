@@ -82,7 +82,7 @@ MDP get_MDP()
   transitiont t1, t2;
   std::pair<fractiont,unsigned> p1;
   MDP model;
-  std::vector<transitiont> action1;
+  std::vector<transitiont> action1, action2;
 
   model.modelparams.resize(2);
   model.modelparams[0].one();
@@ -98,24 +98,35 @@ MDP get_MDP()
   t1.params.push_back(p1);
   t1.successor = 1;
   action1.push_back(t1);
+  t1.successor = 2;
+  action2.push_back(t1);
+
 //  s0.transitions.push_back(t1);
   t2.type = REMAINDER;
   t2.successor = 0;
   action1.push_back(t2);
+  action2.push_back(t2);
  // s0.transitions.push_back(t2);
   s0.actions.push_back(action1);
+  s0.actions.push_back(action2);
   model.MDPstates.push_back(s0);
 
   action1.clear();
+  action2.clear();
   //s1
   s1.init = false;
   t1.successor = 2;
   t2.successor = 3;
   action1.push_back(t1);
+  t1.successor=1;
+  action2.push_back(t1);
   action1.push_back(t2);
+  t2.successor=0;
+  action2.push_back(t2);
  // s1.transitions.push_back(t1);
   //s1.transitions.push_back(t2);
   s1.actions.push_back(action1);
+  s1.actions.push_back(action2);
   model.MDPstates.push_back(s1);
 
   action1.clear();

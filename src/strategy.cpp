@@ -74,9 +74,45 @@ void MDP::paramImportance()
  // assignActionRewards(param_rewards);
 }
 
-std::vector<unsigned> MDP::brute_force_strategySynthesis()
+std::vector<unsigned> MDP::explicitStrategySynth()
 {
+  //explicitly compute expected counts for every strategy
+  std::vector< std::vector<unsigned> > strategies;
+  std::vector<int> expected_counts;
+  strategies.resize(1);
+  //get all strategies
+  for(int i=0; i<MDPstates.size(); i++)
+  {
+    for(auto &s: strategies)
+      { s.push_back(0);}
+    if(MDPstates[i].actions.size()>1)
+    {
+      int currentsize = strategies.size();
+      for(int j=1; j<MDPstates[i].actions.size(); j++)
+      {
+        for(int k=0; k<currentsize; k++ )
+        {
+          strategies.push_back(strategies[k]);
+          strategies[currentsize+k*j-1][i]=j;
+        }
+      }
+    }
+  }
 
+  if(verbose>1)
+  {
+    std::cout<<"all possible strategies: \n";
+    for(const auto &s: strategies)
+    {
+      std::cout<<"strategy ";
+      for(unsigned i=0; i<s.size(); i++ )
+        std::cout<<"s"<<i<<"-a"<<s[i]<<" ";
+      std::cout<<"\n";
+    }
+  }
+
+  //get expected data counts for all
+return strategies[0];
 }
 
 std::vector<unsigned> MDP::synthStrategy()
@@ -85,6 +121,9 @@ std::vector<unsigned> MDP::synthStrategy()
   paramImportance();
   //do strategy synthesis (via prismgames?)
  strategy.resize(MDPstates.size());
+ explicitStrategySynth();
+ assert(0);
+
  for(auto s: strategy)
    {s=0;}
 

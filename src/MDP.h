@@ -63,7 +63,7 @@ class MDP{
     fractiont operator()();
     void paramImportance();
     void assignActionRewards(std::vector<int> &);
-    std::vector<unsigned> brute_force_strategySynthesis();
+    std::vector<unsigned> explicitStrategySynth();
     MDP_statet get_init_state();
     void add_IDs();
 
