@@ -32,7 +32,7 @@ void printtrace(tracet &trace)
   std::cout<<"\n";
     for(const auto &s: trace)
     {
-        printstate(s);
+      std::cout<<s.ID <<", ";
     }
     std::cout<<"\n";
 }

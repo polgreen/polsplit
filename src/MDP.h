@@ -50,6 +50,7 @@ class MDP{
     int success=2; //success state in property
     MDP_statet get_init_state();
     void add_IDs();
+    void initialise_all_counts();
 
     //parameter synthesis
     void outputPrism(std::ostream &);

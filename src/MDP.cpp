@@ -45,7 +45,8 @@ statet MDP_to_MC_state(MDP::MDP_statet &mS, unsigned actionNumber)
   statet s;
   s.ID = mS.ID;
   s.init = mS.init;
-  assert(actionNumber<s.transitions.size() && actionNumber<mS.actions.size());
+  std::cout<<"actions size"<< mS.actions.size()<<", action "<<actionNumber<<std::endl;
+  assert(actionNumber<mS.actions.size());
   s.transitions  = mS.actions[actionNumber];
   return s;
 }
@@ -72,6 +73,7 @@ MC MDP::induceMarkovChain(std::vector<unsigned>& strategy)
   model.parametercounts = parametercounts;
   model.inv_parametercounts = inv_parametercounts;
   model.confidence = confidence;
+  std::cout<<"end of induce MC\n";
   return model;
 }
 
@@ -100,12 +102,24 @@ void MDP::updateTransitionCounts(MC & model, std::vector<unsigned>& strategy)
   }
 }
 
+void MDP::initialise_all_counts()
+{
+  parametercounts.resize(modelparams.size());
+  inv_parametercounts.resize(modelparams.size());
+  confidence.resize(modelparams.size());
+  overall_confidence.zero();
+  for(int i=0; i<modelparams.size(); i++)
+  {
+    parametercounts[i]=0;
+    inv_parametercounts[i]=0;
+    confidence[i].zero();
+  }
+}
+
 
 fractiont MDP::operator()()
 {
-  confidence.resize(modelparams.size());
-  parametercounts.resize(modelparams.size());
-  inv_parametercounts.resize(modelparams.size());
+  initialise_all_counts();
 
   callPrism();
   if(verbose>1)

@@ -115,7 +115,7 @@ return result;
 }
 
 
-fractiont MC::weighting(transitiont& t, statet& s)
+fractiont MC::weighting(const transitiont& t, const statet& s)
 {
 	fractiont sum, prod;
 	sum.zero();
@@ -131,8 +131,8 @@ fractiont MC::weighting(transitiont& t, statet& s)
          	  	sum = prod + sum;
          	  }
           return sum; break;
-         case REMAINDER: return remainderWeight(s) ;break;
-        default: std::cout<<"error, state"<<s.ID<<"type unknown \n";
+      case REMAINDER: return remainderWeight(s) ;break;
+        default: std::cout<<"error, state"<<s.ID<<" transition to "<<t.successor<<" type unknown \n";
         		throw std::exception(); 
     }
        
@@ -140,7 +140,7 @@ fractiont MC::weighting(transitiont& t, statet& s)
 
 
 
-fractiont MC::remainderWeight(statet& s)
+fractiont MC::remainderWeight(const statet& s)
 {
 	fractiont sum_state;
 	fractiont result;

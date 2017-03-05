@@ -56,8 +56,8 @@ struct MC {
   //models
 	statet get_init_state();
 	void add_IDs();
-  fractiont weighting(transitiont&, statet&);
-  fractiont remainderWeight(statet &);
+  fractiont weighting(const transitiont&, const statet&);
+  fractiont remainderWeight(const statet &);
 
 	//parameter synthesis
 	void callPrism();
