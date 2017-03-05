@@ -17,6 +17,7 @@ struct fractiont{
 	friend fractiont operator*(fractiont, fractiont);
 	friend fractiont operator/(fractiont, fractiont);
 	friend fractiont operator-(fractiont, fractiont);
+	friend fractiont operator-(int, fractiont);
 	friend fractiont operator+ (fractiont, fractiont);
 	void simplify();
 	void zero();

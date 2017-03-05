@@ -132,7 +132,7 @@ fractiont MC::weighting(const transitiont& t, const statet& s)
          	  }
           return sum; break;
       case REMAINDER: return remainderWeight(s) ;break;
-        default: std::cout<<"error, state"<<s.ID<<" transition to "<<t.successor<<" type unknown \n";
+        default: std::cout<<"error, state"<<s.ID<<" transition to "<<t.successor<<" type" <<t.type<<" unknown \n";
         		throw std::exception(); 
     }
        

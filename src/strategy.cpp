@@ -20,6 +20,7 @@ struct sort_pred {
 void MDP::assignActionRewards(std::vector<int> &param_rewards)
 {
   assert(param_rewards.size()==modelparams.size());
+
   for (auto &s: MDPstates)
   {
     for(int i=0; i<s.actions.size(); i++)
@@ -74,6 +75,106 @@ void MDP::paramImportance()
  // assignActionRewards(param_rewards);
 }
 
+fractiont MDP::expectedInformationGain(std::vector<unsigned> & strategy, random_distribution &rd)
+{
+
+   MC model=induceMarkovChain(strategy);
+   model.outputMC(std::cout);
+   std::vector<statet> current_states;
+   current_states.push_back(model.get_init_state());
+   fractiont expected_confidence;
+
+   std::vector<fractiont> state_inputs(model.states.size());
+   std::vector<fractiont> next_state_inputs(model.states.size());
+   for(auto s: state_inputs)
+     {s.zero();}
+   for(auto s: next_state_inputs)
+     {s.zero();}
+
+   state_inputs[model.get_init_state().ID].one();
+   std::vector< std::vector <fractiont> > transitioncounts;
+   std::vector<fractiont> expected_param_counts(model.modelparams.size());
+   std::vector<fractiont> expected_invparam_counts(model.modelparams.size());
+   transitioncounts.resize(model.states.size());
+   for(int s=0; s<model.states.size(); s++)
+   {
+     transitioncounts[s].resize(model.states[s].transitions.size());
+     for(auto &t: transitioncounts[s])
+       {t.zero();}
+   }
+   //expected value for parameters
+   for(int i=1; i<modelparams.size(); i++)
+   {
+     expected_param_counts[i].nom=(int)parametercounts[i];
+     expected_param_counts[i].denom=1;
+     expected_invparam_counts[i].nom=(int)parametercounts[i];
+     expected_invparam_counts[i].denom=1;
+     modelparams[i].nom=(int)parametercounts[i];
+     modelparams[i].denom=(int)parametercounts[i]+(int)inv_parametercounts[i];
+   }
+
+ //  std::cout<<"Expected parameter counts: "<<expected_param_counts[1]<<" "<<expected_invparam_counts[1]<<std::endl;
+
+   for(int i=0; i<trace_length; i++)
+   {
+   //  std::cout<<"\nSTEP "<<i<<"\n";
+     for(int s=0; s<state_inputs.size(); s++)
+     {
+       if(state_inputs[s]!=0)
+       {
+       //  std::cout<<" s"<<s<<":";
+         for(int t=0; t<model.states[s].transitions.size(); t++)
+         {
+           fractiont expected_count=model.weighting(model.states[s].transitions[t],model.states[s]);
+
+           transitioncounts[s][t]=transitioncounts[s][t]+expected_count;
+          // std::cout<<"transition "<<t<<" exp count: "<<transitioncounts[s][t];
+           next_state_inputs[model.states[s].transitions[t].successor]=
+               state_inputs[model.states[s].transitions[t].successor]+ expected_count;
+           if(model.states[s].transitions[t].type==FUNCTION)
+           {
+             for(int p=0; p<model.states[s].transitions[t].params.size(); p++)
+             {
+              // std::cout<<"param in func "<<p<<std::endl;
+               int param_num=model.states[s].transitions[t].params[p].second;
+               if(param_num==0)
+                 break;
+               expected_param_counts[param_num]=expected_param_counts[param_num] + expected_count;
+               expected_invparam_counts[param_num]= expected_invparam_counts[param_num]+
+                   state_inputs[s]*
+                   model.states[s].transitions[t].params[p].first*(1-expected_count);
+             //  std::cout<<" next expected parameter counts: "<<expected_param_counts[param_num]<<" "<<expected_invparam_counts[param_num]<<std::endl;
+
+             }
+           }
+         }
+       }
+     }
+     for(int j=0; j<next_state_inputs.size(); j++)
+       state_inputs[j]=next_state_inputs[j];
+   }
+//compute parameter confidence
+  if(verbose>1)
+     std::cout<<"expected parameter counts: "<<expected_param_counts[1]<<" "<<expected_invparam_counts[1]<<std::endl;
+  for(int i=0; i<10; i++)
+  {
+    std::vector<double> sample;
+    for(unsigned i=1; i<modelparams.size(); i++)
+      {
+        double p1 = (double)expected_param_counts[i].nom/(double)expected_param_counts[i].denom;
+        double p2 = (double)expected_invparam_counts[i].nom/(double)expected_invparam_counts[i].denom;
+        sample.push_back(rd.beta(p1,p2));
+      }
+    if(is_in_range(sample))
+      { expected_confidence.nom++;}
+    expected_confidence.denom++;
+   if(verbose>1)
+     std::cout<<"confidence = "<<expected_confidence.nom<<"/"<<expected_confidence.denom<<"\n";
+  }
+
+
+}
+
 std::vector<unsigned> MDP::explicitStrategySynth()
 {
   //explicitly compute expected counts for every strategy
@@ -110,7 +211,8 @@ std::vector<unsigned> MDP::explicitStrategySynth()
       std::cout<<"\n";
     }
   }
-
+random_distribution rd;
+  expectedInformationGain(strategies[0], rd);
   //get expected data counts for all
 return strategies[0];
 }

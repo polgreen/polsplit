@@ -64,7 +64,7 @@ class MDP{
     void paramImportance();
     void assignActionRewards(std::vector<int> &);
     std::vector<unsigned> explicitStrategySynth();
-    fractiont expectedInformationGain (std::vector<unsigned> &);
+    fractiont expectedInformationGain (std::vector<unsigned> &, random_distribution &);
 
     //confidence calculation
     void getData(unsigned,std::vector<unsigned>&, random_distribution &, int);
