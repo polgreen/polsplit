@@ -41,11 +41,19 @@ fractiont operator+(fractiont f1, fractiont f2)
 	return result;
 }
 
+fractiont frac_abs(fractiont f1)
+{
+  if(f1<0)
+    f1.nom=-f1.nom;
+  return f1;
+}
+
 fractiont operator*(fractiont f1, fractiont f2)
 {
 	fractiont result;
 	result.denom = f1.denom * f2.denom;
 	result.nom = f1.nom* f2.nom;
+	//std::cout<<std::endl<<f1.nom<<"/"<<f1.denom<<"*"<<f2.nom<<"/"<<f2.denom<<"="<<result.nom<<"/"<<result.denom<<std::endl;
 	result.simplify();
 	return result;
 }
@@ -71,6 +79,23 @@ fractiont operator-(fractiont f1, fractiont f2)
 	result.nom = f2.denom*f1.nom - f2.nom*f1.denom;}
 //	result.simplify();
 	return result;	
+}
+
+fractiont operator-(int i1, fractiont f2)
+{
+  fractiont result;
+  fractiont f1;
+  f1.nom=i1;
+  f1.denom=1;
+  if(f2.nom==0)
+    {result.nom=f1.nom; result.denom=f1.denom;}
+  else if(f1.nom==0)
+    {result.nom=-f2.nom; result.denom=-f2.denom;}
+  else{
+  result.denom = f1.denom * f2.denom;
+  result.nom = f2.denom*f1.nom - f2.nom*f1.denom;}
+//  result.simplify();
+  return result;
 }
 
 bool operator==(fractiont f1, fractiont f2)

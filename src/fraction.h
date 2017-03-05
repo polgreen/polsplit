@@ -27,4 +27,7 @@ struct fractiont{
 		return out;}
 	void output(std::ostream &out);
 };
+
+fractiont frac_abs(fractiont);
 #endif				
+

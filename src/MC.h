@@ -44,6 +44,7 @@ struct MC {
 	std::vector<std::vector<std::pair <double, double > > >parameter_bounds;
 	std::vector<std::string> parameter_results;
 
+
 	unsigned verbose;
 	unsigned trace_length;
 	unsigned number_of_traces;
@@ -78,7 +79,7 @@ struct MC {
   void sample_params_update_conf(random_distribution &);
 
 //check if params are in feasible bounds
-  bool is_in_range(std::vector<double>&);
+  bool is_in_range(std::vector<double>&, bool);
   bool result_bound_satisfied(unsigned, std::vector<double>& );
 
   fractiont operator()();

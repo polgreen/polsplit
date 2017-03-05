@@ -106,7 +106,7 @@ bool MC::result_bound_satisfied(unsigned i, std::vector<double>& sample)
   throw std::exception();
 }
 
-bool MC::is_in_range(std::vector<double> &sample)
+bool MC::is_in_range(std::vector<double> &sample, bool update_param_conf)
 {
   if(verbose>1)
     std::cout<<"sample from posterior distribution \n";
@@ -129,7 +129,8 @@ bool MC::is_in_range(std::vector<double> &sample)
         in_range=true;
         if(result_bound_satisfied(b, sample))
          {
-          confidence[i].nom++; //update individual param confidences
+          if(update_param_conf)
+              confidence[i].nom++; //update individual param confidences
           if(verbose > 1)
               std::cout<<" RESULT = true \n";
          }
@@ -141,7 +142,7 @@ bool MC::is_in_range(std::vector<double> &sample)
     }
     if(in_range==false)
       { all_params_ok=false;}
-    else
+    else if(update_param_conf)
     {confidence[i].denom++;}
   }
 return all_params_ok;
@@ -233,7 +234,7 @@ bool MDP::result_bound_satisfied(unsigned i, std::vector<double>& sample)
   throw std::exception();
 }
 
-bool MDP::is_in_range(std::vector<double> &sample)
+bool MDP::is_in_range(std::vector<double> &sample, bool update_param_conf)
 {
   if(verbose>1)
     std::cout<<"sample from posterior distribution \n";
@@ -256,7 +257,8 @@ bool MDP::is_in_range(std::vector<double> &sample)
         in_range=true;
         if(result_bound_satisfied(b, sample))
          {
-          confidence[i].nom++; //update individual param confidences
+          if(update_param_conf)
+              confidence[i].nom++; //update individual param confidences
           if(verbose > 1)
               std::cout<<" true \n";
          }
@@ -268,7 +270,7 @@ bool MDP::is_in_range(std::vector<double> &sample)
     }
     if(in_range==false)
       { all_params_ok=false;}
-    else
+    else if(update_param_conf)
     {confidence[i].denom++;}
   }
 

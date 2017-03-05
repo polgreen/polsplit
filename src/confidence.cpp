@@ -29,7 +29,7 @@ void MC::sample_params_update_conf(random_distribution &rd)
   std::vector<double> sample;
   for(unsigned i=1; i<modelparams.size(); i++)
     {sample.push_back(rd.beta(parametercounts[i],inv_parametercounts[i]));}
-  if(is_in_range(sample))
+  if(is_in_range(sample, true))
     { overall_confidence.nom++;}
   overall_confidence.denom++;
  if(verbose>1)

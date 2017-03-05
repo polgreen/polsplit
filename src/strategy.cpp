@@ -109,8 +109,8 @@ fractiont MDP::expectedInformationGain(std::vector<unsigned> & strategy, random_
      expected_param_counts[i].denom=1;
      expected_invparam_counts[i].nom=(int)parametercounts[i];
      expected_invparam_counts[i].denom=1;
-     modelparams[i].nom=(int)parametercounts[i];
-     modelparams[i].denom=(int)parametercounts[i]+(int)inv_parametercounts[i];
+     model.modelparams[i].nom=(int)parametercounts[i];
+     model.modelparams[i].denom=(int)parametercounts[i]+(int)inv_parametercounts[i];
    }
 
  //  std::cout<<"Expected parameter counts: "<<expected_param_counts[1]<<" "<<expected_invparam_counts[1]<<std::endl;
@@ -165,17 +165,17 @@ fractiont MDP::expectedInformationGain(std::vector<unsigned> & strategy, random_
         double p2 = (double)expected_invparam_counts[i].nom/(double)expected_invparam_counts[i].denom;
         sample.push_back(rd.beta(p1,p2));
       }
-    if(is_in_range(sample))
+    if(model.is_in_range(sample, false))
       { expected_confidence.nom++;}
     expected_confidence.denom++;
    if(verbose>1)
-     std::cout<<"confidence = "<<expected_confidence.nom<<"/"<<expected_confidence.denom<<"\n";
+     std::cout<<"expected confidence = "<<expected_confidence<<"\n";
   }
 
-
+ return frac_abs(overall_confidence-expected_confidence);
 }
 
-std::vector<unsigned> MDP::explicitStrategySynth()
+std::vector<unsigned> MDP::explicitStrategySynth(random_distribution& rd)
 {
   //explicitly compute expected counts for every strategy
   std::vector< std::vector<unsigned> > strategies;
@@ -211,10 +211,29 @@ std::vector<unsigned> MDP::explicitStrategySynth()
       std::cout<<"\n";
     }
   }
-random_distribution rd;
-  expectedInformationGain(strategies[0], rd);
+
+int max_strategy=0;
+fractiont info_gain;
+fractiont max_info_gain=0;
+  for(int s=0; s<strategies.size(); s++)
+  {
+    info_gain=expectedInformationGain(strategies[s], rd);
+    if(info_gain>max_info_gain)
+       max_strategy=s;
+      max_info_gain=info_gain;
+  }
   //get expected data counts for all
-return strategies[0];
+return strategies[max_strategy];
+}
+
+std::vector<unsigned> MDP::randomStrategySynth(random_distribution &rd)
+{
+  std::vector<unsigned> strategy;
+  strategy.resize(MDPstates.size());
+  for(int i=0; i<MDPstates.size(); i++)
+    {strategy[i]=(unsigned)(MDPstates[i].actions.size()* rd.beta(1,1));}
+
+return strategy;
 }
 
 std::vector<unsigned> MDP::synthStrategy()
@@ -223,11 +242,23 @@ std::vector<unsigned> MDP::synthStrategy()
   paramImportance();
   //do strategy synthesis (via prismgames?)
  strategy.resize(MDPstates.size());
- explicitStrategySynth();
- assert(0);
+ random_distribution rd;
 
- for(auto s: strategy)
-   {s=0;}
+ switch(strategy_type)
+ {
+   case 0: explicitStrategySynth(rd);
+           if(verbose>1)
+               std::cout<<"explicit strategy synth"<<std::endl;break;
+   case 1:  for(auto s: strategy)
+               {s=0;}
+           if(verbose>1)
+               std::cout<<"pick the first action strategy synth"<<std::endl;break;
+   case 2:  randomStrategySynth(rd);
+            if(verbose>1)
+                std::cout<<"randomized strategy synth"<<std::endl;break;
+   default: std::cout<<"ERROR no strategy method selected\n";
+             throw std::exception();
+ }
 
  if(verbose>1)
  {

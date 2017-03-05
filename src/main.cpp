@@ -44,7 +44,10 @@ void help()
           <<"--tracelength N sets the length of each trace to N transitions, default is 1000\n"
           <<"--integrationsamples N sets the number of samples used by"
           <<" monte-carlo integration to N, default is 10,000\n"
-          <<"--MDP runs the simple MDP model, default is to run the MC model\n\n";
+          <<"--MDP runs the simple MDP model, default is to run the MC model\n"
+          <<"--explicit_strategy explicitly evaluates all memoryless strategies \n"
+          <<"--random_strategy picks a random memoryless strategy \n"
+          <<"--first_strategy picks the first action at each state \n\n";
 }
 
 void output_header()
@@ -79,6 +82,7 @@ int main(int argc, const char *argv[])
   int number_of_traces=1000;
   int trace_length=10;
   int num_int_samples=10000;
+  int strategy=0;
   bool modelMDP=false;
 
 
@@ -122,6 +126,18 @@ int main(int argc, const char *argv[])
      {
          modelMDP=true;
      }
+     else if(std::string(argv[i])=="--explicit_strategy")
+     {
+       strategy=0;
+     }
+     else if(std::string(argv[i])=="--first_strategy")
+     {
+       strategy=1;
+     }
+     else if(std::string(argv[i])=="--random_strategy")
+     {
+       strategy=2;
+     }
      else if(std::string(argv[i])=="--help")
           {
               help();
@@ -145,6 +161,7 @@ try{
     model.number_of_traces = number_of_traces;
     model.trace_length = trace_length;
     model.num_int_samples = num_int_samples;
+    model.strategy_type=strategy;
     confidence = model();
   }
   else

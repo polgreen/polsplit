@@ -41,6 +41,7 @@ class MDP{
     std::vector<std::vector<std::pair <double, double > > >parameter_bounds;
     std::vector<std::string> parameter_results;
 
+    int strategy_type; //explicit synth=0, action 0 always=1, random=2;
     unsigned verbose;
     unsigned trace_length;
     unsigned number_of_traces;
@@ -57,13 +58,14 @@ class MDP{
     void callPrism();
     void prism_find(std::string &);
     bool result_bound_satisfied(unsigned , std::vector<double>& );
-    bool is_in_range(std::vector<double>&);
+    bool is_in_range(std::vector<double>&, bool);
 
     //strategy synthesis
     std::vector<unsigned> synthStrategy();
+    std::vector<unsigned> randomStrategySynth(random_distribution &);
     void paramImportance();
     void assignActionRewards(std::vector<int> &);
-    std::vector<unsigned> explicitStrategySynth();
+    std::vector<unsigned> explicitStrategySynth(random_distribution &);
     fractiont expectedInformationGain (std::vector<unsigned> &, random_distribution &);
 
     //confidence calculation

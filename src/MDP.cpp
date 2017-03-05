@@ -110,8 +110,8 @@ void MDP::initialise_all_counts()
   overall_confidence.zero();
   for(int i=0; i<modelparams.size(); i++)
   {
-    parametercounts[i]=0;
-    inv_parametercounts[i]=0;
+    parametercounts[i]=1;
+    inv_parametercounts[i]=1;
     confidence[i].zero();
   }
 }
