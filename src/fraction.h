@@ -28,6 +28,7 @@ struct fractiont{
 	void output(std::ostream &out);
 };
 
+fractiont double_to_fraction(double d);
 fractiont frac_abs(fractiont);
 #endif				
 

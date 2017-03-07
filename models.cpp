@@ -92,6 +92,34 @@ model.add_IDs();
   return model;
 }
 
+MDP get_MDP2()
+{
+  MDP model;
+  model.num_states(4);
+
+  model.modelparams.resize(2);
+  model.modelparams[0].one();
+  model.modelparams[1].nom = PARAM1;
+  model.modelparams[1].denom = 100;
+
+  model.add_const_transition(0,0,1,1);
+
+  double param_multipliers[]={1};
+  model.add_param_transition(1,0,2,param_multipliers);
+  model.add_remainder_transition(1,0,3);
+  model.add_const_transition(1,1,0,0.7);
+  model.add_remainder_transition(1,1,3);
+  model.add_const_transition(2,0,2,1);
+  model.add_const_transition(3,0,3,1);
+  model.make_state_init(0);
+  model.success=3;
+
+  model.add_IDs();
+  model.check();
+
+return model;
+
+}
 
 MDP get_MDP()
 {

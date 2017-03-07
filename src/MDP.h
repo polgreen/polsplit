@@ -52,6 +52,13 @@ class MDP{
     MDP_statet get_init_state();
     void add_IDs();
     void initialise_all_counts();
+    void num_states(int);
+    void add_const_transition(int, int, int, const fractiont&);
+    void add_const_transition(int, int, int, double);
+    void add_param_transition(int, int,int, const double[]);
+    void add_param_transition(int, int,int, const std::vector<fractiont>&);
+    void add_remainder_transition(int, int, int);
+    void make_state_init(int);
 
     //parameter synthesis
     void outputPrism(std::ostream &);

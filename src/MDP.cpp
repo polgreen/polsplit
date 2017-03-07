@@ -14,6 +14,137 @@ void MDP::add_IDs ()
   }
 }
 
+void MDP::num_states(int num_states)
+{
+  MDP_statet s;
+  for(int i=0; i<num_states; i++)
+  {
+    MDPstates.push_back(s);
+  }
+}
+
+void MDP::add_const_transition(int state, int action_num, int successor, double prob)
+{
+  fractiont f1 = double_to_fraction(prob);
+  add_const_transition(state, action_num, successor, f1);
+}
+
+void MDP::add_const_transition(int state, int action_num,int successor, const fractiont& prob)
+{
+  if(MDPstates.size()<state)
+    {
+      std::cout<<"cannot add transitions between states that don't exist \n";
+      throw std::exception();
+    }
+  action a1;
+  for(int i=MDPstates[state].actions.size(); i<action_num; i++)
+    {MDPstates[state].actions.push_back(a1);}
+  transitiont t1;
+  t1.type=CONST;
+  t1.prob=prob;
+  t1.successor=successor;
+  MDPstates[state].actions[action_num].push_back(t1);
+}
+
+void MDP::add_param_transition(int state, int action_num, int successor, const double param_multipliers[])
+{
+  std::vector<fractiont> fraction_mults;
+  for(const auto &d :param_multipliers)
+  {
+    fraction_mults.push_back(double_to_fraction(d));
+  }
+  add_param_transition(state, action_num, successor, fraction_mults);
+}
+
+void MDP::add_param_transition(int state, int action_num, int successor, const std::vector<fractiont>& param_multipliers)
+{
+  if(MDPstates.size()<state)
+    {
+      std::cout<<"cannot add transitions between states that don't exist \n";
+      throw std::exception();
+    }
+  action a1;
+  for(int i=MDPstates[state].actions.size(); i<action_num; i++)
+    {MDPstates[state].actions.push_back(a1);}
+  transitiont t1;
+  t1.type=FUNCTION;
+  t1.successor=successor;
+  std::pair<fractiont,unsigned> p1;
+  for(int i=0; i<param_multipliers.size(); i++)
+  {
+    p1.first=param_multipliers[i];
+    p1.second=i;
+    t1.params.push_back(p1);
+  }
+
+  MDPstates[state].actions[action_num].push_back(t1);
+}
+
+void MDP::add_remainder_transition(int state, int action_num, int successor)
+{
+  if(MDPstates.size()<state)
+    {
+      std::cout<<"cannot add transitions between states that don't exist \n";
+      throw std::exception();
+    }
+  action a1;
+  for(int i=MDPstates[state].actions.size(); i<action_num; i++)
+    {MDPstates[state].actions.push_back(a1);}
+
+  transitiont t;
+  t.type=REMAINDER;
+  t.successor=successor;
+  MDPstates[state].actions[action_num].push_back(t);
+}
+
+void MDP::make_state_init(int state)
+{
+  MDPstates[state].init=true;
+}
+
+void MDP::check()
+{
+  fractiont weight;
+  fractiont state_sum;
+  fractiont param_sum;
+  if(states.size()==0)
+    {std::cout<<"error in MC::check(), no states found \n";
+    throw std::exception();}
+
+  for(const auto &s: MDPstates)
+  {
+    if(s.ID>=MDPstates.size()){std::cout<<"StateIDs not properly assigned";
+    throw std::exception();}
+    state_sum.zero();
+    for(const auto &a: s.actions)
+    {
+     if(a.size()==0){std::cout<<"empty action \n";
+     throw std::exception();}
+
+     for(const auto &t: a)
+     {
+   //   weight = weighting(t,a);
+      if(weight.nom<0 || weight.denom<0)
+        {std::cout<<"ERROR: transition S"<<s.ID<<"->S"<<t.successor<<" probability less than 0 \n";
+        throw std::exception();}
+      state_sum = weight + state_sum;
+      if(state_sum.nom > state_sum.denom)
+        {std::cout<<"ERROR: transitions from S"<<s.ID<<" sum to more than 1 \n";
+        throw std::exception();}
+      if(t.type==FUNCTION)
+        { for(const auto &p: t.params)
+          {
+            param_sum = p.first + param_sum;
+            if(param_sum.nom>param_sum.denom){std::cout<<"ERROR: parameter multipliers >1";
+              throw std::exception();}
+          }
+        }
+     }
+    }
+  }
+}
+
+
 
 MDP::MDP_statet MDP::get_init_state()
 {

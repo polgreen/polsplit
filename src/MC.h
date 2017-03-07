@@ -18,7 +18,7 @@ struct transitiont {
 	};
 
 struct statet {
-	statet(){input=0;}
+	statet(){input=0; init=false;}
 	unsigned ID; 
 	std::vector<transitiont> transitions; 
 	bool init; 

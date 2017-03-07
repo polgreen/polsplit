@@ -1,6 +1,7 @@
 
 #include "fraction.h"
 #include <iostream>
+#define FRAC_PRECISION 1000
 
 unsigned gcdr (unsigned a, unsigned b)
 {
@@ -121,3 +122,12 @@ void fractiont::zero()
 
 void fractiont::one()
 {nom = 1;denom = 1;}
+
+fractiont double_to_fraction(double d)
+{
+  fractiont f1;
+  f1.nom = d*FRAC_PRECISION;
+  f1.denom=FRAC_PRECISION;
+  f1.simplify();
+  return f1;
+}
