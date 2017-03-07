@@ -4,6 +4,7 @@
 #include "src/fraction.h"
 #include "src/MC.h"
 #include "src/MDP.h"
+#include "src/model_param.h"
 
 
 
@@ -102,7 +103,7 @@ MDP get_MDP()
 
   model.modelparams.resize(2);
   model.modelparams[0].one();
-  model.modelparams[1].nom = 50;
+  model.modelparams[1].nom = PARAM1;
   model.modelparams[1].denom = 100;
 
   //s0
@@ -174,7 +175,7 @@ MC get_MC()
 
  	model.modelparams.resize(2);
  	model.modelparams[0].one();
- 	model.modelparams[1].nom = 50;
+ 	model.modelparams[1].nom = PARAM1;
  	model.modelparams[1].denom = 100;
 
  	//s0
