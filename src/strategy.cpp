@@ -239,7 +239,7 @@ return strategy;
 std::vector<unsigned> MDP::synthStrategy()
 {
   std::vector<unsigned> strategy;
-  paramImportance();
+ // paramImportance();
   //do strategy synthesis (via prismgames?)
  strategy.resize(MDPstates.size());
  random_distribution rd;

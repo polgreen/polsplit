@@ -17,7 +17,7 @@ class MDP{
     typedef std::vector<transitiont> action;
 
     struct MDP_statet {
-        MDP_statet(){input=0;}
+        MDP_statet(){input=0; init=false;}
         unsigned ID;
         bool init;
         unsigned input;
@@ -59,6 +59,9 @@ class MDP{
     void add_param_transition(int, int,int, const std::vector<fractiont>&);
     void add_remainder_transition(int, int, int);
     void make_state_init(int);
+    fractiont weighting(const transitiont&, const std::vector<transitiont>&);
+    fractiont remainderWeight(const std::vector<transitiont>&);
+    void check();
 
     //parameter synthesis
     void outputPrism(std::ostream &);
@@ -85,7 +88,8 @@ class MDP{
 
 
 
-MDP get_MDP();
+MDP get_MDP(int);
+
 
 
 #endif /* SRC_MDP_H_ */

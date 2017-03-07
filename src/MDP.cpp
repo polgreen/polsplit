@@ -37,21 +37,23 @@ void MDP::add_const_transition(int state, int action_num,int successor, const fr
       throw std::exception();
     }
   action a1;
-  for(int i=MDPstates[state].actions.size(); i<action_num; i++)
+  for(int i=MDPstates[state].actions.size(); i<=action_num; i++)
     {MDPstates[state].actions.push_back(a1);}
   transitiont t1;
   t1.type=CONST;
   t1.prob=prob;
   t1.successor=successor;
   MDPstates[state].actions[action_num].push_back(t1);
+
 }
 
 void MDP::add_param_transition(int state, int action_num, int successor, const double param_multipliers[])
 {
   std::vector<fractiont> fraction_mults;
-  for(const auto &d :param_multipliers)
+
+  for(int i=0; i<modelparams.size(); i++)
   {
-    fraction_mults.push_back(double_to_fraction(d));
+    fraction_mults.push_back(double_to_fraction(param_multipliers[i]));
   }
   add_param_transition(state, action_num, successor, fraction_mults);
 }
@@ -64,7 +66,7 @@ void MDP::add_param_transition(int state, int action_num, int successor, const s
       throw std::exception();
     }
   action a1;
-  for(int i=MDPstates[state].actions.size(); i<action_num; i++)
+  for(int i=MDPstates[state].actions.size(); i<=action_num; i++)
     {MDPstates[state].actions.push_back(a1);}
   transitiont t1;
   t1.type=FUNCTION;
@@ -72,9 +74,12 @@ void MDP::add_param_transition(int state, int action_num, int successor, const s
   std::pair<fractiont,unsigned> p1;
   for(int i=0; i<param_multipliers.size(); i++)
   {
-    p1.first=param_multipliers[i];
-    p1.second=i;
-    t1.params.push_back(p1);
+    if(param_multipliers[i]!=0)
+    {
+     p1.first=param_multipliers[i];
+     p1.second=i;
+     t1.params.push_back(p1);
+    }
   }
 
   MDPstates[state].actions[action_num].push_back(t1);
@@ -88,7 +93,7 @@ void MDP::add_remainder_transition(int state, int action_num, int successor)
       throw std::exception();
     }
   action a1;
-  for(int i=MDPstates[state].actions.size(); i<action_num; i++)
+  for(int i=MDPstates[state].actions.size(); i<=action_num; i++)
     {MDPstates[state].actions.push_back(a1);}
 
   transitiont t;
@@ -107,7 +112,7 @@ void MDP::check()
   fractiont weight;
   fractiont state_sum;
   fractiont param_sum;
-  if(states.size()==0)
+  if(MDPstates.size()==0)
     {std::cout<<"error in MC::check(), no states found \n";
     throw std::exception();}
 
@@ -115,15 +120,16 @@ void MDP::check()
   {
     if(s.ID>=MDPstates.size()){std::cout<<"StateIDs not properly assigned";
     throw std::exception();}
-    state_sum.zero();
+
     for(const auto &a: s.actions)
     {
+     state_sum.zero();
      if(a.size()==0){std::cout<<"empty action \n";
      throw std::exception();}
 
      for(const auto &t: a)
      {
-   //   weight = weighting(t,a);
+       weight = weighting(t,a);
       if(weight.nom<0 || weight.denom<0)
         {std::cout<<"ERROR: transition S"<<s.ID<<"->S"<<t.successor<<" probability less than 0 \n";
         throw std::exception();}
@@ -158,7 +164,7 @@ MDP::MDP_statet MDP::get_init_state()
       result= s;
     }
     else if(s.init==true && found==true)
-      {std::cout<<"error in get_init_state: found 2 initial states \n";
+      {std::cout<<"error in get_init_state: found 2 initial states: "<<result.ID<<" and "<<s.ID<< "\n";
       throw std::exception();}
   }
   if(found==false)
@@ -170,6 +176,54 @@ MDP::MDP_statet MDP::get_init_state()
 return result;
 }
 
+
+fractiont MDP::weighting(const transitiont& t, const std::vector<transitiont>& action)
+{
+  fractiont sum, prod;
+  sum.zero();
+
+
+  switch(t.type)
+  {
+    case CONST: return t.prob; break;
+    case FUNCTION:
+      for(unsigned index=0; index<t.params.size(); index++)
+            {
+              prod = t.params[index].first*modelparams[t.params[index].second];
+              sum = prod + sum;
+            }
+          return sum; break;
+      case REMAINDER: return remainderWeight(action) ;break;
+        default:
+            throw std::exception();
+    }
+
+}
+
+
+
+fractiont MDP::remainderWeight(const std::vector<transitiont>& action)
+{
+  fractiont sum_state;
+  fractiont result;
+  bool remainderfound =false;
+  sum_state.zero();
+  for(const auto & t: action)
+   {
+    if((t.type==REMAINDER) && remainderfound==false)
+    {remainderfound=true;}
+    else if((t.type==REMAINDER) && remainderfound==true)
+    {std::cout<<"error, 2 transitions of type REMAINDER found \n";
+     throw std::exception();}
+    else{sum_state = sum_state + weighting(t, action);}
+   }
+  result.one();
+  if(sum_state.nom>sum_state.denom || sum_state.nom<=0)
+    {std::cout<<"error, invalid state found calculating remainder weight S \n";
+    throw std::exception();}
+  result = result-sum_state;
+  return result;
+}
 
 statet MDP_to_MC_state(MDP::MDP_statet &mS, unsigned actionNumber)
 {
