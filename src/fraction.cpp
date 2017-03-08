@@ -1,5 +1,6 @@
 #include "fraction.h"
 #include <iostream>
+
 #define FRAC_PRECISION 1000
 
 unsigned gcdr(unsigned a, unsigned b)
@@ -190,3 +191,34 @@ double fraction_to_double(fractiont f1)
 {
   return (double)f1.nom/(double)f1.denom;
 }
+
+std::vector<fractiont> intvector_to_fractions(const std::vector<int>& v1)
+{
+  std::vector<fractiont> result(v1.size());
+  for(int i=0; i<v1.size(); i++)
+  {
+    result[i].nom=v1[i];
+    result[i].denom=1;
+  }
+  return result;
+}
+
+std::vector<fractiont> intvector_to_fractions(const std::vector<unsigned>& v1)
+{
+  std::vector<fractiont> result(v1.size());
+  for(int i=0; i<v1.size(); i++)
+  {
+    result[i].nom=v1[i];
+    result[i].denom=1;
+  }
+  return result;
+}
+
+
+
+
+
+
+
+
+

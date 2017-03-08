@@ -128,25 +128,20 @@ fractiont MC::weighting(const transitiont& t, const statet& s)
 {
   fractiont sum, prod;
   sum.zero();
-  std::cout<<"transition s"<<s.ID<<"->"<<t.successor<<" ";
   switch (t.type)
   {
     case CONST:
-      std::cout<<"prob type\n";
       return t.prob;
       break;
     case FUNCTION:
       for (unsigned index = 0; index < t.params.size(); index++)
       {
-        std::cout<<"function type \n";
         prod = t.params[index].first * modelparams[t.params[index].second];
         sum = prod + sum;
-        std::cout<<"sum "<<sum<<std::endl;
       }
       return sum;
       break;
     case REMAINDER:
-      std::cout<<"remainder type \n";
       return remainderWeight(s);
       break;
     default:
@@ -159,7 +154,6 @@ fractiont MC::weighting(const transitiont& t, const statet& s)
 
 fractiont MC::remainderWeight(const statet& s)
 {
-  std::cout<<"remainder of state"<<s.ID<<std::endl;
   fractiont sum_state;
   fractiont result;
   bool remainderfound = false;
@@ -185,7 +179,7 @@ fractiont MC::remainderWeight(const statet& s)
   if (sum_state.nom > sum_state.denom || sum_state.nom <= 0)
   {
     std::cout<<"state sum "<<sum_state<<std::endl;
-    std::cout << "TESTerror, invalid state found calculating remainder weight S"
+    std::cout << "error, invalid state found calculating remainder weight S"
         << s.ID << " \n";
     throw std::exception();
   }

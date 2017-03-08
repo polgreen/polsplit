@@ -95,6 +95,8 @@ struct MC
     bool is_in_range(const std::vector<double>&, const bool);
     bool result_bound_satisfied(const unsigned, const std::vector<double>&);
 
+    std::vector<std::vector<fractiont> > transitioncountvector();
+
     fractiont operator()();
 
 };

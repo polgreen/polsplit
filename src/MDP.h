@@ -78,6 +78,7 @@ class MDP
     void prism_find(const std::string &);
 
     //strategy synthesis
+    std::vector<fractiont> expected_parameters();
     std::vector<unsigned> synthStrategy();
     std::vector<unsigned> randomStrategySynth(random_distribution &);
     std::vector<unsigned> explicitStrategySynth(random_distribution &);

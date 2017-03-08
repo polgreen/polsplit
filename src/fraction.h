@@ -1,6 +1,7 @@
 #ifndef fraction_h
 #define fraction_h
 #include <iostream>
+#include <vector>
 
 struct fractiont
 {
@@ -42,5 +43,7 @@ struct fractiont
 fractiont double_to_fraction(double d);
 fractiont frac_abs(fractiont);
 double fraction_to_double(fractiont);
+std::vector<fractiont> intvector_to_fractions(const std::vector<int>&);
+std::vector<fractiont> intvector_to_fractions(const std::vector<unsigned>&);
 #endif				
 
