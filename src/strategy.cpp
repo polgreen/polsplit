@@ -23,7 +23,7 @@ fractiont MDP::expectedInformationGain(std::vector<unsigned> & strategy,
     model.outputMC(std::cout);
   }
 
-  std::vector<statet> current_states;
+ std::vector<statet> current_states;
   current_states.push_back(model.get_init_state());
   fractiont expected_confidence;
 
@@ -43,6 +43,7 @@ fractiont MDP::expectedInformationGain(std::vector<unsigned> & strategy,
   std::vector<fractiont> expected_param_counts(model.modelparams.size());
   std::vector<fractiont> expected_invparam_counts(model.modelparams.size());
   transitioncounts.resize(model.states.size());
+
   for (int s = 0; s < model.states.size(); s++)
   {
     transitioncounts[s].resize(model.states[s].transitions.size());
@@ -51,33 +52,30 @@ fractiont MDP::expectedInformationGain(std::vector<unsigned> & strategy,
       t.zero();
     }
   }
-  //expected value for parameters
+
   for (int i = 1; i < modelparams.size(); i++)
   {
     expected_param_counts[i].nom = (int) parametercounts[i];
     expected_param_counts[i].denom = 1;
     expected_invparam_counts[i].nom = (int) parametercounts[i];
     expected_invparam_counts[i].denom = 1;
-    model.modelparams[i].nom = (int) parametercounts[i];
+    model.modelparams[i].nom = (int) parametercounts[i]+prior_a2[i];
     model.modelparams[i].denom = (int) parametercounts[i]
-        + (int) inv_parametercounts[i];
+        + (int) inv_parametercounts[i]+prior_a2[i];
   }
 
   for (int i = 0; i < trace_length; i++)
   {
-    //  std::cout<<"\nSTEP "<<i<<"\n";
     for (int s = 0; s < state_inputs.size(); s++)
     {
       if (state_inputs[s] != 0)
       {
-        //  std::cout<<" s"<<s<<":";
         for (int t = 0; t < model.states[s].transitions.size(); t++)
         {
           fractiont expected_count = model.weighting(
               model.states[s].transitions[t], model.states[s]);
 
           transitioncounts[s][t] = transitioncounts[s][t] + expected_count;
-          // std::cout<<"transition "<<t<<" exp count: "<<transitioncounts[s][t];
           next_state_inputs[model.states[s].transitions[t].successor] =
               state_inputs[model.states[s].transitions[t].successor]
                   + expected_count;
@@ -86,7 +84,6 @@ fractiont MDP::expectedInformationGain(std::vector<unsigned> & strategy,
             for (int p = 0; p < model.states[s].transitions[t].params.size();
                 p++)
             {
-              // std::cout<<"param in func "<<p<<std::endl;
               int param_num = model.states[s].transitions[t].params[p].second;
               if (param_num == 0)
                 break;
@@ -97,8 +94,6 @@ fractiont MDP::expectedInformationGain(std::vector<unsigned> & strategy,
                       + state_inputs[s]
                           * model.states[s].transitions[t].params[p].first
                           * (1 - expected_count);
-              //  std::cout<<" next expected parameter counts: "<<expected_param_counts[param_num]<<" "<<expected_invparam_counts[param_num]<<std::endl;
-
             }
           }
         }
@@ -122,7 +117,7 @@ fractiont MDP::expectedInformationGain(std::vector<unsigned> & strategy,
           / (double) expected_param_counts[i].denom;
       double p2 = (double) expected_invparam_counts[i].nom
           / (double) expected_invparam_counts[i].denom;
-      sample.push_back(rd.beta(p1 + 1, p2 + 1));
+      sample.push_back(rd.beta(p1 +  prior_a1[i], p2 + prior_a2[i]));
     }
     if (model.is_in_range(sample, false))
     {
@@ -139,6 +134,9 @@ fractiont MDP::expectedInformationGain(std::vector<unsigned> & strategy,
   }
 
   return frac_abs(overall_confidence - expected_confidence);
+  fractiont result;
+  result.one();
+  return result;
 }
 
 std::vector<unsigned> MDP::explicitStrategySynth(random_distribution& rd)

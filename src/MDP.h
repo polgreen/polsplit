@@ -37,6 +37,8 @@ class MDP
     std::vector<double> param_lower_bounds;
     std::vector<double> param_upper_bounds;
     std::vector<fractiont> modelparams;
+    std::vector<unsigned> prior_a1;
+    std::vector<unsigned> prior_a2;
     std::vector<unsigned> parametercounts;
     std::vector<unsigned> inv_parametercounts;
     fractiont overall_confidence;

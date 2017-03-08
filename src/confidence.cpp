@@ -24,7 +24,7 @@ void MC::sample_params_update_conf(random_distribution &rd)
   for (unsigned i = 1; i < modelparams.size(); i++)
   {
     sample.push_back(
-        rd.beta(parametercounts[i] + 1, inv_parametercounts[i] + 1));
+        rd.beta(parametercounts[i] + prior_a1[i], inv_parametercounts[i] + prior_a2[1]));
   }
   if (is_in_range(sample, true))
   {
