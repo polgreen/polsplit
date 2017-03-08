@@ -77,9 +77,15 @@ void MDP::paramImportance()
 
 fractiont MDP::expectedInformationGain(std::vector<unsigned> & strategy, random_distribution &rd)
 {
-
+  if(verbose>2)
+      std::cout<<"Computing expected information gain\n";
    MC model=induceMarkovChain(strategy);
-   model.outputMC(std::cout);
+   if(verbose>2)
+   {
+     std::cout<<"Induced Markov Chain: \n";
+     model.outputMC(std::cout);
+   }
+
    std::vector<statet> current_states;
    current_states.push_back(model.get_init_state());
    fractiont expected_confidence;
@@ -113,9 +119,8 @@ fractiont MDP::expectedInformationGain(std::vector<unsigned> & strategy, random_
      model.modelparams[i].denom=(int)parametercounts[i]+(int)inv_parametercounts[i];
    }
 
- //  std::cout<<"Expected parameter counts: "<<expected_param_counts[1]<<" "<<expected_invparam_counts[1]<<std::endl;
 
-   for(int i=0; i<trace_length; i++)
+  for(int i=0; i<trace_length; i++)
    {
    //  std::cout<<"\nSTEP "<<i<<"\n";
      for(int s=0; s<state_inputs.size(); s++)
@@ -155,7 +160,8 @@ fractiont MDP::expectedInformationGain(std::vector<unsigned> & strategy, random_
    }
 //compute parameter confidence
   if(verbose>1)
-     std::cout<<"expected parameter counts: "<<expected_param_counts[1]<<" "<<expected_invparam_counts[1]<<std::endl;
+    for(int i=0; i<modelparams.size(); i++)
+     std::cout<<"Computed expected parameter "<<i<<" counts: "<<expected_param_counts[i]<<" "<<expected_invparam_counts[i]<<std::endl;
   for(int i=0; i<10; i++)
   {
     std::vector<double> sample;
@@ -169,7 +175,7 @@ fractiont MDP::expectedInformationGain(std::vector<unsigned> & strategy, random_
       { expected_confidence.nom++;}
     expected_confidence.denom++;
    if(verbose>1)
-     std::cout<<"expected confidence = "<<expected_confidence<<"\n";
+     std::cout<<"expected confidence  = "<<expected_confidence<<"\n";
   }
 
  return frac_abs(overall_confidence-expected_confidence);
@@ -202,7 +208,7 @@ std::vector<unsigned> MDP::explicitStrategySynth(random_distribution& rd)
 
   if(verbose>1)
   {
-    std::cout<<"all possible strategies: \n";
+    std::cout<<"All possible strategies: \n";
     for(const auto &s: strategies)
     {
       std::cout<<"strategy ";
@@ -246,16 +252,18 @@ std::vector<unsigned> MDP::synthStrategy()
 
  switch(strategy_type)
  {
-   case 0: explicitStrategySynth(rd);
-           if(verbose>1)
-               std::cout<<"explicit strategy synth"<<std::endl;break;
-   case 1:  for(auto s: strategy)
+   case 0: if(verbose>1)
+               std::cout<<"Explicit strategy synth"<<std::endl;
+           explicitStrategySynth(rd);
+           break;
+   case 1:  if(verbose>1)
+                 std::cout<<"Pick the first action strategy synth"<<std::endl;
+           for(auto s: strategy)
                {s=0;}
-           if(verbose>1)
-               std::cout<<"pick the first action strategy synth"<<std::endl;break;
+           break;
    case 2:  randomStrategySynth(rd);
             if(verbose>1)
-                std::cout<<"randomized strategy synth"<<std::endl;break;
+                std::cout<<"Randomized strategy synth"<<std::endl;break;
    default: std::cout<<"ERROR no strategy method selected\n";
              throw std::exception();
  }

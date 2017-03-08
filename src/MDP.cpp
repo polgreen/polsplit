@@ -235,7 +235,7 @@ statet MDP_to_MC_state(MDP::MDP_statet &mS, unsigned actionNumber)
   statet s;
   s.ID = mS.ID;
   s.init = mS.init;
-  std::cout<<"actions size"<< mS.actions.size()<<", action "<<actionNumber<<std::endl;
+ // std::cout<<"actions size"<< mS.actions.size()<<", action "<<actionNumber<<std::endl;
   assert(actionNumber<mS.actions.size());
   s.transitions  = mS.actions[actionNumber];
   return s;
@@ -247,6 +247,8 @@ MC MDP::induceMarkovChain(std::vector<unsigned>& strategy)
   MC model;
   model.modelparams = modelparams;
   assert(MDPstates.size()==strategy.size());
+  if(verbose>2)
+    std::cout<<"..induce Markov chain for strategy\n";
 
   for(unsigned i=0; i<MDPstates.size(); i++)
   {
@@ -263,7 +265,7 @@ MC MDP::induceMarkovChain(std::vector<unsigned>& strategy)
   model.parametercounts = parametercounts;
   model.inv_parametercounts = inv_parametercounts;
   model.confidence = confidence;
-  std::cout<<"end of induce MC\n";
+
   return model;
 }
 

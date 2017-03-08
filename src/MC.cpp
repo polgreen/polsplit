@@ -230,7 +230,7 @@ void MC::outputMC (std::ostream &out)
 
 		}
 	}			
-
+	out<<"\n\n";
 }
 
 fractiont MC::operator()()

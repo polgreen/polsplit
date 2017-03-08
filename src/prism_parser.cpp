@@ -108,8 +108,7 @@ bool MC::result_bound_satisfied(unsigned i, std::vector<double>& sample)
 
 bool MC::is_in_range(std::vector<double> &sample, bool update_param_conf)
 {
-  if(verbose>1)
-    std::cout<<"sample from posterior distribution \n";
+
   assert(sample.size()==modelparams.size()-1);
   bool in_range=false;
   bool all_params_ok=true;
@@ -118,14 +117,14 @@ bool MC::is_in_range(std::vector<double> &sample, bool update_param_conf)
   {
     in_range=false;
     if(verbose>1)
-      std::cout<<"Sample P"<<i<<" "<<sample[i]<<"\n; ";
+      std::cout<<"Check sample P"<<i+1<<" = "<<sample[i]<<" is in bounds: ";
     for(unsigned b=0; b<parameter_bounds.size(); b++)
     {
       if(sample[i]>=parameter_bounds[b][i].first && sample[i]<=parameter_bounds[b][i].second)
       {
         if(verbose>1)
-          {std::cout<<" parameter in range "<< parameter_bounds[b][i].first<<" ->"
-                  <<parameter_bounds[b][i].second<<"\n";}
+          {std::cout<<"parameter in range "<< parameter_bounds[b][i].first<<" ->"
+                  <<parameter_bounds[b][i].second<<", ";}
         in_range=true;
         if(result_bound_satisfied(b, sample))
          {
