@@ -62,6 +62,7 @@ struct MC
     //debugging
     void outputMC(std::ostream &out);
     void check();
+    void initialise_all_counts();
 
     //models
     statet get_init_state();

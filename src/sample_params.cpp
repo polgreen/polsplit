@@ -24,7 +24,7 @@ unsigned statet::sum_outputs()
 void MC::get_random_model_params(random_distribution &rd)
 {
   if (verbose > 1)
-    std::cout << "get random model parameters from posteriors: ";
+    std::cout << "get random model parameters from posteriors: \n";
   for (unsigned i = 1; i < modelparams.size(); i++)
   {
     modelparams[i].nom = 100

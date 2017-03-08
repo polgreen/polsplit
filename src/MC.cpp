@@ -261,8 +261,23 @@ void MC::outputMC(std::ostream &out)
   out << "\n\n";
 }
 
+void MC::initialise_all_counts()
+{
+  parametercounts.resize(modelparams.size());
+  inv_parametercounts.resize(modelparams.size());
+  overall_confidence.nom = 1;
+  overall_confidence.denom = 2;
+  for (int i = 0; i < modelparams.size(); i++)
+  {
+    parametercounts[i] = 0;
+    inv_parametercounts[i] = 0;
+  }
+}
+
+
 fractiont MC::operator()()
 {
+  initialise_all_counts();
   std::cout << "Calling PRISM for parameter synthesis ... \n";
   callPrism();
   std::cout << "\n";
