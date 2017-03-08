@@ -41,5 +41,6 @@ struct fractiont
 
 fractiont double_to_fraction(double d);
 fractiont frac_abs(fractiont);
+double fraction_to_double(fractiont);
 #endif				
 

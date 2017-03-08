@@ -62,6 +62,14 @@ fractiont MDP::expectedInformationGain(std::vector<unsigned> & strategy,
     model.modelparams[i].nom = (int) parametercounts[i]+prior_a2[i];
     model.modelparams[i].denom = (int) parametercounts[i]
         + (int) inv_parametercounts[i]+prior_a2[i];
+    if(fraction_to_double(model.modelparams[i])>param_upper_bounds[i])
+    {
+      model.modelparams[i].nom=model.modelparams[i].denom*param_upper_bounds[i];
+    }
+    else if(fraction_to_double(model.modelparams[i])<param_lower_bounds[i])
+    {
+      model.modelparams[i].nom=model.modelparams[i].denom*param_lower_bounds[i];
+    }
   }
 
   for (int i = 0; i < trace_length; i++)
@@ -117,7 +125,7 @@ fractiont MDP::expectedInformationGain(std::vector<unsigned> & strategy,
           / (double) expected_param_counts[i].denom;
       double p2 = (double) expected_invparam_counts[i].nom
           / (double) expected_invparam_counts[i].denom;
-      sample.push_back(rd.beta(p1 +  prior_a1[i], p2 + prior_a2[i]));
+            sample.push_back(rd.beta(p1 +  prior_a1[i], p2 + prior_a2[i]));
     }
     if (model.is_in_range(sample, false))
     {

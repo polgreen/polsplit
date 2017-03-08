@@ -185,3 +185,8 @@ fractiont double_to_fraction(double d)
   f1.simplify();
   return f1;
 }
+
+double fraction_to_double(fractiont f1)
+{
+  return (double)f1.nom/(double)f1.denom;
+}
