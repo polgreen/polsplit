@@ -32,6 +32,8 @@ class MDP{
     std::vector<MDP_statet> MDPstates;
     //note that slot 0 in modelparams is 1, and used
     //to represent known constants in param functions
+    std::vector<double> param_lower_bounds;
+    std::vector<double> param_upper_bounds;
     std::vector<fractiont> modelparams;
     std::vector<unsigned> parametercounts;
     std::vector<unsigned> inv_parametercounts;

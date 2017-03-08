@@ -88,7 +88,6 @@ tracet MC::gettrace(unsigned length, random_distribution &rd)
       { std::cout<<" s"<<s.ID;}
     std::cout<<"\n";
   }
-
 	return trace;
 }
 

@@ -31,6 +31,7 @@ std::string ssystem (const char *command)
 }
 
 
+
 void MDP::callPrism()
 {
 
@@ -41,11 +42,23 @@ void MDP::callPrism()
    prismfile.close();
    std::string result;
    char letter='a';
+   bool bounds=false;
    std::string command ("prism prismfile.pm ../propertyfile.props -param ");
+   if(param_upper_bounds.size()==modelparams.size())
+     {bounds=true;}
     for(unsigned p_index=1; p_index<modelparams.size(); p_index++)
     {
       command+=static_cast<char>(letter+p_index -1);
-      command+="=0:1,";
+      if(bounds)
+      {
+        command+="=";
+        command+=std::to_string(param_lower_bounds[p_index]);
+        command+=":";
+        command+=std::to_string(param_upper_bounds[p_index]);
+        command+=',';
+      }
+      else
+        command+="=0:1,";
     }
     result = ssystem(command.c_str());
     for(const auto s: result)

@@ -46,7 +46,7 @@ void multinomial(size_t k, unsigned int N, const std::vector<double> &p, std::ve
  {
  	return gsl_ran_beta(rng, a, b);
  }
- unsigned long int random_int(int n)
+ unsigned long int random_int(int n) //generates int in range 0 to n-1 inclusive
  {
    return gsl_rng_uniform_int (rng,n);
 }

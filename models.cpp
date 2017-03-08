@@ -18,9 +18,11 @@ MDP get_MDP_0()
   model.modelparams[0].one();
   model.modelparams[1].nom = PARAM1;
   model.modelparams[1].denom = 100;
+
+
   std::cout<<"test"<<std::endl;
 
-  model.add_const_transition(0,0,1,1);
+  model.add_const_transition(0,0,1,1); //breaks PRISM
   double param_multipliers[]={0,1};
   model.add_param_transition(1,0,2,param_multipliers);
   model.add_remainder_transition(1,0,3);
@@ -35,9 +37,53 @@ MDP get_MDP_0()
   std::cout<<"checking model\n";
   model.check();
 
-return model;
-
+  return model;
 }
+
+MDP get_MDP_two()
+{
+  //page 14 of lecture 13 PMC
+  MDP model;
+  model.num_states(4);
+  model.modelparams.resize(3);
+  model.modelparams[0].one();
+  model.modelparams[1].nom = PARAM1;
+  model.modelparams[1].denom = 100;
+  model.modelparams[2].nom=PARAM2;
+  model.modelparams[2].denom=100;
+
+  model.param_upper_bounds.resize(3);
+  model.param_lower_bounds.resize(3);
+  model.param_upper_bounds[0]=1.0;
+  model.param_upper_bounds[1]=0.75;
+  model.param_upper_bounds[2]=0.9;
+  model.param_lower_bounds[0]=1.0;
+  model.param_lower_bounds[1]=0.0;
+  model.param_lower_bounds[2]=0.0;
+
+  double param_multipliers[]={0,1,0};
+  model.add_const_transition(0,1,1,1);
+  model.add_param_transition(0,0,2,param_multipliers);
+  model.add_const_transition(0,0,3,0.25);
+  model.add_remainder_transition(0,0,3);
+
+  double param_multipliers2[]={0,0,1};
+  model.add_param_transition(1,0,1,param_multipliers2);
+  model.add_const_transition(1,0,0,0.1);
+  model.add_remainder_transition(1,0,2);
+
+  model.add_const_transition(2,0,2,1);
+  model.add_const_transition(3,0,3,1);
+  //model.add_const_transition(3,1,3,1);
+
+  model.make_state_init(0);
+
+  model.add_IDs();
+  model.check();
+
+ return model;
+}
+
 
 MDP get_MDP_one()
 {
@@ -118,6 +164,7 @@ MDP get_MDP(int m)
   {
     case 0: return get_MDP_0();
     case 1: return get_MDP_one();
+    case 2: return get_MDP_two();
     default: return get_MDP_0();
   }
 

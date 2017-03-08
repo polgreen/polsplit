@@ -124,6 +124,7 @@ void MDP::check()
     for(const auto &a: s.actions)
     {
      state_sum.zero();
+     param_sum.zero();
      if(a.size()==0){std::cout<<"empty action \n";
      throw std::exception();}
 
@@ -141,7 +142,11 @@ void MDP::check()
         { for(const auto &p: t.params)
           {
             param_sum = p.first + param_sum;
-            if(param_sum.nom>param_sum.denom){std::cout<<"ERROR: parameter multipliers >1";
+            if(param_sum.nom>param_sum.denom)
+            {
+              std::cout<<"ERROR: parameter multipliers > 1 for state"
+                        <<s.ID<<"trans to"<<t.successor<<std::endl;
+              std::cout<<"param multiplier sum "<<param_sum;
               throw std::exception();}
           }
         }
