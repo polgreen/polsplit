@@ -11,15 +11,15 @@
 #include <algorithm> //std::sort
 #include <assert.h> //assert
 
-struct sort_pred {
+/*struct sort_pred {
     bool operator()(const std::pair<int,int> &left, const std::pair<int,int> &right) {
         return left.second > right.second;
     }
-};
+};*/
 
 void MDP::assignActionRewards(std::vector<int> &param_rewards)
 {
-  assert(param_rewards.size()==modelparams.size());
+ /* assert(param_rewards.size()==modelparams.size());
 
   for (auto &s: MDPstates)
   {
@@ -35,12 +35,12 @@ void MDP::assignActionRewards(std::vector<int> &param_rewards)
         }
       }
     }
-  }
+  }*/
 }
 
 void MDP::paramImportance()
 {
-  if(verbose>1)
+ /* if(verbose>1)
     std::cout<<"calculate param importance \n";
   //difference between (confidence) and (1-confidence) for each parameter
   std::vector<std::pair<int, int>> importance;
@@ -72,7 +72,7 @@ void MDP::paramImportance()
   }
 
   //add rewards to MDP model
- // assignActionRewards(param_rewards);
+ // assignActionRewards(param_rewards);*/
 }
 
 fractiont MDP::expectedInformationGain(std::vector<unsigned> & strategy, random_distribution &rd)
@@ -160,7 +160,7 @@ fractiont MDP::expectedInformationGain(std::vector<unsigned> & strategy, random_
    }
 //compute parameter confidence
   if(verbose>1)
-    for(int i=0; i<modelparams.size(); i++)
+    for(int i=1; i<modelparams.size(); i++)
      std::cout<<"Computed expected parameter "<<i<<" counts: "<<expected_param_counts[i]<<" "<<expected_invparam_counts[i]<<std::endl;
   for(int i=0; i<10; i++)
   {

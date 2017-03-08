@@ -13,12 +13,7 @@ void MC::reset_confidence()
 {
   if(verbose>1)
       std::cout<<"reset confidence\n";
-  confidence.resize(modelparams.size());
-  for(auto c: confidence)
-  { 
-    c.nom = 0;
-    c.denom = 0;
-  }
+  overall_confidence.zero();
 }
 
 
@@ -34,16 +29,6 @@ void MC::sample_params_update_conf(random_distribution &rd)
   overall_confidence.denom++;
  if(verbose>1)
    std::cout<<"confidence = "<<overall_confidence.nom<<"/"<<overall_confidence.denom<<"\n";
-}
-
-
-fractiont computeconfidence(std::vector<fractiont> conf_vector)
-{
-  fractiont result = 1;
-  for(const auto c: conf_vector)
-    {result = result * c;}
-
- return result; 
 }
 
 

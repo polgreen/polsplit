@@ -37,7 +37,6 @@ struct MC {
 	std::vector<fractiont> modelparams; 
 	std::vector<unsigned> parametercounts;
 	std::vector<unsigned> inv_parametercounts;
-	std::vector<fractiont> confidence;
 	fractiont overall_confidence; 
 	unsigned success = 2; //success state in property.
 

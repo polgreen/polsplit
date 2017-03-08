@@ -37,7 +37,6 @@ class MDP{
     std::vector<fractiont> modelparams;
     std::vector<unsigned> parametercounts;
     std::vector<unsigned> inv_parametercounts;
-    std::vector<fractiont> confidence;
     fractiont overall_confidence;
 
     std::vector<std::vector<std::pair <double, double > > >parameter_bounds;

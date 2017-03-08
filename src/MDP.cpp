@@ -264,7 +264,7 @@ MC MDP::induceMarkovChain(std::vector<unsigned>& strategy)
   model.parameter_results = parameter_results;
   model.parametercounts = parametercounts;
   model.inv_parametercounts = inv_parametercounts;
-  model.confidence = confidence;
+
 
   return model;
 }
@@ -279,7 +279,6 @@ void MDP::getData(unsigned tracelength,std::vector<unsigned>& strategy, random_d
   updateTransitionCounts(model, strategy);
   parametercounts = model.parametercounts;
   inv_parametercounts = model.inv_parametercounts;
-  confidence = model.confidence;//transfer over posterior distribution
   overall_confidence = model.overall_confidence;
 }
 
@@ -298,13 +297,11 @@ void MDP::initialise_all_counts()
 {
   parametercounts.resize(modelparams.size());
   inv_parametercounts.resize(modelparams.size());
-  confidence.resize(modelparams.size());
   overall_confidence.zero();
   for(int i=0; i<modelparams.size(); i++)
   {
     parametercounts[i]=1;
     inv_parametercounts[i]=1;
-    confidence[i].zero();
   }
 }
 

@@ -113,7 +113,39 @@ bool MC::is_in_range(std::vector<double> &sample, bool update_param_conf)
   bool in_range=false;
   bool all_params_ok=true;
 
-  for(unsigned i=0; i<sample.size(); i++)
+
+  for(int b=0; b<parameter_bounds.size(); b++)
+  {
+    in_range=false;
+    for(int s=0; s<sample.size(); s++)
+    {
+      in_range=true;
+      if(sample[s]>=parameter_bounds[b][s].first && sample[s]<=parameter_bounds[b][s].second)
+        {std::cout<<"sample  p"<<s<<"="<<sample[s]<<", in bound "<<b<<": "<<parameter_bounds[b][s].first;
+        std::cout<<" -> "<<parameter_bounds[b][s].second<<std::endl;}
+      else
+        in_range=false;
+    }
+    if(in_range==true)
+    {
+      if(result_bound_satisfied(b, sample))
+       {
+        if(verbose > 1)
+            std::cout<<" RESULT = true \n";
+        return true;
+       }
+      else
+      {
+        if(verbose>1)
+            std::cout<<"RESULT = false\n";
+        return false;
+      }
+     }
+  }
+  return false;
+}
+
+/*  for(unsigned i=0; i<sample.size(); i++)
   {
     in_range=false;
     if(verbose>1)
@@ -145,7 +177,7 @@ bool MC::is_in_range(std::vector<double> &sample, bool update_param_conf)
     {confidence[i].denom++;}
   }
 return all_params_ok;
-}
+}*/
 
 
 void  MDP::prism_find(std::string& input)
@@ -235,45 +267,40 @@ bool MDP::result_bound_satisfied(unsigned i, std::vector<double>& sample)
 
 bool MDP::is_in_range(std::vector<double> &sample, bool update_param_conf)
 {
-  if(verbose>1)
-    std::cout<<"sample from posterior distribution \n";
   assert(sample.size()==modelparams.size()-1);
   bool in_range=false;
   bool all_params_ok=true;
 
-  for(unsigned i=0; i<sample.size(); i++)
+
+  for(int b=0; b<parameter_bounds.size(); b++)
   {
     in_range=false;
-    if(verbose>1)
-      std::cout<<"Sample P"<<i<<" "<<sample[i]<<"\n; ";
-    for(unsigned b=0; b<parameter_bounds.size(); b++)
+    for(int s=0; s<sample.size(); s++)
     {
-      if(sample[i]>=parameter_bounds[b][i].first && sample[i]<=parameter_bounds[b][i].second)
+      in_range=true;
+      if(sample[s]>=parameter_bounds[b][s].first && sample[s]<=parameter_bounds[b][s].second)
+        {std::cout<<"sample  p"<<s<<"="<<sample[s]<<", in bound "<<b<<" "<<parameter_bounds[b][s].first;
+                  std::cout<<" "<<parameter_bounds[b][s].second<<std::endl;
+        }
+      else
+        in_range=false;
+    }
+    if(in_range==true)
+    {
+      if(result_bound_satisfied(b, sample))
+       {
+        if(verbose > 1)
+            std::cout<<" RESULT = true \n";
+        return true;
+       }
+      else
       {
         if(verbose>1)
-          {std::cout<<" parameter in range "<< parameter_bounds[b][i].first<<" ->"
-                  <<parameter_bounds[b][i].second<<"\n";}
-        in_range=true;
-        if(result_bound_satisfied(b, sample))
-         {
-          if(update_param_conf)
-              confidence[i].nom++; //update individual param confidences
-          if(verbose > 1)
-              std::cout<<" true \n";
-         }
-        else
-        {
-          if(verbose>1)
-              std::cout<<" false\n";all_params_ok=false;}
-       }
-    }
-    if(in_range==false)
-      { all_params_ok=false;}
-    else if(update_param_conf)
-    {confidence[i].denom++;}
+            std::cout<<"RESULT = false\n";
+        return false;
+      }
+     }
   }
-
-return all_params_ok;
+  return false;
 }
-
 
