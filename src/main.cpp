@@ -31,6 +31,7 @@
 
 
 
+
 void help()
 {
   std::cout<<"BaeVer is the experimental implementation for paper DOI:10.1007/978-3-319-43425-4_3. \n"
@@ -44,10 +45,11 @@ void help()
           <<"--tracelength N sets the length of each trace to N transitions, default is 1000\n"
           <<"--integrationsamples N sets the number of samples used by"
           <<" monte-carlo integration to N, default is 10,000\n"
-          <<"--MDP runs the simple MDP model, default is to run the MC model\n"
+          <<"--MDP N runs the MDP model N, default is to run the MC model\n"
           <<"--explicit_strategy explicitly evaluates all memoryless strategies \n"
           <<"--random_strategy picks a random memoryless strategy \n"
-          <<"--first_strategy picks the first action at each state \n\n";
+          <<"--first_strategy picks the first action at each state \n"
+          <<"--no_strategy picks actions randomly at each state when generating data \n\n";
 }
 
 void output_header()
@@ -83,6 +85,7 @@ int main(int argc, const char *argv[])
   int trace_length=10;
   int num_int_samples=10000;
   int strategy=0;
+  int model_num =0;
   bool modelMDP=false;
 
 
@@ -124,8 +127,15 @@ int main(int argc, const char *argv[])
           }
      else if(std::string(argv[i])=="--MDP")
      {
-         modelMDP=true;
-     }
+       if(i+1<argc && isdigit(*argv[i+1]))
+       {
+         std::istringstream ss(argv[i+1]);
+         if (!(ss >> model_num))
+           {std::cerr << "Invalid number " << argv[i+1] << '\n';}
+          i++;
+       }
+       modelMDP=true;
+      }
      else if(std::string(argv[i])=="--explicit_strategy")
      {
        strategy=0;
@@ -137,6 +147,10 @@ int main(int argc, const char *argv[])
      else if(std::string(argv[i])=="--random_strategy")
      {
        strategy=2;
+     }
+     else if(std::string(argv[i])=="--no_strategy")
+     {
+       strategy=3;
      }
      else if(std::string(argv[i])=="--help")
           {
@@ -156,7 +170,7 @@ try{
   if(modelMDP)
   {
     std::cout<<"Model = simple Markov decision process \n";
-    MDP model = get_MDP();
+    MDP model = get_MDP(model_num);
     model.verbose = verbose;
     model.number_of_traces = number_of_traces;
     model.trace_length = trace_length;
