@@ -47,6 +47,7 @@ class MDP{
     unsigned trace_length;
     unsigned number_of_traces;
     unsigned num_int_samples; //for monte carlo integration
+    bool need_state_splitting=true;
 
     //models
     int success=2; //success state in property
@@ -68,8 +69,8 @@ class MDP{
     void outputPrism(std::ostream &);
     void callPrism();
     void prism_find(std::string &);
-    bool result_bound_satisfied(unsigned , std::vector<double>& );
-    bool is_in_range(std::vector<double>&, bool);
+  //  bool result_bound_satisfied(unsigned , std::vector<double>& );
+  //  bool is_in_range(std::vector<double>&, bool);
 
     //strategy synthesis
     std::vector<unsigned> synthStrategy();

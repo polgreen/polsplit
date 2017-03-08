@@ -112,36 +112,51 @@ bool MC::is_in_range(std::vector<double> &sample, bool update_param_conf)
   assert(sample.size()==modelparams.size()-1);
   bool in_range=false;
   bool all_params_ok=true;
-
+  if(verbose>2)
+  {
+    std::cout<<"sample ";
+    for(const auto &s: sample)
+      {std::cout<<s<<" ";}
+    std::cout<<std::endl;
+  }
 
   for(int b=0; b<parameter_bounds.size(); b++)
   {
-    in_range=false;
+    in_range=true;
     for(int s=0; s<sample.size(); s++)
     {
-      in_range=true;
       if(sample[s]>=parameter_bounds[b][s].first && sample[s]<=parameter_bounds[b][s].second)
-        {std::cout<<"sample  p"<<s<<"="<<sample[s]<<", in bound "<<b<<": "<<parameter_bounds[b][s].first;
-        std::cout<<" -> "<<parameter_bounds[b][s].second<<std::endl;}
+      {
+        if(verbose>2)
+        {
+          std::cout<<"Sample p"<<s+1<<"="<<sample[s]<<", in bound "<<parameter_bounds[b][s].first;
+          std::cout<<" -> "<<parameter_bounds[b][s].second<<", ";
+        }
+      }
       else
+      {
         in_range=false;
+        break;
+      }
     }
     if(in_range==true)
     {
       if(result_bound_satisfied(b, sample))
        {
-        if(verbose > 1)
+        if(verbose > 2)
             std::cout<<" RESULT = true \n";
         return true;
        }
       else
       {
-        if(verbose>1)
-            std::cout<<"RESULT = false\n";
+        if(verbose>2)
+            std::cout<<" RESULT = false\n";
         return false;
       }
      }
   }
+  if(verbose>2)
+      std::cout<<" RESULT = false\n";
   return false;
 }
 
@@ -250,7 +265,7 @@ void  MDP::prism_find(std::string& input)
   }
 }
 
-bool MDP::result_bound_satisfied(unsigned i, std::vector<double>& sample)
+/*bool MDP::result_bound_satisfied(unsigned i, std::vector<double>& sample)
 {
   std::string truestr("true");
   std::string falsestr("false");
@@ -302,5 +317,5 @@ bool MDP::is_in_range(std::vector<double> &sample, bool update_param_conf)
      }
   }
   return false;
-}
+}*/
 

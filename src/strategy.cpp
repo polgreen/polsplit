@@ -169,13 +169,16 @@ fractiont MDP::expectedInformationGain(std::vector<unsigned> & strategy, random_
       {
         double p1 = (double)expected_param_counts[i].nom/(double)expected_param_counts[i].denom;
         double p2 = (double)expected_invparam_counts[i].nom/(double)expected_invparam_counts[i].denom;
-        sample.push_back(rd.beta(p1,p2));
+        sample.push_back(rd.beta(p1+1,p2+1));
       }
     if(model.is_in_range(sample, false))
       { expected_confidence.nom++;}
     expected_confidence.denom++;
-   if(verbose>1)
-     std::cout<<"expected confidence  = "<<expected_confidence<<"\n";
+  }
+  if(verbose>1)
+  {
+    std::cout<<"expected Strategy confidence  = "<<expected_confidence<<"\n";
+    std::cout<<"change of "<<frac_abs(overall_confidence-expected_confidence)<<std::endl;
   }
 
  return frac_abs(overall_confidence-expected_confidence);

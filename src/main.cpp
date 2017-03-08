@@ -39,8 +39,7 @@ void help()
           <<" The models are input in the file models.cpp.\n"
           <<"For installation instructions please see https://github.com/polgreen/BaeVer\n"
           <<" The following command line arguments are available:\n"
-          <<"--verbose increases the verbosity of the output\n"
-          <<"--debug gives the maximally verbose output\n"
+          <<"--verbosity N increases the verbosity of the output to N\n"
           <<"--traces N sets the number of traces to N, default is 1000\n"
           <<"--tracelength N sets the length of each trace to N transitions, default is 1000\n"
           <<"--integrationsamples N sets the number of samples used by"
@@ -91,10 +90,16 @@ int main(int argc, const char *argv[])
 
   for(unsigned i=1; i<argc; i++)
    {
-     if(std::string(argv[i])=="--verbose")
-       { verbose=1;}
-     else if(std::string(argv[i])=="--debug")
-       { verbose=3;}
+    if(std::string(argv[i])=="--verbosity")
+          {
+            if(i+1<argc && isdigit(*argv[i+1]))
+            {
+              std::istringstream ss(argv[i+1]);
+              if (!(ss >> verbose))
+                {std::cerr << "Invalid number " << argv[i+1] << '\n';}
+              i++;
+             }
+           }
      else if(std::string(argv[i])=="--traces")
      {
        if(i+1<argc && isdigit(*argv[i+1]))

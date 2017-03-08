@@ -297,11 +297,12 @@ void MDP::initialise_all_counts()
 {
   parametercounts.resize(modelparams.size());
   inv_parametercounts.resize(modelparams.size());
-  overall_confidence.zero();
+  overall_confidence.nom=1;
+  overall_confidence.denom=2;
   for(int i=0; i<modelparams.size(); i++)
   {
-    parametercounts[i]=1;
-    inv_parametercounts[i]=1;
+    parametercounts[i]=0;
+    inv_parametercounts[i]=0;
   }
 }
 
@@ -325,7 +326,12 @@ fractiont MDP::operator()()
   }
 
   if(verbose>0)
-    std::cout<<"Final parameter counts: "<<parametercounts[1]<<" "<<inv_parametercounts[1]<<std::endl;
+  {
+    std::cout<<"Final parameter counts: ";
+    for(int i=1; i<modelparams.size(); i++)
+      {std::cout<<"p"<<i<<": "<<parametercounts[i]<<" "<<inv_parametercounts[i]<<", ";}
+    std::cout<<std::endl;
+  }
 
   //confidence was computed at end of each sampling, just return it
   return overall_confidence;

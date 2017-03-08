@@ -19,11 +19,14 @@ void MC::reset_confidence()
 
 void MC::sample_params_update_conf(random_distribution &rd)
 {
-  if(verbose>1)
+  if(verbose>3)
     std::cout<<"\nsample params and update confidence \n";
+
   std::vector<double> sample;
   for(unsigned i=1; i<modelparams.size(); i++)
-    {sample.push_back(rd.beta(parametercounts[i],inv_parametercounts[i]));}
+  {
+    sample.push_back(rd.beta(parametercounts[i]+1,inv_parametercounts[i]+1));
+  }
   if(is_in_range(sample, true))
     { overall_confidence.nom++;}
   overall_confidence.denom++;
@@ -53,6 +56,8 @@ fractiont MC::confidencecalc(bool reset,
   {
     if(need_state_splitting)
     {
+      if(verbose>1)
+        std::cout<<"State splitting \n";
       get_random_model_params(rd);
       sample_D_star(param_states, rd);
     }
