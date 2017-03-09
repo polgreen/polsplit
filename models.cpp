@@ -26,11 +26,10 @@ MDP get_MDP_0()
   model.add_remainder_transition(1, 0, 3);
   model.add_const_transition(1, 1, 0, 0.7);
   model.add_remainder_transition(1, 1, 3);
-  model.add_const_transition(2, 0, 2, 1);
+  model.add_const_transition(2, 0, 0, 1);
   model.add_const_transition(3, 0, 3, 1);
   model.make_state_init(0);
   model.success = 3;
-
 
   model.add_IDs();
   std::cout << "checking model\n";
@@ -78,7 +77,6 @@ MDP get_MDP_two()
   //model.add_const_transition(3,1,3,1);
 
   model.make_state_init(0);
-
 
   model.add_IDs();
   model.check();
