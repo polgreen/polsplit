@@ -31,6 +31,7 @@ MDP get_MDP_0()
   model.make_state_init(0);
   model.success = 3;
 
+
   model.add_IDs();
   std::cout << "checking model\n";
   model.check();
@@ -63,7 +64,7 @@ MDP get_MDP_two()
   { 0, 1, 0 };
   model.add_const_transition(0, 1, 1, 1);
   model.add_param_transition(0, 0, 2, param_multipliers);
-  model.add_const_transition(0, 0, 3, 0.25);
+  model.add_const_transition(0, 0, 0, 0.25);
   model.add_remainder_transition(0, 0, 3);
 
   double param_multipliers2[] =
@@ -77,6 +78,7 @@ MDP get_MDP_two()
   //model.add_const_transition(3,1,3,1);
 
   model.make_state_init(0);
+
 
   model.add_IDs();
   model.check();
