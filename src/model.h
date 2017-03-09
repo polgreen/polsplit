@@ -6,6 +6,8 @@
 #include "fraction.h"
 #include "distributions.h"
 
+
+
 enum transitiontype {
     CONST, FUNCTION, REMAINDER, NEWFUNCTION, NEWCONST, NEWREMAINDER
 };

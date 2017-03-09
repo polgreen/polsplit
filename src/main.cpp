@@ -26,26 +26,31 @@ Bayesian Verification for DTMCs
 
 #include "model.h"
 #include "distributions.h"
+#include "model_mdp.h"
 #define NUMBERSAMPLES 1000
 
 void help() {
-    std::cout<<"BaeVer is the experimental implementation for paper DOI:10.1007/978-3-319-43425-4_3. \n"
-          <<"It runs the experiments for two simple models, one Markov Chain and one Markov Decision Process. \n"
-          <<" The models are input in the file models.cpp.\n"
-          <<"For installation instructions please see https://github.com/polgreen/BaeVer\n"
-          <<" The following command line arguments are available:\n"
-          <<"--verbose increases the verbosity of the output\n"
-          <<"--debug gives the maximally verbose output\n"
-          <<"--traces N sets the number of traces to N, default is 1000\n"
-          <<"--tracelength N sets the length of each trace to N transitions, default is 1000\n"
-          <<"--intsamples N sets the number of samples used by"
-          <<" monte-carlo integration to N, default is 10,000\n"
-          <<"--MDP runs the simple MDP model, default is to run the MC model\n\n";
+    std::cout << "BaeVer is the experimental implementation for paper DOI:10.1007/978-3-319-43425-4_3. \n"
+            << "It runs the experiments for two simple models, one Markov Chain and one Markov Decision Process. \n"
+            << " The models are input in the file models.cpp.\n"
+            << "For installation instructions please see https://github.com/polgreen/BaeVer\n"
+            << " The following command line arguments are available:\n"
+            << "--verbose increases the verbosity of the output\n"
+            << "--debug gives the maximally verbose output\n"
+            << "--traces N sets the number of traces to N, default is 1000\n"
+            << "--tracelength N sets the length of each trace to N transitions, default is 1000\n"
+            << "--intsamples N sets the number of samples used by"
+            << " monte-carlo integration to N, default is 10,000\n"
+            << "--MDP runs the simple MDP model, default is to run the MC model\n\n";
+
+    add_MDP_help(); // MDP model help text
+
+
 }
 
 void output_header() {
     std::cout << "\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n\n"
-            << "********************************************* \n"
+            << "************************************************** \n"
             << "         (\\.---.\\)\n"
             << "          /.-.-.\\ \n"
             << "         /| 0_0 |\\ \n"
@@ -55,9 +60,9 @@ void output_header() {
             << "         `.     .' \n"
             << "           `._.'\n"
             << "           BaeVer \n"
-            << " Bayesian Verification for DTMCs and MDPs \n"
+            << " Bayesian Verification for Probabilistic Models \n"
             << " elizabeth.polgreen@cs.ox.ac.uk \n"
-            << " ******************************************* \n\n";
+            << " ************************************************ \n\n";
     //   <<"for help file use command line option --help\n\n";
 
 }
@@ -68,8 +73,10 @@ int main(int argc, const char *argv[]) {
     int verbose = 0;
     int number_of_traces = 10;
     int trace_length = 10;
-    long int_samples = 10000; //Integration Samples
-    bool mdlMDP = false; // Switch to MDP Verification
+    long int_samples = 10000; //Integration Samples    
+    int model_type = 0;
+
+    MDP_cmdvars cmdvars = get_MDP_cmdvars_instance();
 
     for (unsigned i = 1; i < argc; i++) {
         if (std::string(argv[i]) == "--verbose") {
@@ -100,9 +107,12 @@ int main(int argc, const char *argv[]) {
                 }
                 i++;
             }
-        } else if (std::string(argv[i]) == "--MDP") {
-            mdlMDP = true;
+        } else if (std::string(argv[i]) == "--help") {
+            help();
+            return 0;
         }
+
+        cmdvars.add_MDP_cmd_options(argc, argv, i, &model_type); // capture command-line arguments for MDP
     }
 
     std::cout << "Number of traces " << number_of_traces << "\n";
@@ -113,8 +123,10 @@ int main(int argc, const char *argv[]) {
 
     try {
 
-        if (mdlMDP) {
+        if (model_type == 33586) {
             std::cout << "Model = simple Markov decision process \n\n";
+            cmdvars.display_MDP_cmd_options();
+            cmdvars.init_process(verbose,number_of_traces,trace_length,int_samples);
         } else {
             std::cout << "Model = simple Markov chain \n\n";
             MC model = get_simpleMC();
