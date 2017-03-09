@@ -28,13 +28,14 @@ void MC::get_random_model_params(random_distribution &rd)
   for (unsigned i = 1; i < modelparams.size(); i++)
   {
     modelparams[i].nom = 100
-        * rd.beta(parametercounts[i] + prior_a1[i], inv_parametercounts[i] + prior_a2[i]);
+        * rd.beta(prior_a1[i], prior_a2[i]);
     modelparams[i].denom = 100;
     if (verbose > 1)
       std::cout << "p" << i << " " << modelparams[i] << " ";
   }
   std::cout << std::endl;
 }
+
 
 void MC::sample_D_star(
     const std::vector<std::pair<statet, unsigned> > &param_states,

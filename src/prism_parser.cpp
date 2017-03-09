@@ -134,6 +134,8 @@ bool MC::is_in_range(const std::vector<double> &sample,
       if (sample[s] >= parameter_bounds[b][s].first
           && sample[s] <= parameter_bounds[b][s].second)
       {
+        param_confidence[s].nom++;
+        param_confidence[s].denom++;
         if (verbose > 2)
         {
           std::cout << "Sample p" << s + 1 << "=" << sample[s] << ", in bound "
@@ -143,8 +145,9 @@ bool MC::is_in_range(const std::vector<double> &sample,
       }
       else
       {
+        param_confidence[s].denom++;
         in_range = false;
-        break;
+       // break;
       }
     }
     if (in_range == true)

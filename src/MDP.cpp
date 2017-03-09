@@ -300,8 +300,9 @@ MC MDP::induceMarkovChain(const std::vector<unsigned>& strategy)
   //copy these numbers back and forth is pretty inefficient, but this was a quick hack
   model.parameter_bounds = parameter_bounds;
   model.parameter_results = parameter_results;
-  model.parametercounts = parametercounts;
-  model.inv_parametercounts = inv_parametercounts;
+  model.parametercounts.resize(parametercounts.size());
+  model.inv_parametercounts.resize(inv_parametercounts.size());
+  model.param_confidence.resize(modelparams.size());
   return model;
 }
 
@@ -311,27 +312,19 @@ void MDP::getData(const unsigned tracelength,
 {
   MC model = induceMarkovChain(strategy);
   model.get_data(tracelength, rd); //get single trace
-  model.confidencecalc(false, integration_samples); //update posterior distributions for single trace
-  //copy these numbers back and forth is pretty inefficient, but this was a quick hack
+  model.confidencecalc(true, integration_samples);
 
-  updateTransitionCounts(model, strategy);
-  parametercounts = model.parametercounts;
-  inv_parametercounts = model.inv_parametercounts;
+  //update prior with the new posterior:
+  for(int i=1; i<modelparams.size(); i++)
+  {
+    prior_a1[i]+=model.parametercounts[i];
+    prior_a2[i]+=model.inv_parametercounts[i];
+    if(verbose>3)
+      std::cout<<"updated prior "<<prior_a1[i]<<" "<<prior_a2[i]<<std::endl;
+  }
   overall_confidence = model.overall_confidence;
 }
 
-void MDP::updateTransitionCounts(MC & model,
-    const std::vector<unsigned>& strategy)
-{
-  for (unsigned i = 0; i < MDPstates.size(); i++)
-  {
-    for (unsigned j = 0; j < model.states[i].transitions.size(); j++)
-    {
-      MDPstates[i].actions[strategy[i]][j].count =
-          model.states[i].transitions[j].count;
-    }
-  }
-}
 
 void MDP::initialise_all_counts()
 {
@@ -375,11 +368,11 @@ fractiont MDP::operator()()
 
   if (verbose > 0)
   {
-    std::cout << "Final parameter counts: ";
+    std::cout << "Final distribution counts: ";
     for (int i = 1; i < modelparams.size(); i++)
     {
-      std::cout << "p" << i << ": " << parametercounts[i] << " "
-          << inv_parametercounts[i] << ", ";
+      std::cout << "p" << i << ": " << prior_a1[i] << " "
+          << prior_a2[i] << ", ";
     }
     std::cout << std::endl;
   }

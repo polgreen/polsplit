@@ -50,6 +50,7 @@ struct MC
     std::vector<unsigned> prior_a2;
     std::vector<unsigned> parametercounts;
     std::vector<unsigned> inv_parametercounts;
+    std::vector<fractiont> param_confidence;
     fractiont overall_confidence;
     unsigned success = 2; //success state in property.
 

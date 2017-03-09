@@ -43,12 +43,17 @@ std::vector<std::vector<fractiont> > MC::transitioncountvector()
 }
 
 
-fractiont MDP::expectedInformationGain(std::vector<unsigned> & strategy,
+fractiont MDP::expectedInformationGain(const int strategy,
     random_distribution &rd)
 {
+ fractiont result;
+  result.zero();
+  if(strategy_gain[strategy]==false)
+    return result;
+
   if (verbose > 2)
     std::cout << "Computing expected information gain\n";
-  MC model = induceMarkovChain(strategy);
+  MC model = induceMarkovChain(strategies[strategy]);
   model.modelparams=expected_parameters();
   if (verbose > 2)
   {
@@ -63,8 +68,8 @@ fractiont MDP::expectedInformationGain(std::vector<unsigned> & strategy,
   std::vector<fractiont> next_state_inputs(model.states.size());
   state_inputs[model.get_init_state().ID].one();
   std::vector<std::vector<fractiont> > transitioncounts = model.transitioncountvector();
-  std::vector<fractiont> expected_param_counts=intvector_to_fractions(parametercounts);;
-  std::vector<fractiont> expected_invparam_counts=intvector_to_fractions(inv_parametercounts);
+  std::vector<fractiont> expected_param_counts(parametercounts.size());//=intvector_to_fractions(parametercounts);
+  std::vector<fractiont> expected_invparam_counts(inv_parametercounts.size());//=intvector_to_fractions(inv_parametercounts);
 
   for (int i = 0; i < trace_length; i++)
   {
@@ -132,49 +137,48 @@ fractiont MDP::expectedInformationGain(std::vector<unsigned> & strategy,
     std::cout << "expected Strategy confidence  = " << expected_confidence
         << "\n";
   }
-
   return frac_abs(overall_confidence - expected_confidence);
-  fractiont result;
-  result.one();
-  return result;
 }
 
 std::vector<unsigned> MDP::explicitStrategySynth(random_distribution& rd)
 {
   //explicitly compute expected counts for every strategy
-  std::vector<std::vector<unsigned> > strategies;
-  std::vector<int> expected_counts;
-  strategies.resize(1);
-  //get all strategies
-  for (int i = 0; i < MDPstates.size(); i++)
+  if(strategies.size()==0)
   {
-    for (auto &s : strategies)
+    strategies.resize(1);
+    strategy_gain.push_back(true);
+    //get all strategies
+    for (int i = 0; i < MDPstates.size(); i++)
     {
-      s.push_back(0);
-    }
-    if (MDPstates[i].actions.size() > 1)
-    {
-      int currentsize = strategies.size();
-      for (int j = 1; j < MDPstates[i].actions.size(); j++)
+      for (auto &s : strategies)
       {
-        for (int k = 0; k < currentsize; k++)
+        s.push_back(0);
+      }
+      if (MDPstates[i].actions.size() > 1)
+      {
+        int currentsize = strategies.size();
+        for (int j = 1; j < MDPstates[i].actions.size(); j++)
         {
-          strategies.push_back(strategies[k]);
-          strategies[currentsize + k * j - 1][i] = j;
+          for (int k = 0; k < currentsize; k++)
+          {
+            strategy_gain.push_back(true);
+            strategies.push_back(strategies[k]);
+            strategies[currentsize + k * j - 1][i] = j;
+          }
         }
       }
     }
-  }
 
-  if (verbose > 1)
-  {
-    std::cout << "All possible strategies: \n";
-    for (const auto &s : strategies)
+    if (verbose > 1)
     {
-      std::cout << "strategy ";
-      for (unsigned i = 0; i < s.size(); i++)
-        std::cout << "s" << i << "-a" << s[i] << " ";
-      std::cout << "\n";
+      std::cout << "All possible strategies: \n";
+      for (const auto &s : strategies)
+      {
+        std::cout << "strategy ";
+        for (unsigned i = 0; i < s.size(); i++)
+          std::cout << "s" << i << "-a" << s[i] << " ";
+        std::cout << "\n";
+      }
     }
   }
 
@@ -183,7 +187,7 @@ std::vector<unsigned> MDP::explicitStrategySynth(random_distribution& rd)
   fractiont max_info_gain = 0;
   for (int s = 0; s < strategies.size(); s++)
   {
-    info_gain = expectedInformationGain(strategies[s], rd);
+    info_gain = expectedInformationGain(s, rd);
     if (info_gain > max_info_gain)
       max_strategy = s;
     max_info_gain = info_gain;

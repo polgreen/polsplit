@@ -45,8 +45,9 @@ fractiont MC::confidencecalc(const bool reset, const unsigned num_samples)
   if (verbose > 1)
     std::cout << "Using seed of " << seed << "\n";
   rd.set_seed(seed); //we use the same seed so that we can reproduce experiments
-  std::vector<fractiont> result(modelparams.size(), 0);
-  std::vector<std::pair<statet, unsigned> > param_states;
+  std::vector< std::pair< statet, unsigned>> param_states;
+  std::vector<int>total_paramcounts(modelparams.size());
+  std::vector<int>total_inv_paramcounts(modelparams.size());
   if (reset)
     reset_confidence();
 
@@ -60,10 +61,22 @@ fractiont MC::confidencecalc(const bool reset, const unsigned num_samples)
         std::cout << "State splitting \n";
       get_random_model_params(rd);
       sample_D_star(param_states, rd);
+      for(int i=0; i<modelparams.size(); i++)
+      {
+        total_paramcounts[i]+=parametercounts[i];
+        total_inv_paramcounts[i]+=inv_parametercounts[i];
+      }
     }
     sample_params_update_conf(rd);
-
   }
+  for(int i=1; i<modelparams.size(); i++)
+  {
+   // std::cout<<"total count "<<total_paramcounts[i]<<" "<<total_inv_paramcounts[i]<<std::endl;
+    parametercounts[i]=total_paramcounts[i]/num_samples;
+    inv_parametercounts[i]=total_inv_paramcounts[i]/num_samples;
+  //  std::cout<<"avg counts: "<<parametercounts[i]<<" "<<inv_parametercounts[i]<<std::endl;
+  }
+
   if (verbose > 0)
     std::cout << "MC confidence " << overall_confidence.nom << "/"
         << overall_confidence.denom << "\n";

@@ -43,6 +43,8 @@ class MDP
     std::vector<unsigned> inv_parametercounts;
     fractiont overall_confidence;
 
+    std::vector<std::vector<unsigned> > strategies;
+    std::vector<bool> strategy_gain;
     std::vector<std::vector<std::pair<double, double> > > parameter_bounds;
     std::vector<std::string> parameter_results;
 
@@ -82,14 +84,14 @@ class MDP
     std::vector<unsigned> synthStrategy();
     std::vector<unsigned> randomStrategySynth(random_distribution &);
     std::vector<unsigned> explicitStrategySynth(random_distribution &);
-    fractiont expectedInformationGain(std::vector<unsigned> &,
+    fractiont expectedInformationGain(const int,
         random_distribution &);
 
     //confidence calculation
     void getData(const unsigned, const std::vector<unsigned>&,
         random_distribution &, const int);
     MC induceMarkovChain(const std::vector<unsigned>&);
-    void updateTransitionCounts(MC &, const std::vector<unsigned>&);
+    //void updateTransitionCounts(MC &, const std::vector<unsigned>&);
 
     fractiont operator()();
 };
