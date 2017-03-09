@@ -12,7 +12,7 @@
  -----~--~---~~~----~-`.-;~
  elizabeth.polgreen@cs.ox.ac.uk
  \********************************/
-
+#define VERSION 0001
 #include <vector>
 #include <cassert>
 #include <random>
@@ -21,10 +21,12 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <ctime>
 
 #include "distributions.h"
 #include "MC.h"
 #include "MDP.h"
+#include "log.h"
 
 void help()
 {
@@ -160,6 +162,12 @@ int main(int argc, const char *argv[])
     }
   }
 
+
+
+  std::ofstream results;
+  results.open("results.log", std::ofstream::out | std::ofstream::app);
+  //CSV columns: model, model num, trace num, trace length, integration samples, strategy choice, confidence
+
   std::cout << "Number of traces " << number_of_traces << "\n";
   std::cout << "Trace length " << trace_length << "\n";
 
@@ -167,11 +175,19 @@ int main(int argc, const char *argv[])
   try
   {
 
+
+
+
     fractiont confidence;
     if (modelMDP)
     {
-      std::cout << "Model = simple Markov decision process \n";
       MDP model = get_MDP(model_num);
+      results<<"MDP , "<<model_num<<" , ";
+      for(const auto &p: model.modelparams)
+        results<<fraction_to_double(p)<<" , ";
+      results<<number_of_traces<<" , "<<trace_length<<" , "<<num_int_samples<<" , "<<strategy<<" , ";
+      std::cout << "Model = simple Markov decision process \n";
+
       model.verbose = verbose;
       model.number_of_traces = number_of_traces;
       model.trace_length = trace_length;
@@ -183,12 +199,18 @@ int main(int argc, const char *argv[])
     {
       std::cout << "Model = simple Markov chain \n";
       MC model = get_MC();
+      results<<"MC , "<<0<<" , ";
+      for(const auto &p: model.modelparams)
+        results<<fraction_to_double(p)<<" , ";
+      results<<number_of_traces<<", "<<trace_length<<" , "<<num_int_samples<<" , "<<0<<" , ";
+
       model.verbose = verbose;
       model.number_of_traces = number_of_traces;
       model.trace_length = trace_length;
       model.num_int_samples = num_int_samples;
       confidence = model();
     }
+    results<<fraction_to_double(confidence)<<std::endl;
     std::cout << "\nFinal confidence: " << confidence.nom << " / "
         << confidence.denom << std::endl;
   } catch (...)
