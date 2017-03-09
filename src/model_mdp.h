@@ -15,14 +15,26 @@
 #define MODEL_MDP_H
 #include "model.h"
 
-class MDP {
-    unsigned strategy_type; //Interface Control Methods
+class MDP : public MC {
+public:
+    typedef std::vector<transitiont> action;
+
+    struct statet_a : statet {
+        std::vector<action> actions;
+    };
+
+    std::vector<statet_a> states;
+    unsigned strategy_type; //Interface Control Methods    
+    void outputPRISM(std::ostream &out);
+    statet_a get_init_state();
+
+
 };
 
 class MDP_cmdvars {
 public:
     unsigned strategy_type_cap;
-    void add_MDP_cmd_options(int argc, const char *argv[], int , int* );
+    void add_MDP_cmd_options(int argc, const char *argv[], int, int*);
     void display_MDP_cmd_options();
     void init_process(int, int, int, long);
 };

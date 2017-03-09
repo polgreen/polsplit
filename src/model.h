@@ -6,9 +6,7 @@
 #include "fraction.h"
 #include "distributions.h"
 
-
-
-enum transitiontype {
+enum transitiontype {    
     CONST, FUNCTION, REMAINDER, NEWFUNCTION, NEWCONST, NEWREMAINDER
 };
 
@@ -63,6 +61,7 @@ typedef std::vector<statet> tracet;
 typedef std::vector<fractiont> countt;
 
 struct MC {
+
     std::vector<statet> states;
     std::vector<fractiont> modelparams;
     std::vector<unsigned> parametercounts;
@@ -76,7 +75,7 @@ struct MC {
     unsigned verbose;
     unsigned trace_length;
     unsigned number_of_traces;
-
+    long int_samples;
 
     //debugging
     void outputMC(std::ostream &out);
@@ -92,7 +91,7 @@ struct MC {
 
     //parameter synthesis
     void callPrism();
-    void outputPRISM(std::ostream &out);
+    void virtual outputPRISM(std::ostream &out);
     void prism_find(std::string&);
 
     //get trace data
@@ -117,7 +116,8 @@ struct MC {
 
 };
 
-
+std::ofstream getPRISMFile() ;
+std::string prepCmd() ;
 MC get_simpleMC();
 
 //debugging

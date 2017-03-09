@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
+#include "model.h"
 #include "model_mdp.h"
 
 void add_MDP_help() {
@@ -17,12 +17,12 @@ void MDP_cmdvars::add_MDP_cmd_options(int argc, const char *argv[], int current,
     int i = current;
     if (std::string(argv[i]) == "--MDP") {
         *model_type = 33586;
-    } else if (std::string(argv[i]) == "--explicit_strategy") {       
+    } else if (std::string(argv[i]) == "--explicit_strategy") {
         strategy_type_cap = 0;
     } else if (std::string(argv[i]) == "--first_strategy") {
-       strategy_type_cap = 1;
-    } else if (std::string(argv[i]) == "--random_strategy") {          
-        strategy_type_cap = 2;        
+        strategy_type_cap = 1;
+    } else if (std::string(argv[i]) == "--random_strategy") {
+        strategy_type_cap = 2;
     } else if (std::string(argv[i]) == "--no_strategy") {
         strategy_type_cap = 3;
     }
@@ -44,8 +44,14 @@ void MDP_cmdvars::display_MDP_cmd_options() {
 
 }
 
-void MDP_cmdvars::init_process(int verbose, int number_of_traces, int trace_length , long int_samples){
-    
+void MDP_cmdvars::init_process(int verbose, int number_of_traces, int trace_length, long int_samples) {
+    MDP model = get_MDP_instance();
+    model.verbose = verbose;
+    model.number_of_traces = number_of_traces;
+    model.trace_length = trace_length;
+    model.int_samples = int_samples;
+    model.callPrism();
+
 }
 
 MDP_cmdvars get_MDP_cmdvars_instance() {
@@ -53,4 +59,108 @@ MDP_cmdvars get_MDP_cmdvars_instance() {
     model.strategy_type_cap = 0;
     return model;
 
+}
+
+void MDP::outputPRISM(std::ostream &out) {
+    //output the prism file for an MDP
+    char letter = 'a';
+    int action = 0;
+    out << "mdp \n\n";
+
+    for (unsigned p_index = 1; p_index < modelparams.size(); p_index++) {
+        out << "const double ";
+        out << static_cast<char> (letter + p_index - 1) << ";\n";
+    }
+    out << "\n\nmodule testmdp \n";
+    out << "\n // local state \n s: [0.." << states.size() - 1 << "] init "
+            << get_init_state().ID;
+    out << ";\n \n";
+
+    for (auto & s : states) {
+
+        for (auto &a : s.actions) {
+            bool first_t = true;
+            out << "[act" << action << "] s=" << s.ID << " -> ";
+            action++;
+            for (auto & t : a) {
+                if (first_t) {
+                    first_t = false;
+                } else {
+                    out << " + ";
+                }
+                bool first_p = true;
+                switch (t.type) {
+                    case CONST:
+                        t.prob.output(out);
+                        out << " : (s'=" << t.successor << ") ";
+                        break;
+                    case FUNCTION:
+                        for (auto & p : t.params) {
+                            if (first_p) {
+                                first_p = false;
+                            } else {
+                                out << " + ";
+                            }
+                            p.first.output(out);
+                            out << "*";
+                            if (p.second > 0) {
+                                out << static_cast<char> (letter + p.second - 1);
+                            }
+                        }
+                        out << " : (s'=" << t.successor << ")";
+                        break;
+                    case REMAINDER:
+                        out << "(1";
+                        for (auto & t2 : a)
+                            switch (t2.type) {
+                                case CONST:
+                                    out << "-";
+                                    t2.prob.output(out);
+                                    break;
+                                case FUNCTION:
+                                    for (auto & p2 : t2.params) {
+                                        out << "-";
+                                        p2.first.output(out);
+                                        out << "*";
+                                        if (p2.second > 0) {
+                                            out << static_cast<char> (letter + p2.second - 1);
+                                        }
+                                    }
+                                    break;
+                                case REMAINDER:
+                                    break;
+                                default:
+                                    ;
+                            }
+                        out << "):(s'=" << t.successor << ")";
+                    default:
+                        ;
+                }
+
+            }
+            out << ";\n";
+        }
+    }
+    out << "\nendmodule \n \n";
+    out << "label \"complete\"=(s=" << success << ");\n";
+}
+
+MDP::statet_a MDP::get_init_state() {
+    bool found = false;
+    statet_a result;
+    for (const auto& s : states) {
+        if (s.init == true && found == false) {
+            found = true;
+            result = s;
+        } else if (s.init == true && found == true) {
+            std::cout << "error in get_init_state: found 2 initial states \n";
+            throw std::exception();
+        }
+    }
+    //if we get here throw exception
+    if (found == false) {
+        std::cout << "error in get_init_state: no initial state found \n";
+        throw std::exception();
+    }
+    return result;
 }

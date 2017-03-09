@@ -26,17 +26,28 @@ std::string ssystem(const char *command) {
     return result;
 }
 
-void MC::callPrism() {
-
+std::ofstream getPRISMFile() {
     std::ofstream prismfile("prismfile.pm");
     if (!prismfile) {
         throw std::exception();
     }
-    outputPRISM(prismfile);
+
+    return prismfile;
+}
+
+std::string prepCmd() {
+    std::string command("prism prismfile.pm ../../../propertyfile.props -param ");
+    return command;
+}
+
+void MC::callPrism() {
+
+    std::ofstream prismfile = getPRISMFile();
+    this->outputPRISM(prismfile);
     prismfile.close();
+    std::string command = prepCmd();
     std::string result;
     char letter = 'a';
-    std::string command("prism prismfile.pm ../../../propertyfile.props -param ");
     for (unsigned p_index = 1; p_index < modelparams.size(); p_index++) {
         command += static_cast<char> (letter + p_index - 1);
         command += "=0:1,";

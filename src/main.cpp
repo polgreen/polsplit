@@ -126,7 +126,7 @@ int main(int argc, const char *argv[]) {
         if (model_type == 33586) {
             std::cout << "Model = simple Markov decision process \n\n";
             cmdvars.display_MDP_cmd_options();
-            cmdvars.init_process(verbose,number_of_traces,trace_length,int_samples);
+            cmdvars.init_process(verbose, number_of_traces, trace_length, int_samples);
         } else {
             std::cout << "Model = simple Markov chain \n\n";
             MC model = get_simpleMC();
