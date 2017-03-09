@@ -319,8 +319,8 @@ void MDP::getData(const unsigned tracelength,
   {
     prior_a1[i]+=model.parametercounts[i];
     prior_a2[i]+=model.inv_parametercounts[i];
-    if(verbose>3)
-      std::cout<<"updated prior "<<prior_a1[i]<<" "<<prior_a2[i]<<std::endl;
+    if(verbose>0)
+      std::cout<<"updated prior for p"<<i<<" "<<prior_a1[i]<<" "<<prior_a2[i]<<std::endl;
   }
   overall_confidence = model.overall_confidence;
 }

@@ -33,7 +33,8 @@ void MC::get_random_model_params(random_distribution &rd)
     if (verbose > 1)
       std::cout << "p" << i << " " << modelparams[i] << " ";
   }
-  std::cout << std::endl;
+  if(verbose>1)
+    std::cout << std::endl;
 }
 
 
@@ -177,5 +178,4 @@ void MC::sample_D_star(
     }
     std::cout << "\n";
   }
-
 }

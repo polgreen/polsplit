@@ -90,7 +90,7 @@ tracet MC::gettrace(const unsigned length, random_distribution &rd)
     state = states[next];
     trace.push_back(state);
   }
-  if (verbose > 1)
+  if (verbose >0)
   {
     std::cout << "trace: ";
     for (const auto s : trace)
@@ -121,7 +121,7 @@ void MC::get_trace_counts(const tracet &trace)
       }
     }
   }
-  if (verbose > 1)
+  if (verbose >1)
   {
     std::cout << "transition counts: \n";
     for (const auto s : states)
