@@ -266,6 +266,7 @@ void MC::initialise_all_counts()
 {
   parametercounts.resize(modelparams.size());
   inv_parametercounts.resize(modelparams.size());
+  param_confidence.resize(modelparams.size());
   overall_confidence.nom = 1;
   overall_confidence.denom = 2;
   for (int i = 0; i < modelparams.size(); i++)
@@ -273,6 +274,20 @@ void MC::initialise_all_counts()
     parametercounts[i] = 0;
     inv_parametercounts[i] = 0;
   }
+  if(prior_a1.size()==0)
+    {
+      prior_a1.resize(modelparams.size());
+      prior_a2.resize(modelparams.size());
+      for(auto &p: prior_a1)
+        p=1;
+      for(auto&p: prior_a2)
+        p=1;
+    }
+  while(param_upper_bounds.size()<modelparams.size())
+   {
+   param_upper_bounds.push_back(1);
+   param_lower_bounds.push_back(0);
+   }
 }
 
 

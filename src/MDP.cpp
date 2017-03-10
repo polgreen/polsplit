@@ -294,7 +294,7 @@ MC MDP::induceMarkovChain(const std::vector<unsigned>& strategy)
 
   model.prior_a1=prior_a1;
   model.prior_a2=prior_a2;
-  std::cout<<"prior size "<<prior_a1.size()<<std::endl; 
+ // std::cout<<"prior size "<<prior_a1.size()<<std::endl;
   model.verbose = verbose;
   model.trace_length = trace_length;
   model.number_of_traces = 1;

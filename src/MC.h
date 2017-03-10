@@ -52,6 +52,8 @@ struct MC
     std::vector<unsigned> inv_parametercounts;
     std::vector<fractiont> param_confidence;
     fractiont overall_confidence;
+    std::vector<double> param_lower_bounds;
+    std::vector<double> param_upper_bounds;
     unsigned success = 2; //success state in property.
 
     std::vector<std::vector<std::pair<double, double> > > parameter_bounds;
@@ -62,6 +64,7 @@ struct MC
     unsigned number_of_traces;
     unsigned num_int_samples;
     bool need_state_splitting = true;
+
     //debugging
     void outputMC(std::ostream &out);
     void check();
