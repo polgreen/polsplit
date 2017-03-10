@@ -260,7 +260,7 @@ fractiont MDP::remainderWeight(const std::vector<transitiont>& action)
   result.one();
   if (sum_state.nom > sum_state.denom || sum_state.nom <= 0)
   {
-    std::cout << "error, invalid state found calculating remainder weight S \n";
+    std::cout << "error, invalid state found calculating remainder weight "<<sum_state<<std::endl;
     throw std::exception();
   }
   result = result - sum_state;
@@ -356,14 +356,12 @@ void MDP::initialise_all_counts()
   }
 }
 
-fractiont MDP::operator()()
+fractiont MDP::operator()(random_distribution &rd)
 {
   initialise_all_counts();
   callPrism();
   if (verbose > 1)
     std::cout << "collect data \n";
-  random_distribution rd;
-  rd.set_seed(0);
   int int_samples = num_temp_int_samples;
   for (unsigned n = 0; n < number_of_traces; n++)
   {

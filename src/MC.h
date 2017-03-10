@@ -101,7 +101,7 @@ struct MC
 
     std::vector<std::vector<fractiont> > transitioncountvector();
 
-    fractiont operator()();
+    fractiont operator()(random_distribution &);
 
 };
 

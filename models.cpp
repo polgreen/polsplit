@@ -6,6 +6,49 @@
 #include "src/MDP.h"
 #include "src/model_param.h"
 
+
+MDP get_randomwalk(int N)
+{
+  std::cout<<"random walk\n";
+  MDP model;
+  model.num_states(N*2);
+  model.modelparams.resize(3);
+  model.modelparams[0].one();
+  model.modelparams[1].nom = PARAM1;
+  model.modelparams[1].denom = 100;
+  model.modelparams[2].nom = PARAM2;
+  model.modelparams[2].denom = 100;
+  double param_1[]={0,1,0};
+  double param_2[]={0,0,1};
+
+  model.add_const_transition(0,0,1,1);
+  model.add_param_transition(0,1,N,param_2);
+  model.add_remainder_transition(0,1,0);
+  model.add_param_transition(N,0,N+1,param_2);
+  model.add_remainder_transition(N,0,0);
+
+  for(int i=1; i<N-1; i++)
+  {
+    model.add_param_transition(i, 0, i+1, param_1);
+    model.add_remainder_transition(i, 0, i-1);
+    model.add_param_transition(N+i, 0, N+1+i, param_1);
+    model.add_remainder_transition(N+i, 0, N+i-1);
+  }
+
+  model.add_const_transition(N-1,0,N-1,1);
+
+  model.add_const_transition(2*N-1, 0, 2*N-1, 1);
+
+  model.success=N-1;
+  model.make_state_init(0);
+  model.add_IDs();
+  std::cout<<"checking model \n";
+
+  model.check();
+  return model;
+
+}
+
 MDP get_MDP_0()
 {
 
@@ -164,12 +207,19 @@ MDP get_MDP(int m)
   switch (m)
   {
     case 0:
+      std::cout<<"MDP 0"<<std::endl;
       return get_MDP_0();
     case 1:
+      std::cout<<"MDP 1"<<std::endl;
       return get_MDP_one();
     case 2:
+      std::cout<<"MDP 2"<<std::endl;
       return get_MDP_two();
+    case 3:
+      std::cout<<"MDP 3"<<std::endl;
+      return get_randomwalk(4);
     default:
+      std::cout<<"MDP 0"<<std::endl;
       return get_MDP_0();
   }
 

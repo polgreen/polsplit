@@ -291,7 +291,7 @@ void MC::initialise_all_counts()
 }
 
 
-fractiont MC::operator()()
+fractiont MC::operator()(random_distribution &rd)
 {
   initialise_all_counts();
   std::cout << "Calling PRISM for parameter synthesis ... \n";
@@ -299,8 +299,7 @@ fractiont MC::operator()()
   std::cout << "\n";
   std::cout << "Generating data from underlying system ... \n";
   //get data from model
-  random_distribution rd;
-  rd.set_seed(0);
+
   for (unsigned n = 0; n < number_of_traces; n++)
   {
     get_data(trace_length, rd);

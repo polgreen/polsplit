@@ -45,7 +45,7 @@ void help()
       << "--explicit_strategy explicitly evaluates all memoryless strategies \n"
       << "--random_strategy picks a random memoryless strategy \n"
       << "--first_strategy picks the first action at each state \n"
-      << "--no_strategy picks actions randomly at each state when generating data \n\n";
+      << "--batch N runs the experiment N times \n\n";
 }
 
 void output_header()
@@ -74,6 +74,7 @@ int main(int argc, const char *argv[])
   int num_int_samples = 10000;
   int strategy = 0;
   int model_num = 0;
+  int batch=1;
   bool modelMDP = false;
 
   for (unsigned i = 1; i < argc; i++)
@@ -108,6 +109,18 @@ int main(int argc, const char *argv[])
       {
         std::istringstream ss(argv[i + 1]);
         if (!(ss >> trace_length))
+        {
+          std::cerr << "Invalid number " << argv[i + 1] << '\n';
+        }
+        i++;
+      }
+    }
+    else if (std::string(argv[i]) == "--batch")
+    {
+      if (i + 1 < argc && isdigit(*argv[i + 1]))
+      {
+        std::istringstream ss(argv[i + 1]);
+        if (!(ss >> batch))
         {
           std::cerr << "Invalid number " << argv[i + 1] << '\n';
         }
@@ -175,17 +188,15 @@ int main(int argc, const char *argv[])
   try
   {
 
-
+    random_distribution rd;
+    rd.set_seed(0);
 
 
     fractiont confidence;
     if (modelMDP)
     {
       MDP model = get_MDP(model_num);
-      results<<"MDP , "<<model_num<<" , ";
-      for(const auto &p: model.modelparams)
-        results<<fraction_to_double(p)<<" , ";
-      results<<number_of_traces<<" , "<<trace_length<<" , "<<num_int_samples<<" , "<<strategy<<" , ";
+
       std::cout << "Model = simple Markov decision process \n";
 
       model.verbose = verbose;
@@ -193,7 +204,18 @@ int main(int argc, const char *argv[])
       model.trace_length = trace_length;
       model.num_int_samples = num_int_samples;
       model.strategy_type = strategy;
-      confidence = model();
+      for(int i=0; i<=batch; i++)
+      {
+        results<<"MDP , "<<model_num<<" , ";
+              for(const auto &p: model.modelparams)
+                results<<fraction_to_double(p)<<" , ";
+              results<<number_of_traces<<" , "<<trace_length<<" , "<<num_int_samples<<" , "<<strategy<<" , ";
+        confidence = model(rd);
+        results<<fraction_to_double(confidence)<<std::endl;
+           std::cout << "\nFinal confidence: " << confidence.nom << " / "
+               << confidence.denom << std::endl;
+      }
+
     }
     else
     {
@@ -208,11 +230,20 @@ int main(int argc, const char *argv[])
       model.number_of_traces = number_of_traces;
       model.trace_length = trace_length;
       model.num_int_samples = num_int_samples;
-      confidence = model();
+      for(int i=0; i<=batch; i++)
+      {
+        results<<"MDP , "<<model_num<<" , ";
+                      for(const auto &p: model.modelparams)
+                        results<<fraction_to_double(p)<<" , ";
+                      results<<number_of_traces<<" , "<<trace_length<<" , "<<num_int_samples<<" , "<<strategy<<" , ";
+                confidence = model(rd);
+                results<<fraction_to_double(confidence)<<std::endl;
+                   std::cout << "\nFinal confidence: " << confidence.nom << " / "
+                       << confidence.denom << std::endl;
+      }
+
     }
-    results<<fraction_to_double(confidence)<<std::endl;
-    std::cout << "\nFinal confidence: " << confidence.nom << " / "
-        << confidence.denom << std::endl;
+
   } catch (...)
   {
     std::cout << "exception caught at end of main \n";
