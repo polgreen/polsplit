@@ -294,6 +294,7 @@ MC MDP::induceMarkovChain(const std::vector<unsigned>& strategy)
 
   model.prior_a1=prior_a1;
   model.prior_a2=prior_a2;
+  std::cout<<"prior size "<<prior_a1.size()<<std::endl; 
   model.verbose = verbose;
   model.trace_length = trace_length;
   model.number_of_traces = 1;
@@ -338,6 +339,7 @@ void MDP::initialise_all_counts()
     parametercounts[i] = 0;
     inv_parametercounts[i] = 0;
   }
+
   if(prior_a1.size()==0)
   {
     prior_a1.resize(modelparams.size());
@@ -346,6 +348,11 @@ void MDP::initialise_all_counts()
       p=1;
     for(auto&p: prior_a2)
       p=1;
+  }
+  while(param_upper_bounds.size()<modelparams.size())
+  {
+  param_upper_bounds.push_back(1);
+  param_lower_bounds.push_back(0);
   }
 }
 
