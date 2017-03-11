@@ -10,7 +10,7 @@
 void MDP::synthStrategy() {
     data_acq_strategy.clear();
     data_acq_strategy.resize(states.size());
-    
+
 
     switch (strategy_type) {
 
@@ -25,4 +25,20 @@ void MDP::synthStrategy() {
             std::cout << "ERROR no strategy method selected\n";
             throw std::exception();
     }
+}
+
+MC induceMarkovChain(MDP m) {
+    if (m.verbose > 2)
+        std::cout << "..induce Markov chain for strategy\n";
+
+    MC model = m;
+
+    for (unsigned i = 0; i < m.states.size(); i++) {
+        statet s;
+        s.ID = m.states[i].ID;
+        s.init = m.states[i].init;
+        s.transitions = m.states[i].actions[m.data_acq_strategy[i]];
+        model.states.push_back(s);
+    }
+    return model;
 }

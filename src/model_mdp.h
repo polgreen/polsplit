@@ -31,6 +31,7 @@ public:
     statet_a get_init_state();
 
 
+
 };
 
 class MDP_cmdvars {
@@ -43,7 +44,7 @@ public:
 void add_MDP_help();
 
 
-
+MC induceMarkovChain(MDP);
 MDP get_MDP_instance();
 MDP_cmdvars get_MDP_cmdvars_instance();
 #endif /* MODEL_MDP_H */
