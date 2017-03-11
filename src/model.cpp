@@ -238,3 +238,10 @@ void MC::outputMC(std::ostream &out) {
 
 }
 
+random_distribution initRndDistribution() {
+    random_distribution rd;
+    rd.set_seed(0);
+    return rd;
+
+}
+

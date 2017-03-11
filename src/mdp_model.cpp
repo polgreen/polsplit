@@ -13,8 +13,6 @@ MDP get_MDP_instance() {
     std::vector<transitiont> action1, action2;
     transitiont t1, t2, t3, t4;
     MDP model;
-
-
     s0.ID = 0;
     s1.ID = 1;
     s2.ID = 2;

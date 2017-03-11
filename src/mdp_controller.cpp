@@ -50,7 +50,13 @@ void MDP_cmdvars::init_process(int verbose, int number_of_traces, int trace_leng
     model.number_of_traces = number_of_traces;
     model.trace_length = trace_length;
     model.int_samples = int_samples;
+    model.strategy_type = strategy_type_cap;
     model.callPrism();
+    initRndDistribution();
+    for (unsigned n = 0; n < model.number_of_traces; n++) {
+        model.synthStrategy();      
+        //model.get_data(model.trace_length, rd);
+    }
 
 }
 

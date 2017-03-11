@@ -24,8 +24,10 @@ public:
     };
 
     std::vector<statet_a> states;
+    std::vector<unsigned> data_acq_strategy; //Data acquisition strategy
     unsigned strategy_type; //Interface Control Methods    
     void outputPRISM(std::ostream &out);
+    void synthStrategy();
     statet_a get_init_state();
 
 
