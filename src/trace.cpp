@@ -48,18 +48,11 @@ tracet MC::gettrace(const unsigned length, random_distribution &rd)
 
   while (trace.size() < length)
   {
-    fractiont sum;
-    sum.zero();
-    //get total weighting of outgoing transitions
-    for (const auto& t : state.transitions)
-    { //std::cout<<"debug 3 \n";
-      sum = sum + weighting(t, state);
-    }
 
     //std::uniform_int_distribution<unsigned> distribution(0,100);
     fractiont random;
-    random.nom = Generate(0, sum.nom, rd);
-    random.denom = sum.denom;
+    random.nom = Generate(0, 100, rd);
+    random.denom = 100;
     fractiont mass;
     fractiont subtraction;
     mass.zero();
