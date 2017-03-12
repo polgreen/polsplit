@@ -58,8 +58,8 @@ tracet MC::gettrace(const unsigned length, random_distribution &rd)
 
     //std::uniform_int_distribution<unsigned> distribution(0,100);
     fractiont random;
-    random.nom = Generate(0, 100, rd);
-    random.denom = 100;
+    random.nom = Generate(0, sum.nom, rd);
+    random.denom = sum.denom;
     fractiont mass;
     fractiont subtraction;
     mass.zero();
