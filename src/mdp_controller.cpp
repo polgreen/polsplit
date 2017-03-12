@@ -56,9 +56,9 @@ void MDP_cmdvars::init_process(int verbose, int number_of_traces, int trace_leng
     model.synthStrategy();
     MC inducd_model = induceMarkovChain(model);
     for (unsigned n = 0; n < model.number_of_traces; n++) {
-        inducd_model.get_data(inducd_model.trace_length, rd);
+        inducd_model.get_data(rd);
     }
-    inducd_model.confidencecalc(inducd_model.int_samples);
+    inducd_model.confidencecalc();
 }
 
 MDP_cmdvars get_MDP_cmdvars_instance() {

@@ -32,6 +32,25 @@ MDP get_MDP_instance() {
     model.states.push_back(s0);
     action1.clear();
 
+    s2.init = false;
+    t1.type = CONST;
+    t1.prob.one();
+    t1.successor = s2.ID;
+    action1.push_back(t1);
+    s2.actions.push_back(action1);
+    model.states.push_back(s2);
+    action1.clear();
+
+    s3.init = false;
+    t1.type = CONST;
+    t1.prob.one();
+    t1.successor = s3.ID;
+    action1.push_back(t1);
+    s3.actions.push_back(action1);
+    model.states.push_back(s3);
+    action1.clear();
+
+    
     s1.init = false;
     t1.type = FUNCTION;
     std::pair<fractiont, unsigned> p1;
@@ -60,24 +79,7 @@ MDP get_MDP_instance() {
     action1.clear();
     action2.clear();
 
-    s2.init = false;
-    t3.type = CONST;
-    t3.prob.one();
-    t3.successor = s2.ID;
-    action1.push_back(t3);
-    s2.actions.push_back(action1);
-    model.states.push_back(s2);
-    action1.clear();
-
-    s3.init = false;
-    t3.type = CONST;
-    t3.prob.one();
-    t3.successor = s3.ID;
-    action1.push_back(t3);
-    s3.actions.push_back(action1);
-    model.states.push_back(s3);
-    action1.clear();
-
+    
     model.success = s3.ID;
 
     return model;

@@ -133,18 +133,17 @@ int main(int argc, const char *argv[]) {
             model.verbose = verbose;
             model.number_of_traces = number_of_traces;
             model.trace_length = trace_length;
-
+            model.int_samples=int_samples;
             model.callPrism();
             std::cout << "\n";
-
             random_distribution rd;
             rd.set_seed(0);
             //get data from model
             for (unsigned n = 0; n < model.number_of_traces; n++) {
-                model.get_data(model.trace_length, rd);
+                model.get_data(rd);
             }
             //do confidence calculation
-            model.confidencecalc(NUMBERSAMPLES);
+            model.confidencecalc();
         }
     } catch (...) {
         std::cout << "exception caught at end of main \n";

@@ -14,7 +14,7 @@ double Generate(const double from, const double to, random_distribution& dist) {
     return result;
 }
 
-tracet MC::gettrace(unsigned length, random_distribution& rd) {
+tracet MC::gettrace(random_distribution& rd) {
     tracet trace;
     std::vector<std::vector<unsigned> > count;
     statet state = get_init_state();
@@ -22,14 +22,17 @@ tracet MC::gettrace(unsigned length, random_distribution& rd) {
     unsigned next = 0;
     trace.push_back(state);
 
-    while (trace.size() < length) {
+    while (trace.size() < trace_length) {
         fractiont sum;
         sum.zero();
         //get total weighting of outgoing transitions
         for (const auto& t : state.transitions) { //std::cout<<"debug 3 \n"; 
             sum = sum + weighting(t, state);
         }
-
+        if (verbose > 1) {
+            std::cout << "Sum weight for transitions of state s" << state.ID;
+            std::cout << " is: " << sum << "\n";
+        }
         //std::uniform_int_distribution<unsigned> distribution(0,100);
         fractiont random;
         random.nom = Generate(0, 100, rd);
@@ -57,7 +60,7 @@ tracet MC::gettrace(unsigned length, random_distribution& rd) {
             throw std::exception();
         }
 
-        state = states[next];
+        state = states[getStateIndex(next)];
         trace.push_back(state);
     }
     if (verbose > 1) {
@@ -84,17 +87,17 @@ unsigned trace_count(unsigned s1, unsigned s2, tracet t) {
     return count;
 }
 
-void MC::get_trace_counts(tracet &trace) {
+void MC::get_trace_counts(tracet & trace) {
     for (unsigned i = 0; i < trace.size() - 1; i++) {
-        if (states[trace[i].ID].transitions.size() == 0) {
+        if (states[getStateIndex(trace[i].ID)].transitions.size() == 0) {
             std::cout << "Error no transitions on state" << trace[i].ID << "\n";
             throw std::exception();
         }
 
-        for (unsigned t = 0; t < states[trace[i].ID].transitions.size(); t++) {
-            if (states[trace[i].ID].transitions[t].successor == trace[i + 1].ID) {
-                states[trace[i].ID].transitions[t].count++;
-                states[trace[i].ID].input++;
+        for (unsigned t = 0; t < states[getStateIndex(trace[i].ID)].transitions.size(); t++) {
+            if (states[getStateIndex(trace[i].ID)].transitions[t].successor == trace[i + 1].ID) {
+                states[getStateIndex(trace[i].ID)].transitions[t].count++;
+                states[getStateIndex(trace[i].ID)].input++;
             }
         }
     }
@@ -109,8 +112,8 @@ void MC::get_trace_counts(tracet &trace) {
 
 }
 
-void MC::get_data(unsigned length, random_distribution &rd) {
-    tracet T = gettrace(length, rd);
+void MC::get_data(random_distribution & rd) {
+    tracet T = gettrace(rd);
     get_trace_counts(T);
 }
 
@@ -120,4 +123,15 @@ void printtrace(tracet trace) {
         printstate(s);
     }
     std::cout << "\n";
+}
+
+unsigned MC::getStateIndex(unsigned id) {
+    unsigned index;
+    for (unsigned i = 0; i < states.size(); i++) {
+        if (states[i].ID == id) {
+            index = i;
+            break;
+        }
+    }
+    return index;
 }

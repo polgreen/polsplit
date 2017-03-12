@@ -43,8 +43,7 @@ fractiont computeconfidence(std::vector<fractiont> conf_vector) {
     return result;
 }
 
-void MC::confidencecalc(
-        unsigned num_samples) {
+void MC::confidencecalc() {
     if (verbose > 1)
         std::cout << "confidence calc \n";
     unsigned seed = 0;
@@ -58,7 +57,7 @@ void MC::confidencecalc(
 
     param_states = get_parameterised_states();
 
-    for (unsigned i = 0; i < num_samples; i++) {
+    for (unsigned i = 0; i < int_samples; i++) {
         get_random_model_params(rd);
         sample_D_star(param_states, rd);
         sample_params_update_conf(rd);
