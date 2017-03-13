@@ -306,6 +306,7 @@ MC MDP::induceMarkovChain(const std::vector<unsigned>& strategy)
   model.verbose = verbose;
   model.trace_length = trace_length;
   model.number_of_traces = number_of_traces;
+  model.num_int_samples=num_int_samples;
   //copy these numbers back and forth is pretty inefficient, but this was a quick hack
   model.parameter_bounds = parameter_bounds;
   model.parameter_results = parameter_results;
