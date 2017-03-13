@@ -76,16 +76,16 @@ tracet MC::gettrace(random_distribution& rd) {
 
 //make this pass by reference
 
-unsigned trace_count(unsigned s1, unsigned s2, tracet t) {
-    unsigned count;
-    for (unsigned i = 0; i < t.size(); i++) {
-        if (t[i].ID == s1 && t[i + 1].ID == s2) {
-            count++;
-        }
-        i++;
-    }
-    return count;
-}
+//unsigned trace_count(unsigned s1, unsigned s2, tracet t) {
+//    unsigned count;
+//    for (unsigned i = 0; i < t.size(); i++) {
+//        if (t[i].ID == s1 && t[i + 1].ID == s2) {
+//            count++;
+//        }
+//        i++;
+//    }
+//    return count;
+//}
 
 void MC::get_trace_counts(tracet & trace) {
     for (unsigned i = 0; i < trace.size() - 1; i++) {
@@ -117,13 +117,13 @@ void MC::get_data(random_distribution & rd) {
     get_trace_counts(T);
 }
 
-void printtrace(tracet trace) {
-    std::cout << "\n";
-    for (const auto &s : trace) {
-        printstate(s);
-    }
-    std::cout << "\n";
-}
+//void printtrace(tracet trace) {
+//    std::cout << "\n";
+//    for (const auto &s : trace) {
+//        printstate(s);
+//    }
+//    std::cout << "\n";
+//}
 
 unsigned MC::getStateIndex(unsigned id) {
     unsigned index;

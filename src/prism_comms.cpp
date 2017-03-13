@@ -50,7 +50,8 @@ void MC::callPrism() {
     char letter = 'a';
     for (unsigned p_index = 1; p_index < modelparams.size(); p_index++) {
         command += static_cast<char> (letter + p_index - 1);
-        command += "=0:1,";
+        command += "=" + intToString(param_lower_bounds[p_index]) + ":";
+        command += intToString(param_upper_bounds[p_index]) + ",";
     }
     result = ssystem(command.c_str());
     for (const auto s : result) {
@@ -138,6 +139,12 @@ void MC::outputPRISM(std::ostream &out) {
     out << "\nendmodule \n \n";
     out << "label \"complete\"=(s=" << success << ");\n";
 
+}
+
+std::string intToString(int a) {
+    std::stringstream ss;
+    ss << a;
+    return ss.str();
 }
 
 

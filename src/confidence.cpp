@@ -12,11 +12,7 @@
 void MC::reset_confidence() {
     if (verbose > 1)
         std::cout << "reset confidence\n";
-    confidence.resize(modelparams.size());
-    for (auto c : confidence) {
-        c.nom = 0;
-        c.denom = 0;
-    }
+    overall_confidence.zero();
 }
 
 void MC::sample_params_update_conf(random_distribution &rd) {
@@ -24,7 +20,7 @@ void MC::sample_params_update_conf(random_distribution &rd) {
         std::cout << "\nsample params and update confidence \n";
     std::vector<double> sample;
     for (unsigned i = 1; i < modelparams.size(); i++) {
-        sample.push_back(rd.beta(parametercounts[i], inv_parametercounts[i]));
+        sample.push_back(rd.beta(parametercounts[i] + beta_prior_param1[i], inv_parametercounts[i] + beta_prior_param2[i]));
     }
     if (is_in_range(sample)) {
         overall_confidence.nom++;
@@ -34,37 +30,36 @@ void MC::sample_params_update_conf(random_distribution &rd) {
         std::cout << "confidence = " << overall_confidence.nom << "/" << overall_confidence.denom << "\n";
 }
 
-fractiont computeconfidence(std::vector<fractiont> conf_vector) {
-    fractiont result = 1;
-    for (const auto c : conf_vector) {
-        result = result * c;
-    }
-
-    return result;
-}
+//fractiont computeconfidence(std::vector<fractiont> conf_vector) {
+//    fractiont result = 1;
+//    for (const auto c : conf_vector) {
+//        result = result * c;
+//    }
+//
+//    return result;
+//}
 
 void MC::confidencecalc() {
     if (verbose > 1)
         std::cout << "confidence calc \n";
-    unsigned seed = 0;
-    random_distribution rd;
-    if (verbose > 1)
-        std::cout << " Using seed of " << seed << "\n";
-    rd.set_seed(seed); //we use the same seed so that we can reproduce experiments
-    std::vector<fractiont> result(modelparams.size(), 0);
+    random_distribution rd = initRndDistribution();
     std::vector< std::pair < statet, unsigned> > param_states;
     reset_confidence();
-
     param_states = get_parameterised_states();
-
+    std::vector<int>total_paramcounts(modelparams.size());
+    std::vector<int>total_inv_paramcounts(modelparams.size());
     for (unsigned i = 0; i < int_samples; i++) {
         get_random_model_params(rd);
         sample_D_star(param_states, rd);
         sample_params_update_conf(rd);
-
+        for (int i = 0; i < modelparams.size(); i++) {
+            total_paramcounts[i] += parametercounts[i];
+            total_inv_paramcounts[i] += inv_parametercounts[i];
+        }
     }
-    std::cout << "overall confidence " << overall_confidence.nom << "/" << overall_confidence.denom << "\n";
-    ;
-
+    for (int i = 1; i < modelparams.size(); i++) {
+        parametercounts[i] = total_paramcounts[i] / int_samples;
+        inv_parametercounts[i] = total_inv_paramcounts[i] / int_samples;
+    }
 }
 

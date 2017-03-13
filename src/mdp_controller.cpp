@@ -51,14 +51,25 @@ void MDP_cmdvars::init_process(int verbose, int number_of_traces, int trace_leng
     model.trace_length = trace_length;
     model.int_samples = int_samples;
     model.strategy_type = strategy_type_cap;
+    model.prepModel();
     model.callPrism();
     random_distribution rd = initRndDistribution();
-    model.synthStrategy();
-    MC inducd_model = induceMarkovChain(model);
     for (unsigned n = 0; n < model.number_of_traces; n++) {
+        model.synthStrategy();
+        MC inducd_model = induceMarkovChain(model);
         inducd_model.get_data(rd);
+        inducd_model.confidencecalc();
+       // std::cout << "overall confidence " << inducd_model.overall_confidence.nom << "/" << inducd_model.overall_confidence.denom << "\n";
+        model.overall_confidence = inducd_model.overall_confidence;
+        for (int i = 1; i < model.modelparams.size(); i++) {
+            model.beta_prior_param1[i] += inducd_model.parametercounts[i];
+            model.beta_prior_param2[i] += inducd_model.inv_parametercounts[i];
+            if (verbose > 0)
+                std::cout << "updated prior for p" << i << " " << model.beta_prior_param1[i] << " " << model.beta_prior_param2[i] << std::endl;
+        }
     }
-    inducd_model.confidencecalc();
+    //model.overall_confidence.avg(model.number_of_traces);
+    model.displayConfidence();
 }
 
 MDP_cmdvars get_MDP_cmdvars_instance() {

@@ -29,44 +29,44 @@ void MC::add_IDs() {
     }
 }
 
-void MC::check() {
-    fractiont weight;
-    fractiont state_sum;
-    fractiont param_sum;
-    if (states.size() == 0) {
-        std::cout << "error in MC::check(), no states found \n";
-        throw std::exception();
-    }
-
-    for (const auto &s : states) {
-        if (s.ID >= states.size()) {
-            std::cout << "StateIDs not properly assigned";
-            throw std::exception();
-        }
-        state_sum.zero();
-        for (const auto &t : s.transitions) {
-            weight = weighting(t, s);
-            if (weight.nom < 0 || weight.denom < 0) {
-                std::cout << "ERROR: transition S" << s.ID << "->S" << t.successor << " probability less than 0 \n";
-                throw std::exception();
-            }
-            state_sum = weight + state_sum;
-            if (state_sum.nom > state_sum.denom) {
-                std::cout << "ERROR: transitions from S" << s.ID << " sum to more than 1 \n";
-                throw std::exception();
-            }
-            if (t.type == FUNCTION) {
-                for (const auto &p : t.params) {
-                    param_sum = p.first + param_sum;
-                    if (param_sum.nom > param_sum.denom) {
-                        std::cout << "ERROR: parameter multipliers >1";
-                        throw std::exception();
-                    }
-                }
-            }
-        }
-    }
-}
+//void MC::check() {
+//    fractiont weight;
+//    fractiont state_sum;
+//    fractiont param_sum;
+//    if (states.size() == 0) {
+//        std::cout << "error in MC::check(), no states found \n";
+//        throw std::exception();
+//    }
+//
+//    for (const auto &s : states) {
+//        if (s.ID >= states.size()) {
+//            std::cout << "StateIDs not properly assigned";
+//            throw std::exception();
+//        }
+//        state_sum.zero();
+//        for (const auto &t : s.transitions) {
+//            weight = weighting(t, s);
+//            if (weight.nom < 0 || weight.denom < 0) {
+//                std::cout << "ERROR: transition S" << s.ID << "->S" << t.successor << " probability less than 0 \n";
+//                throw std::exception();
+//            }
+//            state_sum = weight + state_sum;
+//            if (state_sum.nom > state_sum.denom) {
+//                std::cout << "ERROR: transitions from S" << s.ID << " sum to more than 1 \n";
+//                throw std::exception();
+//            }
+//            if (t.type == FUNCTION) {
+//                for (const auto &p : t.params) {
+//                    param_sum = p.first + param_sum;
+//                    if (param_sum.nom > param_sum.denom) {
+//                        std::cout << "ERROR: parameter multipliers >1";
+//                        throw std::exception();
+//                    }
+//                }
+//            }
+//        }
+//    }
+//}
 
 std::vector< std::pair < statet, unsigned> > MC::get_parameterised_states() {
 
@@ -75,10 +75,6 @@ std::vector< std::pair < statet, unsigned> > MC::get_parameterised_states() {
         throw std::exception();
     }
     std::vector< std::pair < statet, unsigned> > result;
-
-    //vector of < vectors of <state and transition index >
-    //for(const auto & v: result) //initialise result vector of vectors to empty for each parameter
-    //{v = {};}
     std::pair<statet, unsigned> pair;
     bool found = false;
 
@@ -174,74 +170,105 @@ statet MC::get_init_state() {
     return result;
 }
 
-void printstate(statet s) {
-    std::cout << s.ID << ", ";
-}
-
-void MC::outputMC(std::ostream &out) {
-    fractiont result;
-    out << "\nMARKOV CHAIN: \n";
-    out << "parameters: ";
-    for (auto &p : modelparams) {
-        p.output(out);
-        out << " ";
-    }
-    out << "\nSTATES \n";
-    for (const auto &s : states) {
-        out << "\nS" << s.ID;
-        switch (s.newtype) {
-            case S1: out << " type 1";
-                break;
-            case S2: out << " type 2";
-                break;
-            case S3: out << " type 3";
-                break;
-            case S0: break;
-            default:;
-        }
-
-        //if(s.inputknown==true){out<<" input known ";}
-        //if(s.outputknown==true){out<<" output known ";}
-        //(s.inputknown==false){out<<" input unknown ";}
-        //if(s.outputknown==false){out<<" output unknown ";}
-        out << ": \n";
-        out << s.input << " input count \n";
-        for (const auto & t : s.transitions) {
-            if (t.type == FUNCTION || t.type == NEWFUNCTION) {
-                out << "FUNCTION ";
-            }
-            out << "transition to S";
-            out << t.successor << " weighting: ";
-            result = weighting(t, s);
-            if (result.nom == 0) {
-                std::cout << "ERROR ZERO VALUE RETURNED";
-            }
-            result.output(out);
-            out << ", count: " << t.count;
-
-            switch (t.newtype) {
-                case T1: out << " type 1";
-                    break;
-                case T2: out << " type 2";
-                    break;
-                case T3: out << " type 3";
-                    break;
-                case T4: out << " type 4";
-                    break;
-                case T0: break;
-                default:;
-            }
-            out << "\n";
-
-        }
-    }
-
-}
+//void printstate(statet s) {
+//    std::cout << s.ID << ", ";
+//}
+//
+//void MC::outputMC(std::ostream &out) {
+//    fractiont result;
+//    out << "\nMARKOV CHAIN: \n";
+//    out << "parameters: ";
+//    for (auto &p : modelparams) {
+//        p.output(out);
+//        out << " ";
+//    }
+//    out << "\nSTATES \n";
+//    for (const auto &s : states) {
+//        out << "\nS" << s.ID;
+//        switch (s.newtype) {
+//            case S1: out << " type 1";
+//                break;
+//            case S2: out << " type 2";
+//                break;
+//            case S3: out << " type 3";
+//                break;
+//            case S0: break;
+//            default:;
+//        }
+//
+//        //if(s.inputknown==true){out<<" input known ";}
+//        //if(s.outputknown==true){out<<" output known ";}
+//        //(s.inputknown==false){out<<" input unknown ";}
+//        //if(s.outputknown==false){out<<" output unknown ";}
+//        out << ": \n";
+//        out << s.input << " input count \n";
+//        for (const auto & t : s.transitions) {
+//            if (t.type == FUNCTION || t.type == NEWFUNCTION) {
+//                out << "FUNCTION ";
+//            }
+//            out << "transition to S";
+//            out << t.successor << " weighting: ";
+//            result = weighting(t, s);
+//            if (result.nom == 0) {
+//                std::cout << "ERROR ZERO VALUE RETURNED";
+//            }
+//            result.output(out);
+//            out << ", count: " << t.count;
+//
+//            switch (t.newtype) {
+//                case T1: out << " type 1";
+//                    break;
+//                case T2: out << " type 2";
+//                    break;
+//                case T3: out << " type 3";
+//                    break;
+//                case T4: out << " type 4";
+//                    break;
+//                case T0: break;
+//                default:;
+//            }
+//            out << "\n";
+//
+//        }
+//    }
+//
+//}
 
 random_distribution initRndDistribution() {
     random_distribution rd;
     rd.set_seed(0);
     return rd;
+
+}
+
+void MC::prepModel() {
+    parametercounts.resize(modelparams.size());
+    inv_parametercounts.resize(modelparams.size());
+    param_confidence.resize(modelparams.size());
+    //overall_confidence.nom = 1;
+    //overall_confidence.denom = 2;
+
+    for (int i = 0; i < modelparams.size(); i++) {
+        parametercounts[i] = 0;
+        inv_parametercounts[i] = 0;
+    }
+
+    if (beta_prior_param1.size() == 0) {
+        beta_prior_param1.resize(modelparams.size());
+        beta_prior_param2.resize(modelparams.size());
+        for (auto &p : beta_prior_param1)
+            p = 1;
+        for (auto&p : beta_prior_param2)
+            p = 1;
+    }
+    while (param_upper_bounds.size() < modelparams.size()) {
+        param_upper_bounds.push_back(1);
+        param_lower_bounds.push_back(0);
+    }
+}
+
+void MC::displayConfidence() {
+    std::cout << "overall confidence " << overall_confidence.nom << "/" << overall_confidence.denom << "\n";
 
 }
 

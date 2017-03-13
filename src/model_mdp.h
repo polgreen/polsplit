@@ -29,9 +29,6 @@ public:
     void outputPRISM(std::ostream &out);
     void synthStrategy();
     statet_a get_init_state();
-
-
-
 };
 
 class MDP_cmdvars {

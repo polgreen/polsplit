@@ -3,11 +3,7 @@
 #include <iostream>
 
 struct fractiont {
-
-    fractiont() {
-        nom = 0;
-        denom = 0;
-    }
+    fractiont();
 
     fractiont(signed s) {
         nom = s;
@@ -29,6 +25,7 @@ struct fractiont {
     void simplify();
     void zero();
     void one();
+    void avg(unsigned);
 
     friend std::ostream& operator<<(std::ostream& out, fractiont f) {
         f.output(out);

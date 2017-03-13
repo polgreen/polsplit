@@ -1,6 +1,12 @@
 
 #include "fraction.h"
 #include <iostream>
+#include <math.h>    
+
+fractiont::fractiont() {
+    nom = 0;
+    denom = 0;
+}
 
 unsigned gcdr(unsigned a, unsigned b) {
     if (a == 0) return b;
@@ -108,4 +114,9 @@ void fractiont::zero() {
 void fractiont::one() {
     nom = 1;
     denom = 1;
+}
+
+void fractiont::avg(unsigned trace_size) {
+    nom = floor((double(nom) / double(trace_size)) + 0.5);
+    denom = floor((double(denom) / double(trace_size)) + 0.5);
 }

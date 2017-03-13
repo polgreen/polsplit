@@ -27,7 +27,6 @@ Bayesian Verification for DTMCs
 #include "model.h"
 #include "distributions.h"
 #include "model_mdp.h"
-#define NUMBERSAMPLES 1000
 
 void help() {
     std::cout << "BaeVer is the experimental implementation for paper DOI:10.1007/978-3-319-43425-4_3. \n"
@@ -133,7 +132,8 @@ int main(int argc, const char *argv[]) {
             model.verbose = verbose;
             model.number_of_traces = number_of_traces;
             model.trace_length = trace_length;
-            model.int_samples=int_samples;
+            model.int_samples = int_samples;
+            model.prepModel();
             model.callPrism();
             std::cout << "\n";
             random_distribution rd;
@@ -144,6 +144,7 @@ int main(int argc, const char *argv[]) {
             }
             //do confidence calculation
             model.confidencecalc();
+            model.displayConfidence();
         }
     } catch (...) {
         std::cout << "exception caught at end of main \n";

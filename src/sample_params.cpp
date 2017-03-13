@@ -14,10 +14,7 @@
 unsigned statet::sum_outputs() {
     unsigned sum = 0;
     for (const auto &t : transitions) {
-        if (t.countknown == true) {
-            sum = sum + t.count;
-        }
-
+        sum = sum + t.count;
     }
     return sum;
 }
@@ -26,7 +23,7 @@ void MC::get_random_model_params(random_distribution &rd) {
     if (verbose > 1)
         std::cout << "get random model parameters: \n";
     for (unsigned i = 1; i < modelparams.size(); i++) {
-        modelparams[i].nom = 100 * rd.beta(1, 1);
+        modelparams[i].nom = 100 * rd.beta(beta_prior_param1[i], beta_prior_param2[i]);
         modelparams[i].denom = 100;
         if (verbose > 1)
             std::cout << "param" << i << " " << modelparams[i].nom << "/" << modelparams[i].denom << "\n";
@@ -38,8 +35,8 @@ void MC::sample_D_star(std::vector< std::pair < statet, unsigned> > &param_state
         std::cout << "Sample D* \n";
     std::vector<unsigned> param_counts;
     std::vector<unsigned> inv_param_counts;
-    param_counts.resize(modelparams.size());
-    inv_param_counts.resize(modelparams.size());
+    param_counts.resize(parametercounts.size());
+    inv_param_counts.resize(inv_parametercounts.size());
     unsigned kcount = 0;
     double prob;
     bool all_constants_equal_one = true;
@@ -49,6 +46,8 @@ void MC::sample_D_star(std::vector< std::pair < statet, unsigned> > &param_state
         if (verbose > 1)
             std::cout << "Param state S" << s.first.ID << ":\n";
         for (const auto t : s.first.transitions) {
+            if (t.type == REMAINDER)
+                break;
             if (verbose > 1)
                 std::cout << " transition to S" << t.successor << " :";
             if (t.params.size() == 1) {

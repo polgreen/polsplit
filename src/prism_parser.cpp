@@ -38,8 +38,7 @@ void MC::prism_find(std::string& input) {
     std::size_t found = input.find(res);
     if (found != std::string::npos) {
         substring = input.substr(found);
-    }
-    else {
+    } else {
         std::cout << "Could not find Result in prism output \n";
     }
 
@@ -103,38 +102,49 @@ bool MC::result_bound_satisfied(unsigned i, std::vector<double>& sample) {
 }
 
 bool MC::is_in_range(std::vector<double> &sample) {
-    if (verbose > 1)
-        std::cout << "sample from posterior distribution \n";
     assert(sample.size() == modelparams.size() - 1);
     bool in_range = false;
-    bool all_params_ok = true;
-
-    for (unsigned i = 0; i < sample.size(); i++) {
-        in_range = false;
-        if (verbose > 1)
-            std::cout << "Sample P" << i << " " << sample[i] << "\n; ";
-        for (unsigned b = 0; b < parameter_bounds.size(); b++) {
-            if (sample[i] > parameter_bounds[b][i].first && sample[i] < parameter_bounds[b][i].second) {
-                if (verbose > 1)
-                    std::cout << " parameter in range " << parameter_bounds[b][i].first << " ->"
-                        << parameter_bounds[b][i].second << "\n";
-                in_range = true;
-                if (result_bound_satisfied(b, sample)) {
-                    if (verbose > 1)
-                        std::cout << " true \n";
-                } else {
-                    if (verbose > 1)
-                        std::cout << " false\n";
-                    all_params_ok = false;
-                }
-            }
+    if (verbose > 1) {
+        std::cout << "sample ";
+        for (const auto &s : sample) {
+            std::cout << s << " ";
         }
-        if (in_range == false) {
-            all_params_ok = false;
-        }
+        std::cout << std::endl;
     }
 
-    return all_params_ok;
+    for (int b = 0; b < parameter_bounds.size(); b++) {
+        in_range = true;
+        for (int s = 0; s < sample.size(); s++) {
+            if (sample[s] >= parameter_bounds[b][s].first
+                    && sample[s] <= parameter_bounds[b][s].second) {
+                param_confidence[s].nom++;
+                param_confidence[s].denom++;
+                if (verbose > 2) {
+                    std::cout << "Sample p" << s + 1 << "=" << sample[s] << ", in bound "
+                            << parameter_bounds[b][s].first;
+                    std::cout << " -> " << parameter_bounds[b][s].second << ", ";
+                }
+            } else {
+                param_confidence[s].denom++;
+                in_range = false;
+                // break;
+            }
+        }
+        if (in_range == true) {
+            if (result_bound_satisfied(b, sample)) {
+                if (verbose > 1)
+                    std::cout << " RESULT = true \n";
+                return true;
+            } else {
+                if (verbose > 1)
+                    std::cout << " RESULT = false\n";
+                return false;
+            }
+        }
+    }
+    if (verbose > 1)
+        std::cout << " RESULT = false\n";
+    return false;
 }
 
 
