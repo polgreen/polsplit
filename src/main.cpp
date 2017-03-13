@@ -26,7 +26,7 @@
 #include "distributions.h"
 #include "MC.h"
 #include "MDP.h"
-#include "log.h"
+
 
 void help()
 {
@@ -178,7 +178,9 @@ int main(int argc, const char *argv[])
 
 
   std::ofstream results;
-  results.open("results.log", std::ofstream::out | std::ofstream::app);
+  std::string resultfilename=("Results_strat"+std::to_string(strategy)+"_tr"+std::to_string(number_of_traces)+"_l"+std::to_string(trace_length)+".csv");
+
+  results.open(resultfilename, std::ofstream::out | std::ofstream::app);
   //CSV columns: model, model num, trace num, trace length, integration samples, strategy choice, confidence
 
   std::cout << "Number of traces " << number_of_traces << "\n";
