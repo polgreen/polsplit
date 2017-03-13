@@ -1,3 +1,18 @@
+/*****************************\
+          (\.---./)
+ /.-.-.\
+          /| 0_0 |\
+         |_`-(v)-'_|
+ \`-._._.-'/      .-.
+ -~-(((.`-\_|_/-'.)))-~' <_
+ `.     .'
+ `._.'
+ BaeVer
+ Bayesian Verification for DTMCs
+ -----~--~---~~~----~-`.-;~
+ elizabeth.polgreen@cs.ox.ac.uk
+ \********************************/
+
 #include <vector>
 #include <random>
 #include <iostream>
