@@ -31,7 +31,7 @@ void MDP::add_const_transition(const int state, const int action_num,
 void MDP::add_const_transition(const int state, const int action_num,
     const int successor, const fractiont& prob)
 {
-  if (MDPstates.size() < state)
+  if ((MDPstates.size() < state)||(MDPstates.size()<successor))
   {
     std::cout << "cannot add transitions between states that don't exist \n";
     throw std::exception();
@@ -64,7 +64,7 @@ void MDP::add_param_transition(const int state, const int action_num,
 void MDP::add_param_transition(const int state, const int action_num,
     const int successor, const std::vector<fractiont>& param_multipliers)
 {
-  if (MDPstates.size() < state)
+  if ((MDPstates.size() < state)||(MDPstates.size()<successor))
   {
     std::cout << "cannot add transitions between states that don't exist \n";
     throw std::exception();
@@ -94,7 +94,7 @@ void MDP::add_param_transition(const int state, const int action_num,
 void MDP::add_remainder_transition(const int state, const int action_num,
     const int successor)
 {
-  if (MDPstates.size() < state)
+  if ((MDPstates.size() < state)||(MDPstates.size()<successor))
   {
     std::cout << "cannot add transitions between states that don't exist \n";
     throw std::exception();
