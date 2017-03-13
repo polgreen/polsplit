@@ -221,12 +221,12 @@ std::vector<unsigned> MDP::synthStrategy(random_distribution &rd)
 
   switch (strategy_type)
   {
-    case 0:
+    case EXPLICIT:
       if (verbose > 1)
         std::cout << "Explicit strategy synth" << std::endl;
       strategy=explicitStrategySynth(rd);
       break;
-    case 1:
+    case NONE:
       if (verbose > 1)
         std::cout << "Pick the first action strategy synth" << std::endl;
       for (auto s : strategy)
@@ -234,10 +234,15 @@ std::vector<unsigned> MDP::synthStrategy(random_distribution &rd)
         s = 0;
       }
       break;
-    case 2:
+    case RANDOM:
       strategy=randomStrategySynth(rd);
       if (verbose > 1)
         std::cout << "Randomized strategy synth" << std::endl;
+      break;
+    case FIRST:
+      if (verbose > 1)
+        std::cout << "Explicit strategy synth" << std::endl;
+      strategy=explicitStrategySynth(rd);
       break;
     default:
       std::cout << "ERROR no strategy method selected\n";

@@ -42,6 +42,11 @@ typedef std::vector<fractiont> countt;
 
 struct MC
 {
+    MC()
+    {
+      num_int_samples=1000;
+      success=2;
+    }
     std::vector<statet> states;
     //note that slot 0 in modelparams is 1, and used
     //to represent known constants in param functions
@@ -54,7 +59,7 @@ struct MC
     fractiont overall_confidence;
     std::vector<double> param_lower_bounds;
     std::vector<double> param_upper_bounds;
-    unsigned success = 2; //success state in property.
+    unsigned success; //success state in property.
 
     std::vector<std::vector<std::pair<double, double> > > parameter_bounds;
     std::vector<std::string> parameter_results;
@@ -102,6 +107,7 @@ struct MC
     std::vector<std::vector<fractiont> > transitioncountvector();
 
     fractiont operator()(random_distribution &);
+    fractiont operator()(random_distribution &, bool);
 
 };
 

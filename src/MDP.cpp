@@ -305,7 +305,7 @@ MC MDP::induceMarkovChain(const std::vector<unsigned>& strategy)
  // std::cout<<"prior size "<<prior_a1.size()<<std::endl;
   model.verbose = verbose;
   model.trace_length = trace_length;
-  model.number_of_traces = 1;
+  model.number_of_traces = number_of_traces;
   //copy these numbers back and forth is pretty inefficient, but this was a quick hack
   model.parameter_bounds = parameter_bounds;
   model.parameter_results = parameter_results;
@@ -373,12 +373,19 @@ fractiont MDP::operator()(random_distribution &rd)
   if (verbose > 1)
     std::cout << "collect data \n";
   int int_samples = num_temp_int_samples;
+  std::vector<unsigned> data_collection_strategy;
+
   for (unsigned n = 0; n < number_of_traces; n++)
   {
     if (n == number_of_traces - 1)
       int_samples = num_int_samples;
-    std::vector<unsigned> strategy = synthStrategy(rd);
-    getData(trace_length, strategy, rd, int_samples);  //and update posterior
+    data_collection_strategy = synthStrategy(rd);
+    if(strategy_type==FIRST)
+    {
+      MC model=induceMarkovChain(data_collection_strategy);
+      return model(rd, false);
+    }
+    getData(trace_length, data_collection_strategy, rd, int_samples);  //and update posterior
   }
 
   if (verbose > 0)
