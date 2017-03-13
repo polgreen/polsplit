@@ -189,6 +189,15 @@ MDP get_MDP_one()
   model.modelparams[2].nom = PARAM2;
   model.modelparams[2].denom = 100;
 
+  model.param_upper_bounds.resize(3);
+  model.param_lower_bounds.resize(3);
+  model.param_upper_bounds[0] = 1.0;
+  model.param_upper_bounds[1] = 0.75;
+  model.param_upper_bounds[2] = 0.9;
+  model.param_lower_bounds[0] = 1.0;
+  model.param_lower_bounds[1] = 0.0;
+  model.param_lower_bounds[2] = 0.0;
+
   double param1[] =
   { 0, 1, 0 };
   double param2[] =
