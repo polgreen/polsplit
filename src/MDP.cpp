@@ -15,7 +15,7 @@ void MDP::add_IDs()
 void MDP::num_states(const int num_states)
 {
   MDP_statet s;
-  for (int i = 0; i <= num_states; i++)
+  for (int i = 0; i < num_states; i++)
   {
     MDPstates.push_back(s);
   }
@@ -273,7 +273,13 @@ statet MDP_to_MC_state(MDP::MDP_statet &mS, const unsigned actionNumber)
   s.ID = mS.ID;
   s.init = mS.init;
   // std::cout<<"actions size"<< mS.actions.size()<<", action "<<actionNumber<<std::endl;
-  assert(actionNumber < mS.actions.size());
+  if(actionNumber >= mS.actions.size())
+  {
+    std::cout<<"action number must not be more than number of actions available \n";
+    std::cout<<"State"<<mS.ID<<" action "<<actionNumber<<" actionsize "<<mS.actions.size()<<std::endl;
+    throw std::exception();
+  }
+
   s.transitions = mS.actions[actionNumber];
   return s;
 }
@@ -294,6 +300,8 @@ MC MDP::induceMarkovChain(const std::vector<unsigned>& strategy)
 
   model.prior_a1=prior_a1;
   model.prior_a2=prior_a2;
+  model.param_upper_bounds=param_upper_bounds;
+  model.param_lower_bounds=param_lower_bounds;
  // std::cout<<"prior size "<<prior_a1.size()<<std::endl;
   model.verbose = verbose;
   model.trace_length = trace_length;
@@ -342,6 +350,11 @@ void MDP::initialise_all_counts()
     inv_parametercounts[i] = 0;
   }
 
+  while(param_upper_bounds.size()<modelparams.size())
+  {
+  param_upper_bounds.push_back(1);
+  param_lower_bounds.push_back(0);
+  }
   if(prior_a1.size()==0)
   {
     prior_a1.resize(modelparams.size());
@@ -350,11 +363,6 @@ void MDP::initialise_all_counts()
       p=1;
     for(auto&p: prior_a2)
       p=1;
-  }
-  while(param_upper_bounds.size()<modelparams.size())
-  {
-  param_upper_bounds.push_back(1);
-  param_lower_bounds.push_back(0);
   }
 }
 
