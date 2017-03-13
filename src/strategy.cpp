@@ -203,7 +203,7 @@ std::vector<unsigned> MDP::randomStrategySynth(random_distribution &rd)
   strategy.resize(MDPstates.size());
   for (int i = 0; i < MDPstates.size(); i++)
   {
-    strategy[i] = (unsigned) (MDPstates[i].actions.size() * rd.beta(1, 1));
+    strategy[i] = rd.random_int(MDPstates[i].actions.size());// (unsigned) (MDPstates[i].actions.size() * rd.beta(1, 1));
   }
 
   return strategy;
