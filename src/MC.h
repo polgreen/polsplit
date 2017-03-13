@@ -80,7 +80,7 @@ struct MC
     void callPrism();
     void outputPRISM(std::ostream &);
     void prism_find(const std::string&);
-
+    bool check_for_parameters();
 //get trace data
     std::vector<std::pair<statet, unsigned> > get_parameterised_states();
     void get_data(const unsigned, random_distribution &);

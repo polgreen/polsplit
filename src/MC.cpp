@@ -80,6 +80,19 @@ void MC::check()
   }
 }
 
+bool MC::check_for_parameters()
+{
+  for(const auto &s: states)
+  {
+    for (const auto &t :s.transitions)
+    {
+      if(t.type==FUNCTION)
+        return true;
+    }
+  }
+return false;
+}
+
 std::vector<std::pair<statet, unsigned> > MC::get_parameterised_states()
 {
 
@@ -115,13 +128,12 @@ std::vector<std::pair<statet, unsigned> > MC::get_parameterised_states()
 
   if (found == false)
   {
-    std::cout
-        << "error in get_parameterised_states: no parameterised states found \n";
+    if(verbose>2)
+      std::cout<< " no parameterised states found \n";
     throw std::exception();
   }
 
   return result;
-
 }
 
 fractiont MC::weighting(const transitiont& t, const statet& s)

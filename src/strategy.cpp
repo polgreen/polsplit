@@ -203,7 +203,9 @@ std::vector<unsigned> MDP::randomStrategySynth(random_distribution &rd)
   strategy.resize(MDPstates.size());
   for (int i = 0; i < MDPstates.size(); i++)
   {
+  //  std::cout<<"action size "<<MDPstates[i].actions.size();
     strategy[i] = rd.random_int(MDPstates[i].actions.size());// (unsigned) (MDPstates[i].actions.size() * rd.beta(1, 1));
+   // std::cout<<", strategy "<<strategy[i]<<std::endl;
   }
 
   return strategy;
@@ -221,7 +223,7 @@ std::vector<unsigned> MDP::synthStrategy(random_distribution &rd)
     case 0:
       if (verbose > 1)
         std::cout << "Explicit strategy synth" << std::endl;
-      explicitStrategySynth(rd);
+      strategy=explicitStrategySynth(rd);
       break;
     case 1:
       if (verbose > 1)
@@ -232,7 +234,7 @@ std::vector<unsigned> MDP::synthStrategy(random_distribution &rd)
       }
       break;
     case 2:
-      randomStrategySynth(rd);
+      strategy=randomStrategySynth(rd);
       if (verbose > 1)
         std::cout << "Randomized strategy synth" << std::endl;
       break;

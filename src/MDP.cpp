@@ -15,7 +15,7 @@ void MDP::add_IDs()
 void MDP::num_states(const int num_states)
 {
   MDP_statet s;
-  for (int i = 0; i < num_states; i++)
+  for (int i = 0; i <= num_states; i++)
   {
     MDPstates.push_back(s);
   }
@@ -312,6 +312,8 @@ void MDP::getData(const unsigned tracelength,
     const int integration_samples)
 {
   MC model = induceMarkovChain(strategy);
+  if(model.check_for_parameters()==false)
+    return;
   model.get_data(tracelength, rd); //get single trace
   model.confidencecalc(true, integration_samples);
 
