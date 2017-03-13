@@ -181,7 +181,7 @@ MDP get_MDP_three()
 MDP get_MDP_one()
 {
   MDP model;
-  model.num_states(4);
+  model.num_states(5);
   model.modelparams.resize(3);
   model.modelparams[0].one();
   model.modelparams[1].nom = PARAM1;
