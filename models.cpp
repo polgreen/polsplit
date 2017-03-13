@@ -84,7 +84,7 @@ MDP get_MDP_two()
 {
   //page 14 of lecture 13 PMC
   MDP model;
-  model.num_states(4);
+  model.num_states(3);
   model.modelparams.resize(3);
   model.modelparams[0].one();
   model.modelparams[1].nom = PARAM1;
