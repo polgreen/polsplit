@@ -81,7 +81,7 @@ class MDP
 
     //strategy synthesis
     std::vector<fractiont> expected_parameters();
-    std::vector<unsigned> synthStrategy();
+    std::vector<unsigned> synthStrategy(random_distribution &);
     std::vector<unsigned> randomStrategySynth(random_distribution &);
     std::vector<unsigned> explicitStrategySynth(random_distribution &);
     fractiont expectedInformationGain(const int,

@@ -206,7 +206,7 @@ int main(int argc, const char *argv[])
       model.trace_length = trace_length;
       model.num_int_samples = num_int_samples;
       model.strategy_type = strategy;
-      for(int i=0; i<=batch; i++)
+      for(int i=0; i<batch; i++)
       {
         results<<"MDP , "<<model_num<<" , ";
               for(const auto &p: model.modelparams)
@@ -232,7 +232,7 @@ int main(int argc, const char *argv[])
       model.number_of_traces = number_of_traces;
       model.trace_length = trace_length;
       model.num_int_samples = num_int_samples;
-      for(int i=0; i<=batch; i++)
+      for(int i=0; i<batch; i++)
       {
         results<<"MDP , "<<model_num<<" , ";
                       for(const auto &p: model.modelparams)

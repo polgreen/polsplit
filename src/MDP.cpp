@@ -367,7 +367,7 @@ fractiont MDP::operator()(random_distribution &rd)
   {
     if (n == number_of_traces - 1)
       int_samples = num_int_samples;
-    std::vector<unsigned> strategy = synthStrategy();
+    std::vector<unsigned> strategy = synthStrategy(rd);
     getData(trace_length, strategy, rd, int_samples);  //and update posterior
   }
 

@@ -209,13 +209,12 @@ std::vector<unsigned> MDP::randomStrategySynth(random_distribution &rd)
   return strategy;
 }
 
-std::vector<unsigned> MDP::synthStrategy()
+std::vector<unsigned> MDP::synthStrategy(random_distribution &rd)
 {
   std::vector<unsigned> strategy;
   // paramImportance();
   //do strategy synthesis (via prismgames?)
   strategy.resize(MDPstates.size());
-  random_distribution rd;
 
   switch (strategy_type)
   {
