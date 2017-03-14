@@ -23,8 +23,10 @@ void MDP_cmdvars::add_MDP_cmd_options(int argc, const char *argv[], int current,
         strategy_type_cap = 1;
     } else if (std::string(argv[i]) == "--random_strategy") {
         strategy_type_cap = 2;
-    } else if (std::string(argv[i]) == "--no_strategy") {
+    } else if (std::string(argv[i]) == "--random_finite_memory") {
         strategy_type_cap = 3;
+    } else if (std::string(argv[i]) == "--no_strategy") {
+        strategy_type_cap = 4;
     }
 }
 
@@ -55,11 +57,11 @@ void MDP_cmdvars::init_process(int verbose, int number_of_traces, int trace_leng
     model.callPrism();
     random_distribution rd = initRndDistribution();
     for (unsigned n = 0; n < model.number_of_traces; n++) {
-        model.synthStrategy();
+        model.synthStrategy(rd);
         MC inducd_model = induceMarkovChain(model);
         inducd_model.get_data(rd);
         inducd_model.confidencecalc();
-       // std::cout << "overall confidence " << inducd_model.overall_confidence.nom << "/" << inducd_model.overall_confidence.denom << "\n";
+        // std::cout << "overall confidence " << inducd_model.overall_confidence.nom << "/" << inducd_model.overall_confidence.denom << "\n";
         model.overall_confidence = inducd_model.overall_confidence;
         for (int i = 1; i < model.modelparams.size(); i++) {
             model.beta_prior_param1[i] += inducd_model.parametercounts[i];
@@ -100,7 +102,7 @@ void MDP::outputPRISM(std::ostream &out) {
             bool first_t = true;
             out << "[act" << action << "] s=" << s.ID << " -> ";
             action++;
-            for (auto & t : a) {
+            for (auto & t : a.first) {
                 if (first_t) {
                     first_t = false;
                 } else {
@@ -129,7 +131,7 @@ void MDP::outputPRISM(std::ostream &out) {
                         break;
                     case REMAINDER:
                         out << "(1";
-                        for (auto & t2 : a)
+                        for (auto & t2 : a.first)
                             switch (t2.type) {
                                 case CONST:
                                     out << "-";

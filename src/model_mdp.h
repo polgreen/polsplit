@@ -17,7 +17,7 @@
 
 class MDP : public MC {
 public:
-    typedef std::vector<transitiont> action;
+    typedef std::pair<std::vector<transitiont>,unsigned> action;
 
     struct statet_a : statet {
         std::vector<action> actions;
@@ -27,7 +27,8 @@ public:
     std::vector<unsigned> data_acq_strategy; //Data acquisition strategy
     unsigned strategy_type; //Interface Control Methods    
     void outputPRISM(std::ostream &out);
-    void synthStrategy();
+    void synthStrategy(random_distribution& rd);
+    void randomStrategy(random_distribution& rd);
     statet_a get_init_state();
 };
 
