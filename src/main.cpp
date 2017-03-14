@@ -219,7 +219,7 @@ int main(int argc, const char *argv[])
                << confidence.denom<<"," ;
            for(int i=1; i<model.modelparams.size(); i++)
            {
-             results<<model.prior_a1[i]<<" , "<<model.prior_a2[i];
+             results<<model.prior_a1[i]<<" , "<<model.prior_a2[i]<<" , ";
            }
            results<<std::endl;
       }
