@@ -13,9 +13,9 @@ do
 	echo "#endif">>model_param.h
 	./DKRcompile
 	
-	for trace_length in `seq 10 10 100`;
+	for trace_length in `seq 10 30 100`;
 	do
-		for number_traces in `seq 10 10 100`;
+		for number_traces in `seq 10 30 100`;
 		do
 			./baever --MDP 3 --traces $number_traces --tracelength $trace_length --batch 10 --explicit_strategy
 			./baever --MDP 3 --traces $number_traces --tracelength $trace_length --batch 10 --random_strategy
