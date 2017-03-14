@@ -27,7 +27,6 @@
 #include "MC.h"
 #include "MDP.h"
 
-
 void help()
 {
   std::cout
@@ -45,7 +44,7 @@ void help()
       << "--explicit_strategy explicitly evaluates all memoryless strategies \n"
       << "--random_strategy picks a random memoryless strategy \n"
       << "--no_strategy picks the first action at each state \n"
-      <<"--first_strategy uses explicit synthesis to synthesise an initial strategy, and then reuses this strategy \n"
+      << "--first_strategy uses explicit synthesis to synthesise an initial strategy, and then reuses this strategy \n"
       << "--batch N runs the experiment N times \n\n";
 }
 
@@ -75,7 +74,7 @@ int main(int argc, const char *argv[])
   int num_int_samples = 10000;
   int strategy = 0;
   int model_num = 0;
-  int batch=1;
+  int batch = 1;
   bool modelMDP = false;
 
   for (unsigned i = 1; i < argc; i++)
@@ -176,10 +175,10 @@ int main(int argc, const char *argv[])
     }
   }
 
-
-
   std::ofstream results;
-  std::string resultfilename=("Results_strat"+std::to_string(strategy)+"_tr"+std::to_string(number_of_traces)+"_l"+std::to_string(trace_length)+".csv");
+  std::string resultfilename = ("Results_strat" + std::to_string(strategy)
+      + "_tr" + std::to_string(number_of_traces) + "_l"
+      + std::to_string(trace_length) + ".csv");
 
   results.open(resultfilename, std::ofstream::out | std::ofstream::app);
   //CSV columns: model, model num, trace num, trace length, integration samples, strategy choice, confidence
@@ -194,7 +193,6 @@ int main(int argc, const char *argv[])
     random_distribution rd;
     rd.set_seed(0);
 
-
     fractiont confidence;
     if (modelMDP)
     {
@@ -207,21 +205,22 @@ int main(int argc, const char *argv[])
       model.trace_length = trace_length;
       model.num_int_samples = num_int_samples;
       model.strategy_type = strategy;
-      for(int i=0; i<batch; i++)
+      for (int i = 0; i < batch; i++)
       {
-        results<<"MDP , "<<model_num<<" , ";
-              for(const auto &p: model.modelparams)
-                results<<fraction_to_double(p)<<" , ";
-              results<<number_of_traces<<" , "<<trace_length<<" , "<<num_int_samples<<" , "<<strategy<<" , ";
-        confidence = model(rd, (i==0));
-        results<<fraction_to_double(confidence)<<" , ";
-           std::cout << "\nFinal confidence: " << confidence.nom << " / "
-               << confidence.denom<<"," ;
-           for(int i=1; i<model.modelparams.size(); i++)
-           {
-             results<<model.prior_a1[i]<<" , "<<model.prior_a2[i]<<" , ";
-           }
-           results<<std::endl;
+        results << "MDP , " << model_num << " , ";
+        for (const auto &p : model.modelparams)
+          results << fraction_to_double(p) << " , ";
+        results << number_of_traces << " , " << trace_length << " , "
+            << num_int_samples << " , " << strategy << " , ";
+        confidence = model(rd, (i == 0));
+        results << fraction_to_double(confidence) << " , ";
+        std::cout << "\nFinal confidence: " << confidence.nom << " / "
+            << confidence.denom << ",";
+        for (int i = 1; i < model.modelparams.size(); i++)
+        {
+          results << model.prior_a1[i] << " , " << model.prior_a2[i] << " , ";
+        }
+        results << std::endl;
       }
 
     }
@@ -229,25 +228,27 @@ int main(int argc, const char *argv[])
     {
       std::cout << "Model = simple Markov chain \n";
       MC model = get_MC();
-      results<<"MC , "<<0<<" , ";
-      for(const auto &p: model.modelparams)
-        results<<fraction_to_double(p)<<" , ";
-      results<<number_of_traces<<", "<<trace_length<<" , "<<num_int_samples<<" , "<<0<<" , ";
+      results << "MC , " << 0 << " , ";
+      for (const auto &p : model.modelparams)
+        results << fraction_to_double(p) << " , ";
+      results << number_of_traces << ", " << trace_length << " , "
+          << num_int_samples << " , " << 0 << " , ";
 
       model.verbose = verbose;
       model.number_of_traces = number_of_traces;
       model.trace_length = trace_length;
       model.num_int_samples = num_int_samples;
-      for(int i=0; i<batch; i++)
+      for (int i = 0; i < batch; i++)
       {
-        results<<"MDP , "<<model_num<<" , ";
-                      for(const auto &p: model.modelparams)
-                        results<<fraction_to_double(p)<<" , ";
-                      results<<number_of_traces<<" , "<<trace_length<<" , "<<num_int_samples<<" , "<<strategy<<" , ";
-                confidence = model(rd);
-                results<<fraction_to_double(confidence)<<std::endl;
-                   std::cout << "\nFinal confidence: " << confidence.nom << " / "
-                       << confidence.denom << std::endl;
+        results << "MC , " << model_num << " , ";
+        for (const auto &p : model.modelparams)
+          results << fraction_to_double(p) << " , ";
+        results << number_of_traces << " , " << trace_length << " , "
+            << num_int_samples << " , " << strategy << " , ";
+        confidence = model(rd);
+        results << fraction_to_double(confidence) << std::endl;
+        std::cout << "\nFinal confidence: " << confidence.nom << " / "
+            << confidence.denom << std::endl;
       }
 
     }

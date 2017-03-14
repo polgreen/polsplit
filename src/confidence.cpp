@@ -38,8 +38,15 @@ void MC::sample_params_update_conf(random_distribution &rd)
   std::vector<double> sample;
   for (unsigned i = 1; i < modelparams.size(); i++)
   {
-    sample.push_back(
-        rd.beta(parametercounts[i] + prior_a1[i], inv_parametercounts[i] + prior_a2[i]));
+    bool in_possible_set=false;
+    double s;
+    while(!in_possible_set)
+    {
+      s=rd.beta(parametercounts[i] + prior_a1[i], inv_parametercounts[i] + prior_a2[i]);
+      if(s<=param_upper_bounds[i] && s >= param_lower_bounds[i])
+        in_possible_set=true;
+    }
+    sample.push_back(s);
   }
   if (is_in_range(sample, true))
   {
