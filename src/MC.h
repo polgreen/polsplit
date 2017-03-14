@@ -93,7 +93,7 @@ struct MC
     void get_trace_counts(const tracet&);
 
     //void sample_transition_counts(random_distribution &)
-    fractiont confidencecalc(const bool, const unsigned);
+    fractiont confidencecalc(const bool, const unsigned, random_distribution &);
     void reset_confidence();
     void get_random_model_params(random_distribution &);
     void sample_D_star(const std::vector<std::pair<statet, unsigned> > &,

@@ -51,15 +51,10 @@ void MC::sample_params_update_conf(random_distribution &rd)
         << overall_confidence.denom << "\n";
 }
 
-fractiont MC::confidencecalc(const bool reset, const unsigned num_samples)
+fractiont MC::confidencecalc(const bool reset, const unsigned num_samples, random_distribution &rd)
 {
   if (verbose > 1)
     std::cout << "confidence calc, number samples " << num_samples << "\n";
-  unsigned seed = 0;
-  random_distribution rd;
-  if (verbose > 1)
-    std::cout << "Using seed of " << seed << "\n";
-  rd.set_seed(seed); //we use the same seed so that we can reproduce experiments
   std::vector< std::pair< statet, unsigned>> param_states;
   std::vector<int>total_paramcounts(modelparams.size());
   std::vector<int>total_inv_paramcounts(modelparams.size());

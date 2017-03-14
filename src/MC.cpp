@@ -327,6 +327,6 @@ fractiont MC::operator()(random_distribution &rd, bool do_synthesis)
   }
   //do confidence calculation
   std::cout << "Computing confidence system satisfies property ... \n";
-  return confidencecalc(true, num_int_samples);
+  return confidencecalc(true, num_int_samples, rd);
 }
 
