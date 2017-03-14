@@ -190,8 +190,10 @@ std::vector<unsigned> MDP::explicitStrategySynth(random_distribution& rd)
   {
     info_gain = expectedInformationGain(s, rd);
     if (info_gain > max_info_gain)
+    {
       max_strategy = s;
-    max_info_gain = info_gain;
+      max_info_gain = info_gain;
+    }
   }
   //get expected data counts for all
   return strategies[max_strategy];
