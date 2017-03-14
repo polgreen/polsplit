@@ -302,13 +302,22 @@ void MC::initialise_all_counts()
    }
 }
 
-
 fractiont MC::operator()(random_distribution &rd)
 {
-  initialise_all_counts();
-  std::cout << "Calling PRISM for parameter synthesis ... \n";
-  callPrism();
-  std::cout << "\n";
+  MC model=*this;
+  return model(rd, true);
+}
+
+fractiont MC::operator()(random_distribution &rd, bool do_synthesis)
+{
+  if(do_synthesis)
+  {
+    initialise_all_counts();
+    std::cout << "Calling PRISM for parameter synthesis ... \n";
+    callPrism();
+    std::cout << "\n";
+  }
+
   std::cout << "Generating data from underlying system ... \n";
   //get data from model
 

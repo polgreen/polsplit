@@ -15,7 +15,7 @@ void MDP::add_IDs()
 void MDP::num_states(const int num_states)
 {
   MDP_statet s;
-  for (int i = 0; i <= num_states; i++)
+  for (int i = 0; i < num_states; i++)
   {
     MDPstates.push_back(s);
   }
@@ -31,7 +31,7 @@ void MDP::add_const_transition(const int state, const int action_num,
 void MDP::add_const_transition(const int state, const int action_num,
     const int successor, const fractiont& prob)
 {
-  if (MDPstates.size() < state)
+  if ((MDPstates.size() < state)||(MDPstates.size()<successor))
   {
     std::cout << "cannot add transitions between states that don't exist \n";
     throw std::exception();
@@ -64,7 +64,7 @@ void MDP::add_param_transition(const int state, const int action_num,
 void MDP::add_param_transition(const int state, const int action_num,
     const int successor, const std::vector<fractiont>& param_multipliers)
 {
-  if (MDPstates.size() < state)
+  if ((MDPstates.size() < state)||(MDPstates.size()<successor))
   {
     std::cout << "cannot add transitions between states that don't exist \n";
     throw std::exception();
@@ -94,7 +94,7 @@ void MDP::add_param_transition(const int state, const int action_num,
 void MDP::add_remainder_transition(const int state, const int action_num,
     const int successor)
 {
-  if (MDPstates.size() < state)
+  if ((MDPstates.size() < state)||(MDPstates.size()<successor))
   {
     std::cout << "cannot add transitions between states that don't exist \n";
     throw std::exception();
@@ -273,7 +273,13 @@ statet MDP_to_MC_state(MDP::MDP_statet &mS, const unsigned actionNumber)
   s.ID = mS.ID;
   s.init = mS.init;
   // std::cout<<"actions size"<< mS.actions.size()<<", action "<<actionNumber<<std::endl;
-  assert(actionNumber < mS.actions.size());
+  if(actionNumber >= mS.actions.size())
+  {
+    std::cout<<"action number must not be more than number of actions available \n";
+    std::cout<<"State"<<mS.ID<<" action "<<actionNumber<<" actionsize "<<mS.actions.size()<<std::endl;
+    throw std::exception();
+  }
+
   s.transitions = mS.actions[actionNumber];
   return s;
 }
@@ -294,10 +300,13 @@ MC MDP::induceMarkovChain(const std::vector<unsigned>& strategy)
 
   model.prior_a1=prior_a1;
   model.prior_a2=prior_a2;
+  model.param_upper_bounds=param_upper_bounds;
+  model.param_lower_bounds=param_lower_bounds;
  // std::cout<<"prior size "<<prior_a1.size()<<std::endl;
   model.verbose = verbose;
   model.trace_length = trace_length;
-  model.number_of_traces = 1;
+  model.number_of_traces = number_of_traces;
+  model.num_int_samples=num_int_samples;
   //copy these numbers back and forth is pretty inefficient, but this was a quick hack
   model.parameter_bounds = parameter_bounds;
   model.parameter_results = parameter_results;
@@ -342,6 +351,11 @@ void MDP::initialise_all_counts()
     inv_parametercounts[i] = 0;
   }
 
+  while(param_upper_bounds.size()<modelparams.size())
+  {
+  param_upper_bounds.push_back(1);
+  param_lower_bounds.push_back(0);
+  }
   if(prior_a1.size()==0)
   {
     prior_a1.resize(modelparams.size());
@@ -350,11 +364,6 @@ void MDP::initialise_all_counts()
       p=1;
     for(auto&p: prior_a2)
       p=1;
-  }
-  while(param_upper_bounds.size()<modelparams.size())
-  {
-  param_upper_bounds.push_back(1);
-  param_lower_bounds.push_back(0);
   }
 }
 
@@ -365,12 +374,19 @@ fractiont MDP::operator()(random_distribution &rd)
   if (verbose > 1)
     std::cout << "collect data \n";
   int int_samples = num_temp_int_samples;
+  std::vector<unsigned> data_collection_strategy;
+
   for (unsigned n = 0; n < number_of_traces; n++)
   {
     if (n == number_of_traces - 1)
       int_samples = num_int_samples;
-    std::vector<unsigned> strategy = synthStrategy(rd);
-    getData(trace_length, strategy, rd, int_samples);  //and update posterior
+    data_collection_strategy = synthStrategy(rd);
+    if(strategy_type==FIRST)
+    {
+      MC model=induceMarkovChain(data_collection_strategy);
+      return model(rd, false);
+    }
+    getData(trace_length, data_collection_strategy, rd, int_samples);  //and update posterior
   }
 
   if (verbose > 0)

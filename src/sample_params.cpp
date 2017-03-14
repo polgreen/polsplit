@@ -1,3 +1,18 @@
+/*****************************\
+          (\.---./)
+ /.-.-.\
+          /| 0_0 |\
+         |_`-(v)-'_|
+ \`-._._.-'/      .-.
+ -~-(((.`-\_|_/-'.)))-~' <_
+ `.     .'
+ `._.'
+ BaeVer
+ Bayesian Verification for DTMCs
+ -----~--~---~~~----~-`.-;~
+ elizabeth.polgreen@cs.ox.ac.uk
+ \********************************/
+
 #include <vector>
 #include <random>
 #include <iostream>
@@ -25,18 +40,23 @@ void MC::get_random_model_params(random_distribution &rd)
 {
   if (verbose > 1)
     std::cout << "get random model parameters from posteriors: \n";
+  bool inrange = false;
   for (unsigned i = 1; i < modelparams.size(); i++)
   {
-    modelparams[i].nom = 100
-        * rd.beta(prior_a1[i], prior_a2[i]);
+    while (!inrange)
+    {
+      modelparams[i].nom = 100 * rd.beta(prior_a1[i], prior_a2[i]);
+      if (modelparams[i].nom <= 100 * param_upper_bounds[i]
+          && modelparams[i].nom >= 100 * param_lower_bounds[i])
+        inrange = true;
+    }
     modelparams[i].denom = 100;
     if (verbose > 1)
       std::cout << "p" << i << " " << modelparams[i] << " ";
   }
-  if(verbose>1)
+  if (verbose > 1)
     std::cout << std::endl;
 }
-
 
 void MC::sample_D_star(
     const std::vector<std::pair<statet, unsigned> > &param_states,

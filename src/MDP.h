@@ -9,6 +9,10 @@
 #define SRC_MDP_H_
 
 #include "MC.h"
+enum strategytype
+{
+  EXPLICIT, RANDOM, NONE,FIRST
+};
 
 class MDP
 {

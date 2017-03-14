@@ -44,7 +44,8 @@ void help()
       << "--MDP N runs the MDP model N, default is to run the MC model\n"
       << "--explicit_strategy explicitly evaluates all memoryless strategies \n"
       << "--random_strategy picks a random memoryless strategy \n"
-      << "--first_strategy picks the first action at each state \n"
+      << "--no_strategy picks the first action at each state \n"
+      <<"--first_strategy uses explicit synthesis to synthesise an initial strategy, and then reuses this strategy \n"
       << "--batch N runs the experiment N times \n\n";
 }
 
@@ -154,19 +155,19 @@ int main(int argc, const char *argv[])
     }
     else if (std::string(argv[i]) == "--explicit_strategy")
     {
-      strategy = 0;
+      strategy = EXPLICIT;
     }
     else if (std::string(argv[i]) == "--first_strategy")
     {
-      strategy = 1;
+      strategy = FIRST;
     }
     else if (std::string(argv[i]) == "--random_strategy")
     {
-      strategy = 2;
+      strategy = RANDOM;
     }
     else if (std::string(argv[i]) == "--no_strategy")
     {
-      strategy = 3;
+      strategy = NONE;
     }
     else if (std::string(argv[i]) == "--help")
     {
