@@ -138,7 +138,7 @@ fractiont MDP::expectedInformationGain(const int strategy,
     std::cout << "expected Strategy confidence  = " << expected_confidence
         << "\n";
   }
-  return frac_abs(0.5 - expected_confidence);
+  return frac_abs(double_to_fraction(0.5) - expected_confidence);
 }
 
 std::vector<unsigned> MDP::explicitStrategySynth(random_distribution& rd)
