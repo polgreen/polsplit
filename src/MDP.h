@@ -97,6 +97,7 @@ class MDP
     MC induceMarkovChain(const std::vector<unsigned>&);
     //void updateTransitionCounts(MC &, const std::vector<unsigned>&);
 
+    fractiont operator()(random_distribution &, bool);
     fractiont operator()(random_distribution &);
 };
 

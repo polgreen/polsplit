@@ -324,7 +324,7 @@ void MDP::getData(const unsigned tracelength,
   if(model.check_for_parameters()==false)
     return;
   model.get_data(tracelength, rd); //get single trace
-  model.confidencecalc(true, integration_samples);
+  model.confidencecalc(true, integration_samples, rd);
 
   //update prior with the new posterior:
   for(int i=1; i<modelparams.size(); i++)
@@ -369,8 +369,17 @@ void MDP::initialise_all_counts()
 
 fractiont MDP::operator()(random_distribution &rd)
 {
+  MDP model=*this;
+  model(rd, true);
+}
+
+fractiont MDP::operator()(random_distribution &rd, bool doprism)
+{
   initialise_all_counts();
-  callPrism();
+  if(doprism)
+  {
+    callPrism();
+  }
   if (verbose > 1)
     std::cout << "collect data \n";
   int int_samples = num_temp_int_samples;
