@@ -213,7 +213,7 @@ int main(int argc, const char *argv[])
               for(const auto &p: model.modelparams)
                 results<<fraction_to_double(p)<<" , ";
               results<<number_of_traces<<" , "<<trace_length<<" , "<<num_int_samples<<" , "<<strategy<<" , ";
-        confidence = model(rd);
+        confidence = model(rd, (i==0));
         results<<fraction_to_double(confidence)<<" , ";
            std::cout << "\nFinal confidence: " << confidence.nom << " / "
                << confidence.denom<<"," ;
