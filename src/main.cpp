@@ -216,7 +216,13 @@ int main(int argc, const char *argv[])
         confidence = model(rd);
         results<<fraction_to_double(confidence)<<std::endl;
            std::cout << "\nFinal confidence: " << confidence.nom << " / "
-               << confidence.denom << std::endl;
+               << confidence.denom<<"," ;
+           for(int i=1; i<model.modelparams.size(); i++)
+           {
+             std::cout<<model.parametercounts[i]<<" , "<<model.inv_parametercounts[i]<<std::endl;
+           }
+
+
       }
 
     }
