@@ -356,15 +356,15 @@ void MDP::initialise_all_counts()
   param_upper_bounds.push_back(1);
   param_lower_bounds.push_back(0);
   }
-  if(prior_a1.size()==0)
-  {
+ // if(prior_a1.size()==0)
+ // {
     prior_a1.resize(modelparams.size());
     prior_a2.resize(modelparams.size());
     for(auto &p: prior_a1)
       p=1;
     for(auto&p: prior_a2)
       p=1;
-  }
+  //}
 }
 
 fractiont MDP::operator()(random_distribution &rd)
