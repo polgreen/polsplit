@@ -214,15 +214,14 @@ int main(int argc, const char *argv[])
                 results<<fraction_to_double(p)<<" , ";
               results<<number_of_traces<<" , "<<trace_length<<" , "<<num_int_samples<<" , "<<strategy<<" , ";
         confidence = model(rd);
-        results<<fraction_to_double(confidence)<<std::endl;
+        results<<fraction_to_double(confidence)<<" , ";
            std::cout << "\nFinal confidence: " << confidence.nom << " / "
                << confidence.denom<<"," ;
            for(int i=1; i<model.modelparams.size(); i++)
            {
-             std::cout<<model.parametercounts[i]<<" , "<<model.inv_parametercounts[i]<<std::endl;
+             results<<model.prior_a1[i]<<" , "<<model.prior_a2[i];
            }
-
-
+           results<<std::endl;
       }
 
     }
