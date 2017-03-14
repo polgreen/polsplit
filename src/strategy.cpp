@@ -111,14 +111,24 @@ fractiont MDP::expectedInformationGain(const int strategy,
   }
 
 //compute parameter confidence
-  if (verbose > 1)
+  bool no_param_counts=true;
     for (int i = 1; i < modelparams.size(); i++)
-      std::cout << "Computed expected parameter " << i << " counts: "
+    {
+      if(expected_param_counts[i]>0|| expected_invparam_counts[i]>0)
+          no_param_counts=false;
+      if (verbose > 1)
+        std::cout << "Computed expected parameter " << i << " counts: "
           << expected_param_counts[i] << " " << expected_invparam_counts[i]
           << std::endl;
-  for (int i = 0; i < 10; i++)
+    }
+
+  if(no_param_counts)
+    return double_to_fraction(0);
+
+  for (int i = 0; i < 1000; i++)
   {
     std::vector<double> sample;
+
     for (unsigned i = 1; i < modelparams.size(); i++)
     {
       double p1 = fraction_to_double(expected_param_counts[i]);
@@ -251,7 +261,7 @@ std::vector<unsigned> MDP::synthStrategy(random_distribution &rd)
       throw std::exception();
   }
 
-  if (verbose > 1)
+ // if (verbose > 1)
   {
     std::cout << "Memoryless strategy: ";
     for (const auto s : strategy)
