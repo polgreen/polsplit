@@ -24,8 +24,7 @@ struct fractiont {
     friend fractiont operator+(fractiont, fractiont);
     void simplify();
     void zero();
-    void one();
-    void avg(unsigned);
+    void one();    
 
     friend std::ostream& operator<<(std::ostream& out, fractiont f) {
         f.output(out);

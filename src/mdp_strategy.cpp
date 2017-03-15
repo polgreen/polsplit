@@ -7,7 +7,7 @@
 #include "model.h"
 #include "model_mdp.h"
 
-void MDP::synthStrategy(random_distribution& rd) {
+void MDP::synthStrategy() {
     data_acq_strategy.clear();
     data_acq_strategy.resize(states.size());
 
@@ -21,7 +21,7 @@ void MDP::synthStrategy(random_distribution& rd) {
                 s = 0;
             }
             break;
-        case 2: randomStrategy(rd);
+        case 2: randomStrategy();
             break;
         default:
             std::cout << "ERROR no strategy method selected\n";
@@ -33,8 +33,8 @@ MC induceMarkovChain(MDP m) {
     if (m.verbose > 2)
         std::cout << "..induce Markov chain for strategy\n";
 
-    MC model = m;
-
+    MC model = m;   
+    
     for (unsigned i = 0; i < m.states.size(); i++) {
         statet s;
         s.ID = m.states[i].ID;
@@ -45,7 +45,7 @@ MC induceMarkovChain(MDP m) {
     return model;
 }
 
-void MDP::randomStrategy(random_distribution& rd) {
+void MDP::randomStrategy() {
     for (int i = 0; i < states.size(); i++) {
         if (states[i].actions.size() > 0)
             data_acq_strategy.push_back(rd.random_int(states[i].actions.size()));

@@ -27,8 +27,8 @@ public:
     std::vector<unsigned> data_acq_strategy; //Data acquisition strategy
     unsigned strategy_type; //Interface Control Methods    
     void outputPRISM(std::ostream &out);
-    void synthStrategy(random_distribution& rd);
-    void randomStrategy(random_distribution& rd);
+    void synthStrategy();
+    void randomStrategy();
     statet_a get_init_state();
 };
 

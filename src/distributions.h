@@ -11,12 +11,13 @@ double Beta_probability(double lower_bound, double upper_bound, double alpha1, d
 
 class random_distribution {
 public:
+    
 
-    random_distribution() {
+    void initialiseRndDistribution() {
         rng = gsl_rng_alloc(gsl_rng_taus);
     }
 
-    ~random_distribution() {
+    void freeRndDistribution() {
         gsl_rng_free(rng);
     }
 

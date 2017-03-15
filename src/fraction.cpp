@@ -116,7 +116,4 @@ void fractiont::one() {
     denom = 1;
 }
 
-void fractiont::avg(unsigned trace_size) {
-    nom = floor((double(nom) / double(trace_size)) + 0.5);
-    denom = floor((double(denom) / double(trace_size)) + 0.5);
-}
+

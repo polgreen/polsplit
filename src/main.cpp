@@ -136,11 +136,10 @@ int main(int argc, const char *argv[]) {
             model.prepModel();
             model.callPrism();
             std::cout << "\n";
-            random_distribution rd;
-            rd.set_seed(0);
+            model.initRndDistribution();
             //get data from model
             for (unsigned n = 0; n < model.number_of_traces; n++) {
-                model.get_data(rd);
+                model.get_data();
             }
             //do confidence calculation
             model.confidencecalc();

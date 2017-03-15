@@ -234,11 +234,9 @@ statet MC::get_init_state() {
 //
 //}
 
-random_distribution initRndDistribution() {
-    random_distribution rd;
+void MC::initRndDistribution() {
+    rd.initialiseRndDistribution();
     rd.set_seed(0);
-    return rd;
-
 }
 
 void MC::prepModel() {

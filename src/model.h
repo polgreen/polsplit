@@ -56,7 +56,7 @@ struct MC {
     std::vector<statet> states;
     std::vector<fractiont> modelparams;
     std::vector<unsigned> parametercounts;
-    std::vector<unsigned> inv_parametercounts;    
+    std::vector<unsigned> inv_parametercounts;
     std::vector<unsigned> beta_prior_param1;
     std::vector<unsigned> beta_prior_param2;
     std::vector<double> param_lower_bounds;
@@ -64,6 +64,7 @@ struct MC {
     std::vector<fractiont> param_confidence;
     fractiont overall_confidence;
     unsigned success = 2;
+    random_distribution rd;
 
     std::vector<std::vector<std::pair <double, double > > >parameter_bounds;
     std::vector<std::string> parameter_results;
@@ -93,8 +94,8 @@ struct MC {
 
     //get trace data
     std::vector< std::pair < statet, unsigned> > get_parameterised_states();
-    void get_data(random_distribution &);
-    tracet gettrace(random_distribution &);
+    void get_data();
+    tracet gettrace();
     void get_trace_counts(tracet&);
     void displayConfidence();
 
@@ -102,23 +103,23 @@ struct MC {
     //void sample_transition_counts(random_distribution &)
     void confidencecalc();
     void reset_confidence();
-    void get_random_model_params(random_distribution &);
-    void sample_D_star(std::vector< std::pair < statet, unsigned> > &, random_distribution &);
-    void sample_params_update_conf(random_distribution &);
+    void get_random_model_params();
+    void sample_D_star(std::vector< std::pair < statet, unsigned> > &);
+    void sample_params_update_conf();
 
     //check if params are in feasible bounds
     bool is_in_range(std::vector<double>&);
     bool result_bound_satisfied(unsigned, std::vector<double>&);
     unsigned getStateIndex(unsigned);
-
-
+    double Generate(const double, const double);
+    void initRndDistribution();
 };
 
 std::ofstream getPRISMFile();
 std::string prepCmd();
 MC get_simpleMC();
-random_distribution initRndDistribution();
 std::string intToString(int);
+
 
 //debugging
 void printstate(statet s);

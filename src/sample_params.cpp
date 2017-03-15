@@ -19,7 +19,7 @@ unsigned statet::sum_outputs() {
     return sum;
 }
 
-void MC::get_random_model_params(random_distribution &rd) {
+void MC::get_random_model_params() {
     if (verbose > 1)
         std::cout << "get random model parameters: \n";
     for (unsigned i = 1; i < modelparams.size(); i++) {
@@ -30,7 +30,7 @@ void MC::get_random_model_params(random_distribution &rd) {
     }
 }
 
-void MC::sample_D_star(std::vector< std::pair < statet, unsigned> > &param_states, random_distribution &rd) {
+void MC::sample_D_star(std::vector< std::pair < statet, unsigned> > &param_states) {
     if (verbose > 1)
         std::cout << "Sample D* \n";
     std::vector<unsigned> param_counts;

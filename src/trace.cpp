@@ -8,13 +8,13 @@
 #include "model.h"
 #include "distributions.h"
 
-double Generate(const double from, const double to, random_distribution& dist) {
+double MC::Generate(const double from, const double to) {
     double result;
-    result = (to - from) * dist.beta(1, 1) + from;
+    result = (to - from) * rd.beta(1, 1) + from;
     return result;
 }
 
-tracet MC::gettrace(random_distribution& rd) {
+tracet MC::gettrace() {
     tracet trace;
     std::vector<std::vector<unsigned> > count;
     statet state = get_init_state();
@@ -35,7 +35,7 @@ tracet MC::gettrace(random_distribution& rd) {
         }
         //std::uniform_int_distribution<unsigned> distribution(0,100);
         fractiont random;
-        random.nom = Generate(0, 100, rd);
+        random.nom = Generate(0, 100);
         random.denom = 100;
         fractiont mass;
         fractiont subtraction;
@@ -112,8 +112,8 @@ void MC::get_trace_counts(tracet & trace) {
 
 }
 
-void MC::get_data(random_distribution & rd) {
-    tracet T = gettrace(rd);
+void MC::get_data() {
+    tracet T = gettrace();
     get_trace_counts(T);
 }
 

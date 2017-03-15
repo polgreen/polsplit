@@ -15,7 +15,7 @@ void MC::reset_confidence() {
     overall_confidence.zero();
 }
 
-void MC::sample_params_update_conf(random_distribution &rd) {
+void MC::sample_params_update_conf() {
     if (verbose > 1)
         std::cout << "\nsample params and update confidence \n";
     std::vector<double> sample;
@@ -42,16 +42,16 @@ void MC::sample_params_update_conf(random_distribution &rd) {
 void MC::confidencecalc() {
     if (verbose > 1)
         std::cout << "confidence calc \n";
-    random_distribution rd = initRndDistribution();
+    initRndDistribution();
     std::vector< std::pair < statet, unsigned> > param_states;
     reset_confidence();
     param_states = get_parameterised_states();
     std::vector<int>total_paramcounts(modelparams.size());
     std::vector<int>total_inv_paramcounts(modelparams.size());
     for (unsigned i = 0; i < int_samples; i++) {
-        get_random_model_params(rd);
-        sample_D_star(param_states, rd);
-        sample_params_update_conf(rd);
+        get_random_model_params();
+        sample_D_star(param_states);
+        sample_params_update_conf();
         for (int i = 0; i < modelparams.size(); i++) {
             total_paramcounts[i] += parametercounts[i];
             total_inv_paramcounts[i] += inv_parametercounts[i];
