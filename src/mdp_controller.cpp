@@ -40,6 +40,9 @@ void MDP_cmdvars::display_MDP_cmd_options() {
         std::cout << "Strategy: random_strategy\n";
 
     } else if (strategy_type_cap == 3) {
+        std::cout << "Randomized finite memory strategy\n";
+
+    } else if (strategy_type_cap == 4) {
         std::cout << "Strategy: no_strategy\n";
     }
 
@@ -54,23 +57,23 @@ void MDP_cmdvars::init_process(int verbose, int number_of_traces, int trace_leng
     model.int_samples = int_samples;
     model.strategy_type = strategy_type_cap;
     model.prepModel();
-    model.callPrism();    
+    model.callPrism();
     model.initRndDistribution();
     for (unsigned n = 0; n < model.number_of_traces; n++) {
         model.synthStrategy();
-        MC inducd_model = induceMarkovChain(model);      
-        inducd_model.get_data();
-        inducd_model.confidencecalc();
-        // std::cout << "overall confidence " << inducd_model.overall_confidence.nom << "/" << inducd_model.overall_confidence.denom << "\n";
-        model.overall_confidence = inducd_model.overall_confidence;
-        for (int i = 1; i < model.modelparams.size(); i++) {
-            model.beta_prior_param1[i] += inducd_model.parametercounts[i];
-            model.beta_prior_param2[i] += inducd_model.inv_parametercounts[i];
-            if (verbose > 0)
-                std::cout << "updated prior for p" << i << " " << model.beta_prior_param1[i] << " " << model.beta_prior_param2[i] << std::endl;
+        if (model.finiteMemMode == 0) {
+            MC inducd_model = induceMarkovChain(model);
+            inducd_model.get_data();
+            inducd_model.confidencecalc();
+            model.overall_confidence = inducd_model.overall_confidence;
+            model.beta_prior_param1 = inducd_model.beta_prior_param1;
+            model.beta_prior_param2 = inducd_model.beta_prior_param2;
+        } else {
+            model.get_data();
+         //   model.confidencecalc();
         }
-    }    
-    model.displayConfidence();
+    }
+   // model.displayConfidence();
 }
 
 MDP_cmdvars get_MDP_cmdvars_instance() {
@@ -182,4 +185,14 @@ MDP::statet_a MDP::get_init_state() {
         throw std::exception();
     }
     return result;
+}
+
+statet MDP::statet_a::getMCStateStruc(int actionNumber) {
+    statet s;
+    s.ID = ID;
+    s.init = init;
+    s.transitions = actions[actionNumber].first;
+    return s;
+
+
 }

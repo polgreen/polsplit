@@ -17,19 +17,25 @@
 
 class MDP : public MC {
 public:
-    typedef std::pair<std::vector<transitiont>,unsigned> action;
+    typedef std::pair<std::vector<transitiont>, unsigned> action;
 
     struct statet_a : statet {
         std::vector<action> actions;
+        statet getMCStateStruc(int);
     };
 
     std::vector<statet_a> states;
     std::vector<unsigned> data_acq_strategy; //Data acquisition strategy
-    unsigned strategy_type; //Interface Control Methods    
+    unsigned strategy_type; //Interface Control Methods  
+    unsigned finiteMemMode; //Switch to finite memory mode: 0-> off, 1-> randomized finite memory
     void outputPRISM(std::ostream &out);
     void synthStrategy();
     void randomStrategy();
+    void randomFntMemStrategy();
     statet_a get_init_state();
+    tracet gettrace();
+    void get_trace_counts(tracet&);
+    unsigned getStateIndex(unsigned);
 };
 
 class MDP_cmdvars {

@@ -61,5 +61,15 @@ void MC::confidencecalc() {
         parametercounts[i] = total_paramcounts[i] / int_samples;
         inv_parametercounts[i] = total_inv_paramcounts[i] / int_samples;
     }
+    updatePriors();
+
 }
 
+void MC::updatePriors() {
+    for (int i = 1; i < modelparams.size(); i++) {
+        beta_prior_param1[i] += parametercounts[i];
+        beta_prior_param2[i] += inv_parametercounts[i];
+        if (verbose > 0)
+            std::cout << "updated prior for p" << i << " " << beta_prior_param1[i] << " " << beta_prior_param2[i] << std::endl;
+    }
+}

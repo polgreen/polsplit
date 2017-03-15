@@ -17,11 +17,15 @@ void MDP::synthStrategy() {
         case 1:
             if (verbose > 1)
                 std::cout << "Always pick the first action at a state as the strategy" << std::endl;
+            finiteMemMode = 0;
             for (auto &s : data_acq_strategy) {
                 s = 0;
             }
             break;
         case 2: randomStrategy();
+            break;
+
+        case 3: randomFntMemStrategy();
             break;
         default:
             std::cout << "ERROR no strategy method selected\n";
@@ -52,6 +56,7 @@ MC induceMarkovChain(MDP m) {
 }
 
 void MDP::randomStrategy() {
+    finiteMemMode = 0;
     for (int i = 0; i < states.size(); i++) {
         if (states[i].actions.size() > 0) {
             data_acq_strategy[i] = rd.random_int(states[i].actions.size());
@@ -59,5 +64,10 @@ void MDP::randomStrategy() {
             data_acq_strategy[i] = 0;
         }
     }
+
+}
+
+void MDP::randomFntMemStrategy() {
+    finiteMemMode = 1;
 
 }

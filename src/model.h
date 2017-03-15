@@ -95,8 +95,8 @@ struct MC {
     //get trace data
     std::vector< std::pair < statet, unsigned> > get_parameterised_states();
     void get_data();
-    tracet gettrace();
-    void get_trace_counts(tracet&);
+    tracet virtual gettrace();
+    void virtual get_trace_counts(tracet&);
     void displayConfidence();
 
 
@@ -106,11 +106,12 @@ struct MC {
     void get_random_model_params();
     void sample_D_star(std::vector< std::pair < statet, unsigned> > &);
     void sample_params_update_conf();
+    void updatePriors();
 
     //check if params are in feasible bounds
     bool is_in_range(std::vector<double>&);
     bool result_bound_satisfied(unsigned, std::vector<double>&);
-    unsigned getStateIndex(unsigned);
+    unsigned virtual getStateIndex(unsigned);
     double Generate(const double, const double);
     void initRndDistribution();
 };
