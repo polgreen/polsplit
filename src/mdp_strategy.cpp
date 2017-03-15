@@ -33,26 +33,31 @@ MC induceMarkovChain(MDP m) {
     if (m.verbose > 2)
         std::cout << "..induce Markov chain for strategy\n";
 
-    MC model = m;   
-    
+    MC model = m;
+
     for (unsigned i = 0; i < m.states.size(); i++) {
         statet s;
         s.ID = m.states[i].ID;
         s.init = m.states[i].init;
         s.transitions = m.states[i].actions[m.data_acq_strategy[i]].first;
         model.states.push_back(s);
+        if (m.verbose > 1) {
+            std::cout << "State ID: " << s.ID;
+            std::cout << "    First Successor: " << s.transitions[0].successor;
+            std::cout << "    Selected action: " << m.data_acq_strategy[i];
+            std::cout << "\n";
+        }
     }
     return model;
 }
 
 void MDP::randomStrategy() {
     for (int i = 0; i < states.size(); i++) {
-        if (states[i].actions.size() > 0)
-            data_acq_strategy.push_back(rd.random_int(states[i].actions.size()));
-        else {
-            data_acq_strategy.push_back(0);
+        if (states[i].actions.size() > 0) {
+            data_acq_strategy[i] = rd.random_int(states[i].actions.size());
+        } else {
+            data_acq_strategy[i] = 0;
         }
-
     }
 
 }
