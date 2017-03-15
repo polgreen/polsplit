@@ -133,9 +133,17 @@ fractiont MDP::expectedInformationGain(const int strategy,
     {
       double p1 = fraction_to_double(expected_param_counts[i]);
       double p2 = fraction_to_double(expected_invparam_counts[i]);
-      if(verbose>1)
-        std::cout<<"distribution "<<p1<<" "<<p2<<std::endl;
-      sample.push_back(rd.beta(p1 +  prior_a1[i], p2 + prior_a2[i]));
+      bool in_possible_set=false;
+      double s;
+      while(!in_possible_set)
+      {
+        s=rd.beta(p1 +  prior_a1[i], p2 + prior_a2[i]);
+        if(s<=param_upper_bounds[i] && s>=param_lower_bounds[i])
+        {
+          sample.push_back(s);
+          in_possible_set=true;
+        }
+      }
     }
     if (model.is_in_range(sample, false))
     {

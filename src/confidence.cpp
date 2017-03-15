@@ -43,7 +43,7 @@ void MC::sample_params_update_conf(random_distribution &rd)
     while(!in_possible_set)
     {
       s=rd.beta(parametercounts[i] + prior_a1[i], inv_parametercounts[i] + prior_a2[i]);
-      if(s<=param_upper_bounds[i] && s >= param_lower_bounds[i])
+      if(s<=param_upper_bounds[i] & s >= param_lower_bounds[i])
         in_possible_set=true;
     }
     sample.push_back(s);
