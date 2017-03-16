@@ -272,7 +272,7 @@ std::vector<unsigned> MDP::synthStrategy(random_distribution &rd)
       throw std::exception();
   }
 
- // if (verbose > 1)
+  if (verbose > 1)
   {
     std::cout << "Memoryless strategy: ";
     for (const auto s : strategy)
