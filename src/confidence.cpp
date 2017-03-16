@@ -48,11 +48,15 @@ void MC::sample_params_update_conf(random_distribution &rd)
     }
     sample.push_back(s);
   }
-  if (is_in_range(sample, true))
+  switch(is_in_range(sample,true))
   {
-    overall_confidence.nom++;
+    case 0: overall_confidence.denom++; break;
+    case 1: overall_confidence.nom++;
+            overall_confidence.denom++; break;
+    case 2: break;
+    default: throw std::exception(); break;
   }
-  overall_confidence.denom++;
+
   if (verbose > 1)
     std::cout << "confidence = " << overall_confidence.nom << "/"
         << overall_confidence.denom << "\n";

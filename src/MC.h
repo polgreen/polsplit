@@ -101,7 +101,7 @@ struct MC
     void sample_params_update_conf(random_distribution &);
 
 //check if params are in feasible bounds
-    bool is_in_range(const std::vector<double>&, const bool);
+    int is_in_range(const std::vector<double>&, const bool);
     bool result_bound_satisfied(const unsigned, const std::vector<double>&);
 
     std::vector<std::vector<fractiont> > transitioncountvector();

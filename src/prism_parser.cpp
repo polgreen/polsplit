@@ -125,7 +125,7 @@ bool MC::result_bound_satisfied(const unsigned i,
   throw std::exception();
 }
 
-bool MC::is_in_range(const std::vector<double> &sample,
+int MC::is_in_range(const std::vector<double> &sample,
     const bool update_param_conf)
 {
   assert(sample.size() == modelparams.size() - 1);
@@ -161,7 +161,7 @@ bool MC::is_in_range(const std::vector<double> &sample,
       else
       {
         param_confidence[s].denom++;
-        in_range = false;
+        in_range = 0;
        // break;
       }
     }
@@ -183,7 +183,7 @@ bool MC::is_in_range(const std::vector<double> &sample,
   }
   if (verbose > 1)
     std::cout << " RESULT = false\n";
-  return false;
+  return 2;
 }
 
 void MDP::prism_find(const std::string& input)

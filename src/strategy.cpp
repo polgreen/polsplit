@@ -145,11 +145,14 @@ fractiont MDP::expectedInformationGain(const int strategy,
         }
       }
     }
-    if (model.is_in_range(sample, false))
+    switch(model.is_in_range(sample,true))
     {
-      expected_confidence.nom++;
+      case 0: overall_confidence.denom++; break;
+      case 1: overall_confidence.nom++;
+              overall_confidence.denom++; break;
+      case 2: break;
+      default: throw std::exception(); break;
     }
-    expected_confidence.denom++;
   }
   if (verbose > 1)
   {
