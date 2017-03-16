@@ -1,4 +1,4 @@
-g++ -g -D MarkovChain -o baever -I/users/elipol/gsl/include -L/users/elipol/gsl/lib \
+g++ -g -D MarkovChain -o /tmp/baever -I/users/elipol/gsl/include -L/users/elipol/gsl/lib \
 main.cpp \
 MC.cpp \
 ../models.cpp \
