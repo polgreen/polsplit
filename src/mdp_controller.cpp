@@ -50,6 +50,10 @@ void MDP_cmdvars::display_MDP_cmd_options() {
 }
 
 void MDP_cmdvars::init_process(int verbose, int number_of_traces, int trace_length, long int_samples, long batch) {
+    std::ofstream results;
+    std::string resultfilename = ("Results.csv");
+    results.open(resultfilename, std::ofstream::out | std::ofstream::app);
+
     for (unsigned a = 15; a <= 75; a += 5) {
         rud_param_values.resize(2);
         rud_param_values[0] = a;
@@ -83,12 +87,11 @@ void MDP_cmdvars::init_process(int verbose, int number_of_traces, int trace_leng
                     model.overall_confidence = exp_model.overall_confidence;
                     model.beta_prior_param1 = exp_model.beta_prior_param1;
                     model.beta_prior_param2 = exp_model.beta_prior_param2;
-                   // std::cout << " p1 confidence " << exp_model.param_confidence[1] << "/   p2 confidence " << exp_model.param_confidence[2] << "\n";
                     //model.displayConfidence();
                 }
             }
-            model.displayConfidence();
-             //std::cout << " p1 confidence " << model.param_confidence[1] << "/   p2 confidence " << model.param_confidence[2] << "\n";
+            model.displayConfidence(results);
+            //std::cout << " p1 confidence " << model.param_confidence[0] << "/   p2 confidence " << model.param_confidence[1] << "\n";
         }
     }
 }
@@ -211,5 +214,19 @@ statet MDP::statet_a::getMCStateStruc(int actionNumber) {
     s.transitions = actions[actionNumber].first;
     return s;
 
+
+}
+
+void MDP::displayConfidence(std::ofstream& results) {
+    results << "MDP , " << model_num << " , ";
+    for (const auto &p : modelparams)
+        results << fraction_to_double(p) << " , ";
+    results << number_of_traces << " , " << trace_length << " , " << int_samples << " , " << strategy_type << " , ";
+    results << fraction_to_double(overall_confidence) << " , ";
+    for (int i = 1; i < modelparams.size(); i++) {
+        results << beta_prior_param1[i] << " , " << beta_prior_param2[i] << " , ";
+    }
+    results << std::endl;
+    std::cout << "overall confidence: " << overall_confidence.nom << "/" << overall_confidence.denom << "\n";
 
 }

@@ -3,6 +3,7 @@
 
 #include <random>
 #include <vector>
+#include <fstream>
 #include "fraction.h"
 #include "distributions.h"
 
@@ -65,6 +66,7 @@ struct MC {
     fractiont overall_confidence;
     unsigned success = 2;
     random_distribution rd;
+    unsigned model_num;
 
     std::vector<std::vector<std::pair <double, double > > >parameter_bounds;
     std::vector<std::string> parameter_results;

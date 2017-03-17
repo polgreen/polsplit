@@ -41,6 +41,7 @@ public:
     void confidencecalc();
     std::vector< std::tuple <statet_a, unsigned, unsigned> > get_parameterised_states();
     void sample_D_star(std::vector< std::tuple <statet_a, unsigned, unsigned> > &);
+    void displayConfidence(std::ofstream&);
 
 };
 

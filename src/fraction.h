@@ -32,4 +32,6 @@ struct fractiont {
     }
     void output(std::ostream &out);
 };
+
+double fraction_to_double(fractiont);
 #endif    

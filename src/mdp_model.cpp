@@ -9,6 +9,7 @@
 
 MDP MDP_cmdvars::get_MDP_instance(int option) {
     MDP model;
+    model.model_num = option;
     if (option == 0) {
 
         MDP::statet_a s0, s1, s2, s3;
@@ -168,7 +169,7 @@ MDP MDP_cmdvars::get_MDP_instance(int option) {
         model.states.push_back(s0);
 
         s1.init = false;
-        t1.type = FUNCTION;       
+        t1.type = FUNCTION;
         p1.first.one();
         p1.second = 2;
         t1.params.push_back(p1);

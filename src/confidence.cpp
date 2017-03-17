@@ -31,6 +31,7 @@ void MC::sample_params_update_conf() {
 
     }
     if (is_in_range(sample)) {
+         
         overall_confidence.nom++;
     }
     overall_confidence.denom++;

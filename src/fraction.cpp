@@ -116,4 +116,11 @@ void fractiont::one() {
     denom = 1;
 }
 
+double fraction_to_double(fractiont f1)
+{
+  if(f1.denom==0)
+    return 0;
+
+  return (double)f1.nom/(double)f1.denom;
+}
 
