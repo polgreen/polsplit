@@ -40,9 +40,10 @@ void MC::get_random_model_params(random_distribution &rd)
 {
   if (verbose > 1)
     std::cout << "get random model parameters from posteriors: \n";
-  bool inrange = false;
+
   for (unsigned i = 1; i < modelparams.size(); i++)
   {
+    bool inrange = false;
     while (!inrange)
     {
       modelparams[i].nom = 100 * rd.beta(prior_a1[i], prior_a2[i]);
