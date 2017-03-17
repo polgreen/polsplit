@@ -74,6 +74,7 @@ int main(int argc, const char *argv[]) {
     int trace_length = 10;
     long int_samples = 10000; //Integration Samples    
     int model_type = 0;
+    long batch = 1;
 
     MDP_cmdvars cmdvars = get_MDP_cmdvars_instance();
 
@@ -106,6 +107,14 @@ int main(int argc, const char *argv[]) {
                 }
                 i++;
             }
+        } else if (std::string(argv[i]) == "--batch") {
+            if (i + 1 < argc && isdigit(*argv[i + 1])) {
+                std::istringstream ss(argv[i + 1]);
+                if (!(ss >> batch)) {
+                    std::cerr << "Invalid number " << argv[i + 1] << '\n';
+                }
+                i++;
+            }
         } else if (std::string(argv[i]) == "--help") {
             help();
             return 0;
@@ -125,7 +134,7 @@ int main(int argc, const char *argv[]) {
         if (model_type == 33586) {
             std::cout << "Model = simple Markov decision process \n\n";
             cmdvars.display_MDP_cmd_options();
-            cmdvars.init_process(verbose, number_of_traces, trace_length, int_samples);
+            cmdvars.init_process(verbose, number_of_traces, trace_length, int_samples, batch);
         } else {
             std::cout << "Model = simple Markov chain \n\n";
             MC model = get_simpleMC();

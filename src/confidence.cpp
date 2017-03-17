@@ -42,7 +42,7 @@ void MC::sample_params_update_conf() {
 void MC::confidencecalc() {
     if (verbose > 1)
         std::cout << "confidence calc \n";
-    //initRndDistribution();
+    // initRndDistribution();
     std::vector< std::pair < statet, unsigned> > param_states;
     reset_confidence();
     param_states = get_parameterised_states();

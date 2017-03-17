@@ -49,7 +49,7 @@ public:
     unsigned strategy_type_cap;
     void add_MDP_cmd_options(int argc, const char *argv[], int, int*);
     void display_MDP_cmd_options();
-    void init_process(int, int, int, long);
+    void init_process(int, int, int, long, long);
 };
 void add_MDP_help();
 

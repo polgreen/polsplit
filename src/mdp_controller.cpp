@@ -49,32 +49,37 @@ void MDP_cmdvars::display_MDP_cmd_options() {
 
 }
 
-void MDP_cmdvars::init_process(int verbose, int number_of_traces, int trace_length, long int_samples) {
+void MDP_cmdvars::init_process(int verbose, int number_of_traces, int trace_length, long int_samples, long batch) {
     MDP model = get_MDP_instance();
     model.verbose = verbose;
     model.number_of_traces = number_of_traces;
     model.trace_length = trace_length;
     model.int_samples = int_samples;
     model.strategy_type = strategy_type_cap;
-    model.prepModel();
-    model.callPrism();
     model.initRndDistribution();
-    for (unsigned n = 0; n < model.number_of_traces; n++) {
-        model.synthStrategy();
-        if (model.finiteMemMode == 0) {
-            MC inducd_model = induceMarkovChain(model);
-            inducd_model.get_data();
-            inducd_model.confidencecalc();
-            model.overall_confidence = inducd_model.overall_confidence;
-            model.beta_prior_param1 = inducd_model.beta_prior_param1;
-            model.beta_prior_param2 = inducd_model.beta_prior_param2;
-        } else {
-            model.get_data();
-            model.confidencecalc();
-            //model.displayConfidence();
+    for (long i = 0; i < batch; i++) {
+        model.prepModel();
+        if (i == 0) {
+            model.callPrism();
         }
+        for (unsigned n = 0; n < model.number_of_traces; n++) {
+            model.synthStrategy();
+            if (model.finiteMemMode == 0) {
+                MC inducd_model = induceMarkovChain(model);
+                inducd_model.get_data();
+                inducd_model.confidencecalc();
+                model.overall_confidence = inducd_model.overall_confidence;
+                model.beta_prior_param1 = inducd_model.beta_prior_param1;
+                model.beta_prior_param2 = inducd_model.beta_prior_param2;
+            } else {
+                model.get_data();
+                model.confidencecalc();
+                //model.displayConfidence();
+            }
+        }
+        model.displayConfidence();
     }
-    model.displayConfidence();
+
 }
 
 MDP_cmdvars get_MDP_cmdvars_instance() {
