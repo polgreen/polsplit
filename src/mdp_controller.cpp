@@ -77,12 +77,18 @@ void MDP_cmdvars::init_process(int verbose, int number_of_traces, int trace_leng
                     model.beta_prior_param1 = inducd_model.beta_prior_param1;
                     model.beta_prior_param2 = inducd_model.beta_prior_param2;
                 } else {
-                    model.get_data();
-                    model.confidencecalc();
+                    MDP exp_model = model;
+                    exp_model.get_data();
+                    exp_model.confidencecalc();
+                    model.overall_confidence = exp_model.overall_confidence;
+                    model.beta_prior_param1 = exp_model.beta_prior_param1;
+                    model.beta_prior_param2 = exp_model.beta_prior_param2;
+                   // std::cout << " p1 confidence " << exp_model.param_confidence[1] << "/   p2 confidence " << exp_model.param_confidence[2] << "\n";
                     //model.displayConfidence();
                 }
             }
             model.displayConfidence();
+             //std::cout << " p1 confidence " << model.param_confidence[1] << "/   p2 confidence " << model.param_confidence[2] << "\n";
         }
     }
 }

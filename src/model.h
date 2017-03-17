@@ -72,7 +72,7 @@ struct MC {
     unsigned trace_length;
     unsigned number_of_traces;
     long int_samples;
-
+    bool need_state_splitting = true;
 
     //debugging
     void outputMC(std::ostream &out);

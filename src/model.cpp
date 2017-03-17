@@ -236,8 +236,8 @@ void MC::prepModel() {
     parametercounts.resize(modelparams.size());
     inv_parametercounts.resize(modelparams.size());
     param_confidence.resize(modelparams.size());
-    //overall_confidence.nom = 1;
-    //overall_confidence.denom = 2;
+    overall_confidence.nom = 1;
+    overall_confidence.denom = 2;
 
     for (int i = 0; i < modelparams.size(); i++) {
         parametercounts[i] = 0;

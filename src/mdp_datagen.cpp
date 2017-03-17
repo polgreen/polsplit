@@ -53,7 +53,7 @@ void MDP::get_trace_counts(tracet & trace) {
     }
 }
 
-tracet MDP::gettrace() {
+tracet MDP::gettrace() {    
     tracet trace;
     statet_a state = get_init_state();
     data_acq_strategy.clear();

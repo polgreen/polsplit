@@ -59,13 +59,17 @@ void MC::confidencecalc() {
     std::vector<int>total_paramcounts(modelparams.size());
     std::vector<int>total_inv_paramcounts(modelparams.size());
     for (unsigned i = 0; i < int_samples; i++) {
-        get_random_model_params();
-        sample_D_star(param_states);
-        sample_params_update_conf();
-        for (int i = 0; i < modelparams.size(); i++) {
-            total_paramcounts[i] += parametercounts[i];
-            total_inv_paramcounts[i] += inv_parametercounts[i];
+        if (need_state_splitting) {
+            if (verbose > 1)
+                std::cout << "State splitting \n";
+            get_random_model_params();
+            sample_D_star(param_states);
+            for (int i = 0; i < modelparams.size(); i++) {
+                total_paramcounts[i] += parametercounts[i];
+                total_inv_paramcounts[i] += inv_parametercounts[i];
+            }
         }
+        sample_params_update_conf();
     }
     for (int i = 1; i < modelparams.size(); i++) {
         parametercounts[i] = total_paramcounts[i] / int_samples;

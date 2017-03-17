@@ -29,14 +29,20 @@ void MDP::confidencecalc() {
     std::vector<int>total_paramcounts(modelparams.size());
     std::vector<int>total_inv_paramcounts(modelparams.size());
     for (unsigned i = 0; i < int_samples; i++) {
-        get_random_model_params();
-        sample_D_star(param_states);
-        sample_params_update_conf();
-        for (int i = 0; i < modelparams.size(); i++) {
-            total_paramcounts[i] += parametercounts[i];
-            total_inv_paramcounts[i] += inv_parametercounts[i];
+        if (need_state_splitting) {
+            if (verbose > 1)
+                std::cout << "State splitting \n";
+            get_random_model_params();
+            sample_D_star(param_states);
+            for (int j = 0; j < modelparams.size(); j++) {
+                total_paramcounts[j] += parametercounts[j];
+                total_inv_paramcounts[j] += inv_parametercounts[j];
+            }
         }
+        sample_params_update_conf();
     }
+
+
     for (int i = 1; i < modelparams.size(); i++) {
         parametercounts[i] = total_paramcounts[i] / int_samples;
         inv_parametercounts[i] = total_inv_paramcounts[i] / int_samples;
@@ -69,6 +75,7 @@ std::vector< std::tuple <MDP::statet_a, unsigned, unsigned> > MDP::get_parameter
 }
 
 void MDP::sample_D_star(std::vector< std::tuple <statet_a, unsigned, unsigned> > &param_states) {
+    need_state_splitting = false;
     if (verbose > 1)
         std::cout << "Sample D* \n";
     std::vector<unsigned> param_counts;
@@ -99,6 +106,9 @@ void MDP::sample_D_star(std::vector< std::tuple <statet_a, unsigned, unsigned> >
                             << "= " << inv_param_counts[t.params[0].second] << "\n";
 
                 } else {
+                    need_state_splitting = true;
+                    if (verbose > 3)
+                        std::cout << " parameter has a multiplier";
                     param_counts[t.params[0].second] = param_counts[t.params[0].second] + t.count;
                     prob = t.params[0].first.nom / (double) t.params[0].first.denom;
                     while (kcount < t.count) {
@@ -113,6 +123,7 @@ void MDP::sample_D_star(std::vector< std::tuple <statet_a, unsigned, unsigned> >
                             << "= " << inv_param_counts[t.params[0].second] << "\n";
                 }
             } else {
+                need_state_splitting = true;
                 for (const auto p : t.params) {
                     if (p.first != 1) {
                         all_constants_equal_one = false;
