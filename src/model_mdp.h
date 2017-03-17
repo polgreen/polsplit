@@ -14,6 +14,7 @@
 #ifndef MODEL_MDP_H
 #define MODEL_MDP_H
 #include "model.h"
+#include <tuple>
 
 class MDP : public MC {
 public:
@@ -22,6 +23,7 @@ public:
     struct statet_a : statet {
         std::vector<action> actions;
         statet getMCStateStruc(int);
+        unsigned sum_outputs(unsigned);
     };
 
     std::vector<statet_a> states;
@@ -36,6 +38,10 @@ public:
     tracet gettrace();
     void get_trace_counts(tracet&);
     unsigned getStateIndex(unsigned);
+    void confidencecalc();
+    std::vector< std::tuple <statet_a, unsigned, unsigned> > get_parameterised_states();
+    void sample_D_star(std::vector< std::tuple <statet_a, unsigned, unsigned> > &);
+
 };
 
 class MDP_cmdvars {

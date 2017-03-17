@@ -70,10 +70,11 @@ void MDP_cmdvars::init_process(int verbose, int number_of_traces, int trace_leng
             model.beta_prior_param2 = inducd_model.beta_prior_param2;
         } else {
             model.get_data();
-         //   model.confidencecalc();
+            model.confidencecalc();
+            //model.displayConfidence();
         }
     }
-   // model.displayConfidence();
+    model.displayConfidence();
 }
 
 MDP_cmdvars get_MDP_cmdvars_instance() {

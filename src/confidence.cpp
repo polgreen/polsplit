@@ -42,10 +42,12 @@ void MC::sample_params_update_conf() {
 void MC::confidencecalc() {
     if (verbose > 1)
         std::cout << "confidence calc \n";
-    initRndDistribution();
+    //initRndDistribution();
     std::vector< std::pair < statet, unsigned> > param_states;
     reset_confidence();
     param_states = get_parameterised_states();
+    if (param_states.size() == 0)
+        return;
     std::vector<int>total_paramcounts(modelparams.size());
     std::vector<int>total_inv_paramcounts(modelparams.size());
     for (unsigned i = 0; i < int_samples; i++) {

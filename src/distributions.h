@@ -11,7 +11,6 @@ double Beta_probability(double lower_bound, double upper_bound, double alpha1, d
 
 class random_distribution {
 public:
-    
 
     void initialiseRndDistribution() {
         rng = gsl_rng_alloc(gsl_rng_taus);

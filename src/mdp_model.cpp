@@ -10,7 +10,7 @@
 MDP get_MDP_instance() {
 
     MDP::statet_a s0, s1, s2, s3;
-    MDP::action action1,action2;
+    MDP::action action1, action2;
     transitiont t1, t2, t3;
     MDP model;
     s0.ID = 0;
@@ -50,7 +50,7 @@ MDP get_MDP_instance() {
     model.states.push_back(s3);
     action1.first.clear();
 
-    
+
     s1.init = false;
     t1.type = FUNCTION;
     std::pair<fractiont, unsigned> p1;
@@ -79,7 +79,7 @@ MDP get_MDP_instance() {
     action1.first.clear();
     action2.first.clear();
 
-    
+
     model.success = s3.ID;
 
     return model;

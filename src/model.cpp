@@ -75,8 +75,7 @@ std::vector< std::pair < statet, unsigned> > MC::get_parameterised_states() {
         throw std::exception();
     }
     std::vector< std::pair < statet, unsigned> > result;
-    std::pair<statet, unsigned> pair;
-    bool found = false;
+    std::pair<statet, unsigned> pair;   
 
     for (auto &s : states) {
         for (unsigned t = 0; t < s.transitions.size(); t++) {
@@ -85,17 +84,10 @@ std::vector< std::pair < statet, unsigned> > MC::get_parameterised_states() {
                     std::cout << "Found param state " << s.ID << " , param transition to " << s.transitions[t].successor << "\n";
                 pair.first = s;
                 pair.second = t;
-                result.push_back(pair);
-                found = true;
+                result.push_back(pair);                
             }
         }
     }
-
-    if (found == false) {
-        std::cout << "error in get_parameterised_states: no parameterised states found \n";
-        throw std::exception();
-    }
-
     return result;
 
 }
@@ -113,7 +105,7 @@ fractiont MC::weighting(transitiont t, statet s) {
         case FUNCTION:
             for (unsigned index = 0; index < t.params.size(); index++) {
                 prod = t.params[index].first * modelparams[t.params[index].second];
-                sum = prod + sum;
+                sum = prod + sum;                 
             }
             return sum;
             break;
@@ -131,18 +123,19 @@ fractiont MC::remainderWeight(statet s) {
     fractiont result;
     bool remainderfound = false;
     sum_state.zero();
-    for (const auto & t : s.transitions) {
+    for (const auto & t : s.transitions) {        
         if ((t.type == REMAINDER || t.type == NEWREMAINDER) && remainderfound == false) {
             remainderfound = true;
         } else if ((t.type == REMAINDER || t.type == NEWREMAINDER) && remainderfound == true) {
             std::cout << "error, 2 transitions of type REMAINDER found on S" << s.ID << "\n";
             throw std::exception();
         } else {
-            sum_state = sum_state + weighting(t, s);
+            sum_state = sum_state + weighting(t, s);           
         }
-    }
+        
+    } 
     result.one();
-    if (sum_state.nom > sum_state.denom || sum_state.nom <= 0) {
+    if (sum_state.nom > sum_state.denom || sum_state.nom <= 0) {         
         std::cout << "error, invalid state found calculating remainder weight S" << s.ID << " \n";
         throw std::exception();
     }
