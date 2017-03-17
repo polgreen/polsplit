@@ -20,7 +20,15 @@ void MC::sample_params_update_conf() {
         std::cout << "\nsample params and update confidence \n";
     std::vector<double> sample;
     for (unsigned i = 1; i < modelparams.size(); i++) {
-        sample.push_back(rd.beta(parametercounts[i] + beta_prior_param1[i], inv_parametercounts[i] + beta_prior_param2[i]));
+        bool in_possible_set = false;
+        double s;
+        while (!in_possible_set) {
+            s = rd.beta(parametercounts[i] + beta_prior_param1[i], inv_parametercounts[i] + beta_prior_param2[i]);
+            if (s <= param_upper_bounds[i] & s >= param_lower_bounds[i])
+                in_possible_set = true;
+        }
+        sample.push_back(s);
+
     }
     if (is_in_range(sample)) {
         overall_confidence.nom++;
@@ -71,6 +79,12 @@ void MC::updatePriors() {
     for (int i = 1; i < modelparams.size(); i++) {
         beta_prior_param1[i] += parametercounts[i];
         beta_prior_param2[i] += inv_parametercounts[i];
+        if (beta_prior_param1[i] == 0) {
+            beta_prior_param1[i] = 1;
+        }
+        if (beta_prior_param2[i] == 0) {
+            beta_prior_param2[i] = 1;
+        }
         if (verbose > 0)
             std::cout << "updated prior for p" << i << " " << beta_prior_param1[i] << " " << beta_prior_param2[i] << std::endl;
     }

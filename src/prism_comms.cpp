@@ -47,11 +47,19 @@ void MC::callPrism() {
     prismfile.close();
     std::string command = prepCmd();
     std::string result;
+    bool bounds = false;
     char letter = 'a';
+    if (param_upper_bounds.size() == modelparams.size()) {
+        bounds = true;
+    }
     for (unsigned p_index = 1; p_index < modelparams.size(); p_index++) {
         command += static_cast<char> (letter + p_index - 1);
-        command += "=" + intToString(param_lower_bounds[p_index]) + ":";
-        command += intToString(param_upper_bounds[p_index]) + ",";
+        if (bounds) {
+            command += "=" + doubleToString(param_lower_bounds[p_index]) + ":";
+            command += doubleToString(param_upper_bounds[p_index]) + ",";
+        } else {
+            command += "=0:1,";
+        }
     }
     result = ssystem(command.c_str());
     for (const auto s : result) {
@@ -141,7 +149,7 @@ void MC::outputPRISM(std::ostream &out) {
 
 }
 
-std::string intToString(int a) {
+std::string doubleToString(double a) {
     std::stringstream ss;
     ss << a;
     return ss.str();

@@ -23,10 +23,17 @@ void MC::get_random_model_params() {
     if (verbose > 1)
         std::cout << "get random model parameters: \n";
     for (unsigned i = 1; i < modelparams.size(); i++) {
-        modelparams[i].nom = 100 * rd.beta(beta_prior_param1[i], beta_prior_param2[i]);
-        modelparams[i].denom = 100;
+        bool inrange = false;
+        while (!inrange) {
+            modelparams[i].nom = 100 * rd.beta(beta_prior_param1[i], beta_prior_param2[i]);
+            if (modelparams[i].nom <= 100 * param_upper_bounds[i]
+                    && modelparams[i].nom >= 100 * param_lower_bounds[i])
+                inrange = true;
+        }
         if (modelparams[i].nom == 0)
-            modelparams[i].nom = 1; //0 would mean remainder weight being 0 for some sample sizes, also directly affected by sample.push_back
+            modelparams[i].nom = 1;
+
+        modelparams[i].denom = 100;
         if (verbose > 1)
             std::cout << "param" << i << " " << modelparams[i].nom << "/" << modelparams[i].denom << "\n";
     }

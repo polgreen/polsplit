@@ -27,7 +27,7 @@ public:
     };
 
     std::vector<statet_a> states;
-    std::vector<unsigned> data_acq_strategy; //Data acquisition strategy
+    std::vector<unsigned> data_acq_strategy; //Data acquisition strategy    
     unsigned strategy_type; //Interface Control Methods  
     unsigned finiteMemMode; //Switch to finite memory mode: 0-> off, 1-> randomized finite memory
     void outputPRISM(std::ostream &out);
@@ -50,12 +50,14 @@ public:
     void add_MDP_cmd_options(int argc, const char *argv[], int, int*);
     void display_MDP_cmd_options();
     void init_process(int, int, int, long, long);
+    std::vector<unsigned> rud_param_values;
+    MDP get_MDP_instance(int);
 };
+
 void add_MDP_help();
 
 
 MC induceMarkovChain(MDP);
-MDP get_MDP_instance();
 MDP_cmdvars get_MDP_cmdvars_instance();
 #endif /* MODEL_MDP_H */
 

@@ -119,7 +119,7 @@ struct MC {
 std::ofstream getPRISMFile();
 std::string prepCmd();
 MC get_simpleMC();
-std::string intToString(int);
+std::string doubleToString(double);
 
 
 //debugging
