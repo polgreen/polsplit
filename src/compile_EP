@@ -1,0 +1,15 @@
+g++ -o baever -I/usr/local/include -L/usr/local/lib \
+main.cpp \
+mdp_datagen.cpp \
+model.cpp \
+models.cpp \
+prism_comms.cpp \
+mdp_strategy.cpp \
+mdp_model.cpp \
+mdp_controller.cpp \
+mdp_confidence.cpp \
+ fraction.cpp \
+ trace.cpp \
+ confidence.cpp \
+ sample_params.cpp \
+ prism_parser.cpp -std=c++11 -lgsl
