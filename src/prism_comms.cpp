@@ -36,7 +36,7 @@ std::ofstream getPRISMFile() {
 }
 
 std::string prepCmd() {
-    std::string command("prism prismfile.pm ../../../propertyfile.props -param ");
+    std::string command("prism prismfile.pm ../propertyfile.props -param ");
     return command;
 }
 
