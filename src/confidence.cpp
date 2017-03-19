@@ -18,23 +18,36 @@ void MC::reset_confidence() {
 void MC::sample_params_update_conf() {
     if (verbose > 1)
         std::cout << "\nsample params and update confidence \n";
-    std::vector<double> sample;
-    for (unsigned i = 1; i < modelparams.size(); i++) {
-        bool in_possible_set = false;
-        double s;
-        while (!in_possible_set) {
-            s = rd.beta(parametercounts[i] + beta_prior_param1[i], inv_parametercounts[i] + beta_prior_param2[i]);
-            if (s <= param_upper_bounds[i] & s >= param_lower_bounds[i])
-                in_possible_set = true;
-        }
-        sample.push_back(s);
+    long cntr = 0;
+    while (cntr < std::numeric_limits<long>::max()) {
+        std::vector<double> sample;
+        std::vector<fractiont> temp_param_confidence = param_confidence;
+        for (unsigned i = 1; i < modelparams.size(); i++) {
+            bool in_possible_set = false;
+            double s;
+            while (!in_possible_set) {
+                s = rd.beta(parametercounts[i] + beta_prior_param1[i], inv_parametercounts[i] + beta_prior_param2[i]);
+                if (s <= param_upper_bounds[i] & s >= param_lower_bounds[i])
+                    in_possible_set = true;
+            }
+            sample.push_back(s);
 
+        }
+        switch (is_in_range(sample)) {
+            case 0: overall_confidence.denom++;
+                cntr = std::numeric_limits<int>::max();
+                break;
+            case 1: overall_confidence.nom++;
+                overall_confidence.denom++;
+                cntr = std::numeric_limits<int>::max();
+                break;
+            case 2: param_confidence = temp_param_confidence;
+                cntr++;
+                break;
+            default: throw std::exception();
+                break;
+        }
     }
-    if (is_in_range(sample)) {
-         
-        overall_confidence.nom++;
-    }
-    overall_confidence.denom++;
     if (verbose > 1)
         std::cout << "confidence = " << overall_confidence.nom << "/" << overall_confidence.denom << "\n";
 }

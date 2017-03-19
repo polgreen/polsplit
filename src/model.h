@@ -111,7 +111,7 @@ struct MC {
     void updatePriors();
 
     //check if params are in feasible bounds
-    bool is_in_range(std::vector<double>&);
+    int is_in_range(std::vector<double>&);
     bool result_bound_satisfied(unsigned, std::vector<double>&);
     unsigned virtual getStateIndex(unsigned);
     double Generate(const double, const double);

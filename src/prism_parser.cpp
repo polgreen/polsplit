@@ -101,7 +101,7 @@ bool MC::result_bound_satisfied(unsigned i, std::vector<double>& sample) {
     throw std::exception();
 }
 
-bool MC::is_in_range(std::vector<double> &sample) {
+int MC::is_in_range(std::vector<double> &sample) {
     assert(sample.size() == modelparams.size() - 1);
     bool in_range = false;
     if (verbose > 1) {
@@ -126,8 +126,8 @@ bool MC::is_in_range(std::vector<double> &sample) {
                 }
             } else {
                 param_confidence[s].denom++;
-                in_range = false;
-                // break;
+                in_range = 0;
+                //break;
             }
         }
         if (in_range == true) {
@@ -144,7 +144,7 @@ bool MC::is_in_range(std::vector<double> &sample) {
     }
     if (verbose > 1)
         std::cout << " RESULT = false\n";
-    return false;
+    return 2;
 }
 
 
