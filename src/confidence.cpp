@@ -18,8 +18,8 @@ void MC::reset_confidence() {
 void MC::sample_params_update_conf() {
     if (verbose > 1)
         std::cout << "\nsample params and update confidence \n";
-    long cntr = 0;
-    while (cntr < std::numeric_limits<long>::max()) {
+    int cntr = 0;
+    while (cntr < std::numeric_limits<int>::max()) {
         std::vector<double> sample;
         std::vector<fractiont> temp_param_confidence = param_confidence;
         for (unsigned i = 1; i < modelparams.size(); i++) {
@@ -27,7 +27,7 @@ void MC::sample_params_update_conf() {
             double s;
             while (!in_possible_set) {
                 s = rd.beta(parametercounts[i] + beta_prior_param1[i], inv_parametercounts[i] + beta_prior_param2[i]);
-                if (s <= param_upper_bounds[i] & s >= param_lower_bounds[i])
+                if (s <= param_upper_bounds[i] & s > param_lower_bounds[i])
                     in_possible_set = true;
             }
             sample.push_back(s);
