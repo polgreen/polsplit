@@ -42,12 +42,14 @@ public:
     std::vector< std::tuple <statet_a, unsigned, unsigned> > get_parameterised_states();
     void sample_D_star(std::vector< std::tuple <statet_a, unsigned, unsigned> > &);
     void displayConfidence(std::ofstream&);
+    void displayConfidence(std::ofstream&,unsigned,unsigned,unsigned);
 
 };
 
 class MDP_cmdvars {
 public:
     unsigned strategy_type_cap;
+    bool trace_confidence;
     void add_MDP_cmd_options(int argc, const char *argv[], int, int*);
     void display_MDP_cmd_options();
     void init_process(int, int, int, long, long);

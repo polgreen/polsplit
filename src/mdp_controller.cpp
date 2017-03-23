@@ -27,6 +27,8 @@ void MDP_cmdvars::add_MDP_cmd_options(int argc, const char *argv[], int current,
         strategy_type_cap = 3;
     } else if (std::string(argv[i]) == "--no_strategy") {
         strategy_type_cap = 4;
+    } else if (std::string(argv[i]) == "--trace_confidence") {
+        trace_confidence = true;
     }
 }
 
@@ -46,6 +48,9 @@ void MDP_cmdvars::display_MDP_cmd_options() {
         std::cout << "Strategy: no_strategy\n";
     }
 
+    if (trace_confidence)
+        std::cout << "Calculating confidence after each trace\n";
+
 
 }
 
@@ -53,8 +58,8 @@ void MDP_cmdvars::init_process(int verbose, int number_of_traces, int trace_leng
     std::ofstream results;
     std::string resultfilename = ("Results.csv");
     results.open(resultfilename, std::ofstream::out | std::ofstream::app);
-
-    for (unsigned a = 15; a <= 75; a += 5) {
+    if (trace_confidence) {
+        unsigned a = 50;
         rud_param_values.resize(2);
         rud_param_values[0] = a;
         rud_param_values[1] = a;
@@ -66,32 +71,66 @@ void MDP_cmdvars::init_process(int verbose, int number_of_traces, int trace_leng
         model.int_samples = int_samples;
         model.strategy_type = strategy_type_cap;
         model.initRndDistribution();
-        for (long i = 0; i < batch; i++) {
-            model.prepModel();
-            if (i == 0) {
-                model.callPrism();
-            }
-            for (unsigned n = 0; n < model.number_of_traces; n++) {
+        model.prepModel();
+        model.callPrism();
+        for (unsigned n = 0; n < model.number_of_traces; n++) {
+            for (long i = 0; i < batch; i++) {
                 model.synthStrategy();
-                if (model.finiteMemMode == 0) {
-                    MC inducd_model = induceMarkovChain(model);
-                    inducd_model.get_data();
-                    inducd_model.confidencecalc();
-                    model.overall_confidence = inducd_model.overall_confidence;
-                    model.beta_prior_param1 = inducd_model.beta_prior_param1;
-                    model.beta_prior_param2 = inducd_model.beta_prior_param2;
-                } else {
+                if (model.finiteMemMode == 1) {
                     MDP exp_model = model;
                     exp_model.get_data();
                     exp_model.confidencecalc();
-                    model.overall_confidence = exp_model.overall_confidence;
-                    model.beta_prior_param1 = exp_model.beta_prior_param1;
-                    model.beta_prior_param2 = exp_model.beta_prior_param2;
-                    //model.displayConfidence();
+                    if (i == (batch / 2)) {//get middle value                        
+                        model.overall_confidence = exp_model.overall_confidence;
+                        model.beta_prior_param1 = exp_model.beta_prior_param1;
+                        model.beta_prior_param2 = exp_model.beta_prior_param2;
+                    }
+                    exp_model.displayConfidence(results, n + 1, i + 1, a);
                 }
             }
-            model.displayConfidence(results);
-            //std::cout << " p1 confidence " << model.param_confidence[0] << "/   p2 confidence " << model.param_confidence[1] << "\n";
+        }
+
+    } else {
+        for (unsigned a = 15; a <= 75; a += 5) {
+            rud_param_values.resize(2);
+            rud_param_values[0] = a;
+            rud_param_values[1] = a;
+            std::cout << "\n\nRudimentary Param Value: " << a << "\n\n";
+            MDP model = get_MDP_instance(1);
+            model.verbose = verbose;
+            model.number_of_traces = number_of_traces;
+            model.trace_length = trace_length;
+            model.int_samples = int_samples;
+            model.strategy_type = strategy_type_cap;
+            model.initRndDistribution();
+            for (long i = 0; i < batch; i++) {
+                model.prepModel();
+                if (i == 0) {
+                    model.callPrism();
+                }
+                for (unsigned n = 0; n < model.number_of_traces; n++) {
+                    model.synthStrategy();
+                    if (model.finiteMemMode == 0) {
+                        MC inducd_model = induceMarkovChain(model);
+                        inducd_model.get_data();
+                        inducd_model.confidencecalc();
+                        model.overall_confidence = inducd_model.overall_confidence;
+                        model.beta_prior_param1 = inducd_model.beta_prior_param1;
+                        model.beta_prior_param2 = inducd_model.beta_prior_param2;
+                    } else {
+                        MDP exp_model = model;
+                        exp_model.get_data();
+                        exp_model.confidencecalc();
+                        model.overall_confidence = exp_model.overall_confidence;
+                        model.beta_prior_param1 = exp_model.beta_prior_param1;
+                        model.beta_prior_param2 = exp_model.beta_prior_param2;
+
+                    }
+                }
+
+                model.displayConfidence(results);
+                //std::cout << " p1 confidence " << model.param_confidence[0] << "/   p2 confidence " << model.param_confidence[1] << "\n";
+            }
         }
     }
 }
@@ -228,5 +267,19 @@ void MDP::displayConfidence(std::ofstream& results) {
     }
     results << std::endl;
     std::cout << "overall confidence: " << overall_confidence.nom << "/" << overall_confidence.denom << "\n";
+
+}
+
+void MDP::displayConfidence(std::ofstream& results, unsigned trace_number, unsigned batch_number, unsigned param_increment) {
+    results << "MDP , " << model_num << " , ";
+    for (const auto &p : modelparams)
+        results << fraction_to_double(p) << " , ";
+    results << number_of_traces << " , " << trace_length << " , " << int_samples << " , " << strategy_type << " , " << trace_number << " , " << batch_number << " , " << param_increment << " , ";
+    results << fraction_to_double(overall_confidence) << " , ";
+    for (int i = 1; i < modelparams.size(); i++) {
+        results << beta_prior_param1[i] << " , " << beta_prior_param2[i] << " , ";
+    }
+    results << std::endl;
+    //std::cout << "overall confidence: " << overall_confidence.nom << "/" << overall_confidence.denom << "\n";
 
 }
