@@ -14,8 +14,19 @@ do
 	./DKRcompile
 	
 
-	/tmp/baever --MDP 3 --traces 1000 --tracelength 10 --batch 50 --explicit_strategy
-	/tmp/baever --MDP 3 --traces 1000 --tracelength 10 --batch 50 --random_strategy	
+	/tmp/baever --MDP 3 --traces 2 --tracelength 20 --batch 100 --explicit_strategy
+	/tmp/baever --MDP 3 --traces 2 --tracelength 20 --batch 100 --random_strategy	
+
+	/tmp/baever --MDP 3 --traces 4 --tracelength 10 --batch 100 --explicit_strategy
+	/tmp/baever --MDP 3 --traces 4 --tracelength 10 --batch 100 --random_strategy	
+
+	/tmp/baever --MDP 3 --traces 5 --tracelength 8 --batch 100 --explicit_strategy
+	/tmp/baever --MDP 3 --traces 5 --tracelength 8 --batch 100 --random_strategy	
+
+	/tmp/baever --MDP 3 --traces 8 --tracelength 5 --batch 100 --explicit_strategy
+	/tmp/baever --MDP 3 --traces 8 --tracelength 5 --batch 100 --random_strategy	
+	/tmp/baever --MDP 3 --traces 10 --tracelength 2 --batch 100 --explicit_strategy
+	/tmp/baever --MDP 3 --traces 10 --tracelength 2 --batch 100 --random_strategy	
 
 done   
 
