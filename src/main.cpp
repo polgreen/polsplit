@@ -12,7 +12,7 @@
  -----~--~---~~~----~-`.-;~
  elizabeth.polgreen@cs.ox.ac.uk
  \********************************/
-#define VERSION 0001
+#define VERSION 0002
 #include <vector>
 #include <cassert>
 #include <random>
@@ -76,6 +76,7 @@ int main(int argc, const char *argv[])
   int model_num = 0;
   int batch = 1;
   bool modelMDP = false;
+  bool trace_confidence=false;
 
   for (unsigned i = 1; i < argc; i++)
   {
@@ -168,6 +169,10 @@ int main(int argc, const char *argv[])
     {
       strategy = NONE;
     }
+     else if (std::string(argv[i]) == "--trace_confidence")
+    {
+      trace_confidence= true;
+    }
     else if (std::string(argv[i]) == "--help")
     {
       help();
@@ -194,36 +199,70 @@ int main(int argc, const char *argv[])
     rd.set_seed(0);
 
     fractiont confidence;
-    if (modelMDP)
-    {
-      MDP model = get_MDP(model_num);
-
-      std::cout << "Model = simple Markov decision process \n";
-
-      model.verbose = verbose;
-      model.number_of_traces = number_of_traces;
-      model.trace_length = trace_length;
-      model.num_int_samples = num_int_samples;
-      model.strategy_type = strategy;
-      for (int i = 0; i < batch; i++)
+      if (modelMDP)
       {
-        results << "MDP , " << model_num << " , ";
-        for (const auto &p : model.modelparams)
-          results << fraction_to_double(p) << " , ";
-        results << number_of_traces << " , " << trace_length << " , "
-            << num_int_samples << " , " << strategy << " , ";
-        confidence = model(rd, (i == 0));
-        results << fraction_to_double(confidence) << " , ";
-        std::cout << "\nFinal confidence: " << confidence.nom << " / "
-            << confidence.denom << ",";
-        for (int i = 1; i < model.modelparams.size(); i++)
-        {
-          results << model.prior_a1[i] << " , " << model.prior_a2[i] << " , ";
-        }
-        results << std::endl;
-      }
+          MDP model = get_MDP(model_num);
 
-    }
+          std::cout << "Model = simple Markov decision process \n";
+
+          model.verbose = verbose;
+          model.number_of_traces = number_of_traces;
+          model.trace_length = trace_length;
+          model.num_int_samples = num_int_samples;
+          model.strategy_type = strategy;
+          for (int i = 0; i < batch; i++)
+          {
+              if(!trace_confidence){
+                  results << "MDP , " << model_num << " , ";
+                  for (const auto &p : model.modelparams)
+                  results << fraction_to_double(p) << " , ";
+                  results << number_of_traces << " , " << trace_length << " , "
+                  << num_int_samples << " , " << strategy << " , ";
+                  confidence = model(rd, (i == 0));
+                  results << fraction_to_double(confidence) << " , ";
+                  std::cout << "\nFinal confidence: " << confidence.nom << " / "
+                  << confidence.denom << ",";
+                  for (int i = 1; i < model.modelparams.size(); i++)
+                  {
+                      results << model.prior_a1[i] << " , " << model.prior_a2[i] << " , ";
+                  }
+                  results << std::endl;
+                }else{
+                    model.initialise_all_counts();
+                    if(i == 0)
+                    {
+                        model.callPrism();
+                    }
+                    if (model.verbose > 1)
+                    std::cout << "collect data \n";
+                    int int_samples = model.num_int_samples;
+                    std::vector<unsigned> data_collection_strategy;
+
+                    for (unsigned n = 0; n < model.number_of_traces; n++)
+                    {
+                        data_collection_strategy = model.synthStrategy(rd);
+                        if(model.strategy_type==FIRST)
+                        {
+                            //MC model=model.induceMarkovChain(data_collection_strategy);
+                            //return model(rd, false);
+                        }
+                        model.getData(trace_length, data_collection_strategy, rd, int_samples);
+                        results << "MDP , " << model_num << " , ";
+                        for (const auto &p : model.modelparams)
+                            results << fraction_to_double(p) << " , ";
+                        results << number_of_traces << " , " << trace_length << " , "
+                        << num_int_samples << " , " << strategy << " , " << n+1 << " , " << i+1 << " , ";
+                        confidence = model.overall_confidence;
+                        results << fraction_to_double(confidence) << " , ";
+                        for (int i = 1; i < model.modelparams.size(); i++)
+                        {
+                            results << model.prior_a1[i] << " , " << model.prior_a2[i] << " , ";
+                        }
+                        results << std::endl;
+                    }
+                }
+          }
+      }
     else
     {
       std::cout << "Model = simple Markov chain \n";
