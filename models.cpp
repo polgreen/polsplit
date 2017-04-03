@@ -130,7 +130,7 @@ MDP get_MDP_two()
 MDP get_MDP_three()
 {
   MDP model;
-  model.num_states(5);
+  model.num_states(100);
   model.modelparams.resize(3);
   model.modelparams[0].one();
   model.modelparams[1].nom = PARAM1;
@@ -168,7 +168,14 @@ MDP get_MDP_three()
 
    model.add_const_transition(2, 0, 0, 1);
    model.add_const_transition(3, 0, 3, 1);
-   model.add_const_transition(4,0,4,1);
+   for(int i=0; i<95; i++)
+   {
+     model.add_const_transition(4+i, 0, 3+i, 0.5);
+     model.add_const_transition(4+i, 0, 5+i, 0.5);
+     model.add_const_transition(4+i, 1, 4+i, 1);
+   }
+
+   model.add_const_transition(99,0,99,1);
 
    model.make_state_init(0);
    model.success=2;
